@@ -6,16 +6,17 @@ compiles and links as an arm64 Cocoa/Metal application. Its original startup
 mounts the game archives, verifies secure package signatures and loads the UI
 resources. Actual Brighton/BMW gameplay frames, keyboard motion and steering,
 and populated Debug shutdown with assertions enabled have been verified.
-A one-track keyboard race has naturally finished and exited0 (MAC183;
+A one-track keyboard race has naturally finished and exited 0 (MAC183;
 [recorded evidence](docs/macos/PLAYABLE_SLICE.md)). Actual Master frontend runs
 have created and reloaded a career save, completed tutorial movies/autosave,
 and reached the real event garage with an owned/allowed car. Debug197 completed
-that populated frontend's full application shutdown with exit0 (MAC198).
+that populated frontend's full application shutdown with exit 0 (MAC198).
 The final shutdown in that run was requested by the elapsed-time application
 guard; a separate StartScreen run confirms ordinary Escape/Enter desktop quit
 with actual exit 0 (MAC214). SP exit confirmation after populated play remains
 separate. A normal career event now reaches HUD/Racing with 20 cars and keyboard motion;
-its populated race shutdown currently fails and is under investigation. Career
+its populated race shutdown now completes with exit 0 after the pickup borrower
+lifetime repair (MAC219). This shutdown used the elapsed application guard. Career
 completion/results progression, real LAN play and portable distribution are still
 being validated. This remains a development port.
 
@@ -104,9 +105,10 @@ verification also remains pending.
 
 ## Verification limits
 
-Debug and optimized actual-game binaries build. Both pass the19 affected
-stream/audio/save/UI/ownership checks after the latest grouped repairs. Earlier
-renderer checks and exact verification are recorded in
+Debug and optimized actual-game binaries build. The stream/audio/save/UI
+ownership integration passed 19 affected checks per configuration, and the
+lighting repair passed 14 renderer checks per configuration. Exact verification
+and the latest pickup-retirement results are recorded in
 [LEDGER.md](docs/macos/LEDGER.md). Run game tests and component CTest processes
 sequentially: the original Artery service owns localhost6317.
 
@@ -119,16 +121,25 @@ ASan currently hangs in dyld before main on this host, so it supplies no game
 validation evidence.
 
 The original Brighton/BMW keyboard slice completed its natural checkpoint,
-lap and race-finish sequence and exited0. The assert-enabled normal frontend
+lap and race-finish sequence and exited 0. The assert-enabled normal frontend
 created/reloaded a career profile, reached the owned-car garage and completed
-full shutdown with exit0. A subsequent normal career event reached its race
+full shutdown with exit 0. A subsequent normal career event reached its race
 introduction, then stopped on a missing stencil attachment. The original PC
 borrowed-depth pass contract is now restored, with Debug/Speed 14 affected
-renderer checks passing. Actual215 reaches the normal 20-car HUD/Racing, renders
-a completed GPU frame and accepts keyboard motion, but its elapsed300 shutdown
-returns245 and is under debugger investigation. Ordinary
+renderer checks passing. Actual MAC215 reaches the normal 20-car HUD/Racing, renders
+a completed GPU frame and accepts keyboard motion. Its initial shutdown returned 245;
+MAC216 identified pickup destruction querying an already-cleared actor list.
+The native repair joins pickup jobs and retains that borrow until all pickup
+callbacks finish. Actual MAC219 now completes the populated shutdown with exit 0. Ordinary
 StartScreen desktop confirmation also exits 0. Normal career results, SP exit
 confirmation after populated play,
 multiplayer and portable distribution remain unverified. See
 [PLAYABLE_SLICE.md](docs/macos/PLAYABLE_SLICE.md) and
 [BOARD.md](docs/macos/BOARD.md) for the acceptance criteria and current evidence.
+
+The latest layer/borrower integration passes 10 affected checks in Debug. The
+optimized matrix initially passed 9/10, with a 90-second resource-worker rollback
+timeout; its focused retry passed 1/1 in 0.28 seconds. The first failure remains
+recorded and unexplained in
+[resource-worker-pause-audit.md](docs/macos/resource-worker-pause-audit.md).
+No speculative worker repair or timeout increase was applied.

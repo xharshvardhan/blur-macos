@@ -123,11 +123,25 @@ namespace AmaxDataLogging
 namespace Game
 {
 
+#if defined(PLATFORM_MACOS)
+namespace {
+// [Blur2PC] Pickup ray jobs borrow the same objects retired by Clear's typed-pool destructors.
+void NativeClearJoinedRacePickups()
+{
+    auto& pickups=C_PickupsManager::Instance();
+    const auto group=pickups.GetPickupSchedulerGroupHandle();
+    if(group!=Scheduler::JQ_GROUP_NONE)Scheduler::Flush(group);
+    pickups.Clear();
+}
+}
+#endif
+
 C_RaceLogicLayer::C_RaceLogicLayer( Messaging::C_MessageSubscriberSystem* pSubscriberSystem ): Framework::C_Layer("C_RaceLogicLayer")
 {
 #if defined(PLATFORM_MACOS)
 	// [Blur2PC] Constructor failure cannot strand static handlers acquired before the layer exists.
 	bool nativeStartLineEntered=false,nativePickupsEntered=false;
+    m_pGameActorList=NULL; // [Blur2PC] An unentered/failed Create owns no borrowed actor list.
 	try
 	{
 #endif
@@ -206,7 +220,7 @@ C_RaceLogicLayer::C_RaceLogicLayer( Messaging::C_MessageSubscriberSystem* pSubsc
 	{
 		if(nativePickupsEntered)
 		{
-			C_PickupsManager::Instance().Clear();
+            NativeClearJoinedRacePickups(); // [Blur2PC] Partial Init may already own a real scheduler group.
 			C_PickupsManager::Instance().NativeDetachSubscriberSystem(pSubscriberSystem);
 		}
 		if(nativeStartLineEntered)C_InGameStartLineInfoManager::Instance().NativeDetachSubscriberSystem(pSubscriberSystem);
@@ -217,7 +231,13 @@ C_RaceLogicLayer::C_RaceLogicLayer( Messaging::C_MessageSubscriberSystem* pSubsc
 
 C_RaceLogicLayer::~C_RaceLogicLayer()
 {
+#if defined(PLATFORM_MACOS)
+    // [Blur2PC] Keep published vehicle/actor lookup alive through real pickup/body/deleted-message callbacks.
+    NativeClearJoinedRacePickups();
+    m_pGameActorList=NULL;
+#else
 	C_PickupsManager::Instance().Clear();
+#endif
 #if defined(PLATFORM_MACOS)
 	// [Blur2PC] Clear/quick Reset retain handlers, but deleting the race owner retires its pool bindings.
 	auto* pool=&C_Game::GetInstance()->GetSubscriberSystem();
@@ -508,7 +528,9 @@ HRESULT C_RaceLogicLayer::Destroy(bool quickRestart)
 	m_PhysicsBodyEvents.Clear();
 
 	m_pRLDamageSystem	= NULL;
+#if !defined(PLATFORM_MACOS) // [Blur2PC] Native final deletion still retires pickups that require the live borrowed actor lookup.
 	m_pGameActorList	= NULL;
+#endif
 
 	C_StickerManager::Instance().Shutdown();
 

@@ -23,8 +23,9 @@ release.** The current build still needs developer tools and native dependencies
   full application shutdown with exit code 0.
 - The repaired normal career lighting pass reaches the HUD with 20 cars and
   responds to keyboard throttle and steering. Debug and optimized builds pass
-  14 affected renderer checks. That 20-car run currently fails during shutdown;
-  normal career completion/results remain unverified.
+  14 affected renderer checks. The populated 20-car race now shuts down normally
+  with exit code 0 after the pickup ownership repair. Normal career race
+  completion/results remain unverified.
 - The start-screen desktop quit confirmation exits normally using ordinary keys.
 - Complete normal career race/results/save progression, full content coverage,
   real LAN/multiplayer play and portable distribution remain in progress.

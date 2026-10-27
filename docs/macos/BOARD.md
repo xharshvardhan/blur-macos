@@ -346,4 +346,14 @@ The inherited `tools/agent_context.py context` was attempted and rejects this ne
 
 | MAC215 | Actual normal career after PC borrowed-depth repair | Codex /root | actual20carRacing/GPU/humanmovement PASS; elapsedshutdown245 FAIL;216diagnostic | unique215app; genuine189Master/profile/save; no debug event/config/progress writes | Real20carHUD +humanfinitekeys; no racefinish/results or clean exit claim; actual302.76s/245 needs216stack |
 
-| MAC216 | Actual populated career shutdown debugger diagnosis | Codex /root/physics_port | running fresh Debug213 private copy; pure SB before-unwind capture | ignored mac216 scripts/log/JSON; diagnostic doc +BOARD/LEDGER only | Ordinary Master189 menu/event/car; elapsed240 normal shutdown, no production/build/progress writes; kill only owned inferior and release slot |
+| MAC216 | Actual populated career shutdown debugger diagnosis | Codex /root/physics_port | complete: GetActorPtr thisNULL during bomb retirement; owned inferior killed/slotfree | career-shutdown-pickup-proof.md; ignored mac216 scripts/log/JSON; BOARD/LEDGER only | Ordinary Master189 menu/event/car; elapsed240 normal shutdown, no production/build/progress writes; kill only owned inferior and release slot |
+
+| MAC220 | Independent populated-race shutdown owner review | Codex /root/physics_port | complete; no blocking candidate issue found, source-only | race-shutdown-owner-review.md; BOARD/LEDGER only | Required borrowers through Destroy/derived/base cleanup, pickup/shock/jobs/partial paths; no production or fixture/build/runtime changes |
+
+| MAC218 | Coherent native race-lookup final-borrower integration | Codex /root | Debug/Speed buildPASS;Debug10/10 ownerchecks;Speed9/10+worldretryPASS;222timeoutaudit | Debug/Speed standardgame +affected layer/world/particle/borrower checks | Exact216pickupdtorNULLlookup; preserve dependencies through actual final consumers, strictownershipchecks;219real20carshutdown follows |
+
+| MAC217 | Populated normal-race pickup teardown dependency | Codex /root/dynamic_port | production frozen;4/4 source probes PASS;220 review clear | GameLogic/Layers/RaceLogicLayer.cpp only;race-pickup-retirement.md;BOARD/LEDGER | Exact216 bomb12 proof;real callbacks/task completion before borrower retirement;actual219 acceptance pending |
+
+| MAC219 | Controlled actual populated20car shutdown after pickup ownership repair | Codex /root | PASS actualDebug218 Racing20/fullGPU +normalexit0/253.46s; elapsed240 applicationguard | fresh219app; original normalmenu keys; one completed GPU capture210 | Exact216controlledrepeat nowcleansRaceLogic/pickups/world/audio/alllayers; normalracecompletion/results stillseparate |
+
+| MAC222 | Resource-worker pause/rollback timeout source audit | Codex /root/metal_occlusion | bounded read-only audit complete; original Speed90s timeout unexplained | resource-worker-pause-audit.md; BOARD/LEDGER only | Debug10/10; initialSpeed9/10 +separate focused1/1 retry0.28s; Close log precedes completion; balanced exercised World pauses; Stop/Join lock-order candidate requires recurrence/live stack, no repair or extra run |

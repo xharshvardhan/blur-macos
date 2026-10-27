@@ -3158,3 +3158,98 @@ No natural lap/finish/results verified. Before-unwind diagnostic216 and source
 class audit217 own the unknown shutdown cause. Exact ignored proof/log/PNG
 mac215-career-smoke-proof.json, mac215-game.log, mac215-keyboard-drive.jsonl and
 mac215-game-frame.png.
+
+
+## 2026-10-27 — MAC216 populated-career shutdown fault captured
+
+Fresh Debug213 hashchecked private app/real Master189profile+save, CompleteCareer0
+ObserveOnly1; ordinary realevent4597671/ownedcar navigation. Actual180s HUD/Racing20;
+owned menuobserver retired. Elapsed240 shutdown exactmainthread EXC_BAD_ACCESS0x10:
+GetActorPtr(thisNULL)171 ← GetLogicVehicleActor(i12)1123 ← PickupBase dtor147 ←
+Mine/Bomb typedpoolretirement ← Pickups Delete/KillAll/Clear ← RaceLogicLayer
+dtor220 ← NativeDestroyLayerNow185 ← NativeShutdownChildren481 ← OnShutdown781.
+ActualBOMB unique17 firing12, samestillpublishedRaceLogic; confirms217 dependency
+clearedbeforeconsumerretirement. All29threads pureSB, topcaptureerrors[]. Stale
+unexecutedlocals explicitlynotusedasproof. Ignoredfull+compactJSON/logs and
+career-shutdown-pickup-proof.md records evidence/limits. LLDBexplicitowned54667
+kill9/quit, wrapperdiagnostic0/248.64s/slotreleasedtrue, noexactapp leftovers.
+No production/build/progress writes, no normalgameexit or careercompletionclaim.
+Parent/dynamic217 received exactstack; repair/integration/retry remain next.
+
+
+## 2026-10-27 — MAC220 independent217 shutdown owner review
+
+Current one-TU native217 candidate reviewed against exact216fault; no blocking
+issue found. Native actorlistborrow survives Destroy through derivedtypedpickup
+retirement/bodyremoval/deletednotifications; nativehelper Flush actualpickupgroup
+beforeClear/poolfree, thenborrowcleared, expectedstaticbindingsdetached, basemessage
+handlers retireagainstlivegamepool. Shockrecords/membermaps/taskgroup ownership
+coherent; constructorNULLborrow/enteredflag/nonegroup partialcleanup checked.
+Windows/quickReset retainedoriginalpolicy; no getterfallback orskippedcallbacks.
+race-shutdown-owner-review.md records sourceauthority andboundedlimits. No code/
+fixture/CMake/build/archive/runtime actions. Emptyfixturewouldnotreproduceactual
+AI-firedbomb dependency; root218coherent+219populatedshutdown nextacceptance.
+
+
+2026-10-27 MAC217 /root/dynamic_port: sourceaudit narrowed actual21520car
+shutdown afterRaceLogic state0 toderiveddtor. Actual216 confirms ActorList
+GetActorPtr(thisNULL)←GetLogicVehicleActor12←PickupBase/Mine/Bombtypedpool
+retirement; liveBOMB17, SBerrors[], diagnosticinferiorownedkill9 (notcleanexit).
+OneTUnativefix retainsborrowedactorListthroughDestroy→deriveddtor, flushes
+actualpickupgroup BEFOREunchangedtypedpool/shock/body/deletedmessage cleanup,
+clearsborroweronlyaftercleanup. NativeCtor initializeslookupNULL, enteredpartial
+ctorcleanup uses samepreflush. Windows/quickReset/handles/getter/physicscallback
+policyunchanged; noABI/nullskip/forcedpoolclear. Fourconfigsyntax4/4PASS, scoped
+diffcheckclean; MAC220 independentreadreview noblockingissue. Sourcefrozen/root
+readleasereleased. Noassetfreefake/no-pickupmirrorfixture: actual219controlled
+20car AIpopulatedshutdown requiredaftercoherent218+10ownerchecks.
+Sourceaudit race-pickup-retirement.md. No217game/debugger/build/archive/GPUrun.
+
+
+## MAC218 coherent pickup dependency-retirement integration
+
+Both standard Debug and Speed game builds succeeded with217 one-TU repair.
+Debug10/10 affected layer/world/borrower/particle/entry checks passed. Speed9/10
+passed initially; real world_transaction timed out90s at second failure boundary
+afterworker-1 fileclose. Its focused strictMetal retry passed1/1 in0.28s; the
+original timeout output remains in mac218-tests.log and audit222 investigates
+its timing/worker handshake. Do not rewrite initial result as10/10PASS.
+No production resourceworker or timeout changes made on this evidence.
+Exact hashes/results in ignored mac218-integration-proof.json. Controlled
+actual219 follows216 normal20car run with elapsed240 and no driver.
+
+## MAC222 bounded resource pause/rollback audit; initial timeout retained
+
+218Debug selection10/10PASS; initialSpeed9/10 with mac_world_transaction90.04s
+TIMEOUT remains failure in macos-release/mac218-tests.log. Separate focused222
+Speed retry1/1PASS0.28s does not erase it (LastTest nowcontainsretry). The fixture
+fails an actual owning postprocess effect beforephysics/RaceLogic creation and
+validates real worker/file reads afterfalse/throw rollback. Native owned pause
+is source-balanced in both branches; no217RaceLogic runtime method invoked.
+Final AsyncFile::Closing worker-1 log means closebegan, beforependingOps/native
+closeWait, not completion; no timeout thread stack wascaptured. Read-only audit
+records checkpoint/status-event, blocking-mutex and acceptedIO completion
+contracts plus Stop/Join-vs-main-owned-blocking-mutex candidate, not a diagnosed
+cause. No production/test/timeout edits, newruntime or weakenedfailureclaim.
+resource-worker-pause-audit.md specifies needed all-thread/queue/IO state if it
+recurs; root219 actualruntime remains separatelyowned.
+
+
+## MAC219 actual normal20-car populated shutdown PASS
+
+Fresh coherent Debug218 with217 final pickup task/lookup owner repair, same real
+Master189 profile/save/PC data, CompleteCareer0, normal unlocked event/ownedcar
+keys, elapsed240 guard and no driver as216. Actual original game progressed to
+HUD/Racing20, emitted RaceLoaded/RaceStarted and captured one completed native
+GPU frame at210s. Owned menu observer retired after Racing to reduce IPC.
+Elapsed240 requested actual application shutdown; full RaceLogic/pickups/world/
+Audio/debug/system/static/package cleanup completed and actual process exited0
+after253.46s with no primary error. No debugger, external kill or timeout.
+This verifies the exact populated owner class that crashed216 in bomb17's final
+borrow of vehicle12. No natural race finish/results were requested or claimed.
+Keyboard movement137.91m was separately measured215 before the teardown fix.
+Screenshot verification/mac219-game-frame.png; logs/status and scoped acceptance
+proof mac219-populated-shutdown-proof.json remain ignored. Normal career race
+completion/results/save progress, full content, real LAN and portable packaging
+remain separate work. The222 initial optimized resource-rollback timeout remains
+recorded despite a passing focused retry; no speculative resource-worker change.
