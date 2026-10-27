@@ -358,7 +358,7 @@ The inherited `tools/agent_context.py context` was attempted and rejects this ne
 
 | MAC222 | Resource-worker pause/rollback timeout source audit | Codex /root/metal_occlusion | bounded read-only audit complete; original Speed90s timeout unexplained | resource-worker-pause-audit.md; BOARD/LEDGER only | Debug10/10; initialSpeed9/10 +separate focused1/1 retry0.28s; Close log precedes completion; balanced exercised World pauses; Stop/Join lock-order candidate requires recurrence/live stack, no repair or extra run |
 
-| MAC223 | Genuine career finish/results/save-return audit | Codex /root/dynamic_port | source audit complete; private finite-key helper pure tests PASS | career-results-flow.md;ignored career_results_operator.py;BOARD/LEDGER | Ordered completedlaps1/2/3 +UIpass/human qualification; original159 return/autosave; actual226 and disk/reload acceptance remain root-owned |
+| MAC223 | Genuine career finish/results/save-return audit | Codex /root/dynamic_port | source audit complete; private finite-key helper pure tests PASS | career-results-flow.md;ignored career_results_operator.py;BOARD/LEDGER | Ordered completedlaps1/2/3 +originalUI/human classification;243physicalfinish20th/none permitsUIRaceFailed; root disk/reload/exit acceptance |
 
 | MAC226 | Actual normal career3lap finish/results/save/exit | Codex /root | actualSpeed218 firststartline/rawlap1 thenunsupportedalphaCoverage; cleanerror1/234.79s;227/228 | unique226app/logs; real189profile/save/data; before-state backup; ordinary223/224helpers | Require real ordered completedlap1/2/3 +original nonwreck finish/results, normal autosave+reload/exit; never use genericRaceFinished alone or synthesize progress |
 
@@ -405,3 +405,23 @@ The inherited `tools/agent_context.py context` was attempted and rejects this ne
 | MAC246 | Personal public photo ownership follow-up | Codex /root | PASS accepted242source/fixture/review; personalpublicfollow-up | README/README.macos/PLAYABLE_SLICE/source-publication notes +separatepublicationindex | Natural2323lapfinishverified butpostracefailure; fixed243PhotoModecapture/returnverified; fullresults/save-return stillrunning |
 
 | MAC245 | Required-vs-optional vehicle/AI automation diagnostics | Codex /root/metal_occlusion | bounded read-only source audit complete | vehicle-diagnostic-contracts.md;BOARD/LEDGER only | NoDObj bit1setter commented/stalereport; licenseplate exactsuffix/material-control mismatch unresolvedmetadata; AIBROKEN before InitRace simulation gate; no newfatal/default/asset/engine/runtime changes |
+
+| MAC247 | Self-contained development app metadata/notices staging | Codex /root/physics_port | frozen; original stage checks and actual MAC248 relocated-copy strict signature/manifest checks PASS (7 aliases preserved) | stage_bundle_test.py; packaging doc; BOARD/LEDGER (production bundler unchanged) | Existing BundleUtilities only; new destination, source unchanged, actual provenance/notices/SPDX, CLI-only closure/signature tests; no game/GPU/build/archive changes |
+
+| MAC248 | Default-metadata local development bundle | Codex /root | PASS defaultmetadata/notices/SPDX/strictsignature; actual251reloadPASS | ignored mac248stage/proof | Preserve sourceapp; actual notices/SPDX/closure/minOS26/signatures; sourceonlypublicartifactexcluded |
+
+| MAC249 | Real relocated saved-career reload and normal exit | Codex /root | preparation after243slotrelease | unique249app from248bundle; same genuine savedprofile; dyldper-game observation | Requireactualnewsave reload rank1/fans60/stars0/eventnone, all non-systemruntime libs insideapp, ordinaryexit0; no newrace/progresssetters |
+
+| MAC250 | Actual LAN host/join readiness source audit | Codex /root/dynamic_port | completed bounded read-only; no runtime/build/source changes | lan-actual-readiness.md;BOARD/LEDGER | Original ordinaryHost/Join;20race/8party/1local sourcebounds; onehost cannotprove4peers; currentlock retained; nativeentryret4 gap recorded |
+
+| MAC251 | Signature-preserving real relocated saved-career reload | Codex /root | PASS actualrelocatedreload +21bundledlibs +strictsignaturebefore/after +ordinaryexit0 | unique251app +dyld/load/save/quitproof |249realreload/exitpassed butprobe-copyresource sealinvalid; preservealllibrarysymlinks and requirebefore/afterstrictsignature/manifest plusrealrepeat |
+
+| MAC252 | Ordinary-key local LAN host smoke operator | Codex /root/dynamic_port | frozen; pure policy/builders + py_compile PASS; actual253 host PASS, desktop repeat256 pending | ignored lan_host_operator.py; lan-actual-readiness.md;BOARD/LEDGER | Original Master→LAN→CustomRace host; actual offline router/roster/start limits; optional original leave path; no identity/peer/race/progress setters |
+
+| MAC254 | Verified local development ZIP delivery | Codex /root | PASS localapp/ZIP copy+extract strictsignature/manifest checks | ignored _work/dist developmentapp/ZIP +deliveryproof | Actual251equivalent242game, no game/profiledata; strictseal/notice/dependencyhash verification afterZIPextract; nopublicbinaryrelease |
+
+| MAC253 | Actual original LAN host/lobby/leave smoke | Codex /root | actualhost/capacity20/local1/noStart+sessionclosePASS; elapsedexit0;256ordinarycleanuprepeat | unique253app/log/proof; same genuineprofile; nogame/progress/peer setters | Requireactualofflinerouter/host/localroster and no remoteStart; originalleavecleanup; no 4player/raceproof fromsinglehost |
+
+| MAC255 | Publish verified career cycle and development staging | Codex /root | PASS curated source/tools/acceptance docs verified; personal public snapshot | README/README.macos/PLAYABLE_SLICE/publication/quit/menu docs +newcareeracceptance;separateindex |243physical3lap+nonmedalresults/save/exit,251signedrelocatedreload,247staging/254ZIP; LAN253stillseparate |
+
+| MAC256 | Fresh actual LAN host, leave and desktop exit | Codex /root | PASS original host/leave/desktop, exit 0 / 120.24s, strict signature/manifest | ignored unique256app/input/log/proof; same genuine profile | Actual offline router, capacity20/local1/remote0/noStart; original20key LAN +3key desktop flow; no multiplayer race claim |

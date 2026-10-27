@@ -3580,3 +3580,201 @@ fullcareerresults/save-return remains explicitlypending; no finishedinstaller
 orfullgameparity claim. Sourcepathsunchanged/CMakeintegrationalreadybuilt, no
 redundantfullconfigure. Separatepublicationindex retains exactredactedprofile
 mirror and sourceonlyexclusions, originalbranch/defaultindex/historyintact.
+
+
+MAC223/243 source interpretation correction: UIterminal25870352 is actual
+RaceFailed (LuaVariableHelper32–33), not necessarily physicalDNF. RaceRules-
+Manager388–406 resolvespass/fail AFTER rawlap>configured; unsatisfiedloadedpass
+rules maySendFail atgenuinecompleted3laps. FinishInXPosition39 evaluatesactual
+position againstloadedthreshold; StreetRace375→UIFailed/globalRaceFinished;
+HUD762 accepts RaceFinished ORRaceFailed intooriginalresults. Position20→medal
+none matchesfailedobjective, notwinning/unlocks. Earlier223UIpass-only physical
+qualification wasTOOSTRONG, doccorrected. VehicleState1=RACING notFINISHED(2),
+so rootorderedlaps1/2/3/raw4/nonwreck/human/RaceLayerFinished supplyphysicalproof.
+Actual223helper alreadyordinaryreturned159value1/newsave0/SPmenu; emittedfans60
+butattributablegainrequiresbeforebackup. Sourceaudit makesno process/reload claim;
+rootownsacceptance, faultyUIassert/shellcontinuation mustremaininrecord. No source/
+helper/progress/runtime/build change bythiscorrection. career-results-flow.md.
+
+
+## 2026-10-27 — MAC247 bounded development bundle staging
+
+Existing stage_bundle.cmake now retains BundleUtilities as sole resolver/rewriter,
+new/outside-source destination and raw-payload preflight; meaningful validated
+development metadata defaults/overrides. New bundle_notices.py consumes original
+CMake resolved keys and copies3adjacentnative notices +actual Homebrew package
+notices/installedSPDX intoResources/ThirdParty, relative hashedmanifest; missing
+provenance/SPDX/notices failsclear. Inspect arm64/minOS/noexternalruntime refs,
+signnested dylibs thenapp, finalstrictsignature+manifestverification. No blanket
+licenseclaim. stage_bundle_test.py actual frozenSpeed242 aedb9756…60c56 PASS
+newignoredmac247-stage:21deps/16packages/57noticeSPDXfiles+3native, derived26.0,
+metadataoverrides, strictsignature, sourceapptreeSHAunchanged2a4ce175…9a41,
+new-destination/missingSPDX/notice/invalidID rejection. Addedauthoredforbiddenpak
+preflight alsoPASS; noactualstage repeatneededasproductionunchanged. Syntax and
+whitespace checksPASS. development-bundle-staging.md records usage/scope/limits.
+No game/GPU/Artery/build/sharedarchives/engine ororiginaldependency/sourceapp
+mutations; MAC253 cleanmachine gameplay/reload/quit +publicsigning/notary remain
+unverified. Parenthasexactstagedpath, localadhoconly.
+
+### MAC247 follow-up — preserved relocated bundle seal
+
+Parent MAC249 found its private default copytree flattened seven Frameworks
+symlinks; original MAC248 stage remained valid. Production bundler unchanged.
+stage_bundle_test.py now copies a signed stage with symlinks=True, compares
+symlink topology plus contents/modes, verifies strict deep signatures and full
+manifest/notice/signeddependency hashes on both copies, and checks the original
+staged app remains unchanged. Added --staged-app mode for this bounded check;
+normal raw-app regression runs the same relocated-copy check automatically.
+tree_digest now records aliases as aliases before following regular files.
+Actual MAC248 copy into new ignored mac247-followup-copy PASS, seven aliases,
+no re-signing, original unchanged; verification.json and separate log preserve
+prior247 proofs. Python syntax and scoped whitespace checks PASS. Staging doc
+requires a symlink-preserving copy (Finder/ditto/copytree symlinks=True), not
+re-signing as repair. CLI only: no game/GPU/service/build/archive changes.
+
+
+## MAC250 — Actual LAN host/join readiness source audit
+
+Boundedreadonly Master→Multiplayer→LAN/offlinepopup86→browser→ordinaryButtonY
+→ModeSelectCustomRace2→actualhostLobby source mapped inlan-actual-readiness.md.
+Join mustselectactualenumeratedcompatible row+originalasyncpopup8/handshake.
+Read-only registeredUI/router/lobby/realSlots queries identified. Noengine/code/
+protocol/account/room/ready setters, build/GPU/runtime/input. NativeEntryRequire-
+ments(false) stillreturnsunknown4(PCguardexcludesMac); LANUIonlyspecialcases1
+soitcontinues—recordnotfake success. OfflineRouter reallyrequiresbdNetDONE,
+actualkeys/players beforeCreateLanRunning; popupsuccessalone insufficient.
+Sourcebounds20networkvehicles/8party/1local; browser10servers notplayers;
+6syntheticdiscoveryquerytests not4gamejoins. Onehostsmokecanproveoffline
+realhost/roster/advertise/leave/exit, normalraceStartrequiresremote>0 with
+AllowSingleRacer false. SameMac endpointsettings/freegameports existbutcurrent
+Artery/serviceflockstillserializesactualapps; no bypass/multiapp launch. Future
+coordinator underonelease separate, real4independentclients/machines required
+for>3 historicalissue acceptance. Root249keptservice/inputownership. Scoped
+diffcheckclean, noactualLANproof/newconnectivityrepairclaim.
+
+
+## MAC243 normal career cycle PASS (non-medal result)
+
+FrozenSpeed242 actual20car3lap event4597671/car331339493,2881 observedRacing
+records withallAIflagsfalse, orderedoriginalstart/splits/laps1/2/3/RaceFinished,
+rawlap4. OriginalUIRaceFailed25870352 reflects20thplace/unmetcareerobjective;
+this isfullphysicaldistancewithstate'none', not medal/unlocksuccess. State1
+isRACING/nonfatal snapshot, not itself finishproof. Resultsphoto nowcompletes;
+originalawardsNext +popup159Up/Return1 returnsSPmain, freshFINISHEDSAVING/
+local_error0 +FinishedSuccess +inactiveLoadSave. On-disk save changes2028→2207
+bytes/hash603efcf7…, liveGameInfo rank1/fans60/stars0. No earned-fansdeltaassert
+fromunknownprebackuprecord. Original7keySPexit/Startdesktop204 confirmation
+endsactualprocess0/1546.35s/no primary, wellbefore3300guard. FirstrootUIpass
+assert wasoverstrong forfailedmedal andshellcontinuednextcommand;223audit
+corrected andfullphysicalproof retained. No progression/result setters.
+
+## MAC248/249/251 relocated profile reload and signed-copy verification
+
+247tool default-stage248 hasmeaningfuldevelopmentmetadata,21actualdylibs,
+16packageSPDX/notices +3native notices andactualminOS26.0. Actual249 reload
+readsversion1378/51227bytes/0unread, retainsrank1/fans60/stars0/eventnone/car
+331339493, realownedgarage,21runtimebundledlibs/noexternalnonsystemlibraries
+underminimalPATH/unsetdyldpaths; ordinaryexit0/246.35s. BUTprivatecopytree
+flattened7libraryaliases, invalidatingthatcopy'sresource seal (original248valid).
+No re-sign repair: privateharnessesnowpreservesymlinks and251repeatsactual
+reload/records/Garage/dyldproof withstrictsignature+manifestbeforeANDafter
+ordinaryexit0/196.35s. All21non-systemlibraries loadfrom251app, noHomebrew.
+247CLIregressionnowalsochecksrealrelocatedcopy/topology/originalimmutability.
+Theseare same-host relocatedruns, not anothercleanMac validation.
+
+## MAC254 local development ZIP delivery
+
+Signature-preserving default248app copiedintoignored _work/dist development
+folder withlocalREADME, ZIPcreatedandextractedviaApple ditto. Extractedapp
+passesstrictdeep signature/notice/dependencyhashmanifest unchanged; rawupstream
+removedcredentialliterals absentfromnativeMachO (valuesneverprinted). ZIP
+27422927bytes, SHA295f1fceee30a0432b8a487e02c1c2d8015610065eb6e85362c8246da69e6384.
+No retaildata/profile/save included andnopublicbinaryrelease. Thisisarm64/
+macOS26 adhocdevelopmentbundle; cleanmachine/LANmultiplayer remainunverified.
+
+
+MAC252 — Prepared ignored lan_host_operator.py; no IPC, game, build or GPU work.
+Pure ordinary-key decisions, refusal/stale/127-byte builders and py_compile PASS.
+Source-gated Master stage0 Enter → original profile boot/stage2 → MP/LAN →
+actual offline router Complete (popup fallback alone refused) → RControl Host →
+actual CustomRace2 → real host roster/start policy. Known native entry ret4 is
+recorded separately, not auth/router success. Requires actual one-local/zero-
+remote roster with matching actual configured capacity<=20 and both real
+CanStartCustomRace/HostCanPressStart false; never enables single-racer bypass.
+Optional original leave: lobby Escape/popup4 Yes/automatic6/browser Escape/
+MP root Escape/popup2 Yes/StartScreen2; no direct disconnect/transition/setter.
+Corrected250 documentation typo ExitRaceLobby2→4 before any runtime. Private
+helper frozen and exact CLI handed to root253; max24 finite keys, fresh actual
+contexts/selection/popup/local profile gates, unknown query/key outcomes stop.
+Doc lan-actual-readiness.md records source contracts and proof limits. Actual
+LAN host/join, desktop exit and4-player acceptance remain unverified by252.
+
+
+## MAC253 LAN entry and operator axis correction
+
+OriginalMaster mode2/MPcarouselLAN throughfinitekeys reaches actualofflinerouter
+Complete3/error0, onlinefalse andrealprimaryprofile0. Native entryrequirements
+returns4 fromunknownplatformbranch; originalLANUI ignoresallbutret1. This
+knownnativeguardgap isnot relabeledsuccess, andrealrouter proof isseparate
+frompopupcallback. Actualbrowser/nogamespopup3ack, HostRCONTROL reaches
+originalMpModeSelect. Firsthelper'sDOWN assumedverticalnavigation; actual
+UINodeListdefaulthorizontal and screenshot/source showtwoside-by-sidechoices.
+GetSelectionreturnsactual1/2payloads, notrowindexes. Noenginefault inferred.
+Corrected252resumeobservespayload1/index0/twoauthorednodes andusesoneRIGHT,
+thenpayload2/index1authorizesEnter. Firstdeadline/axisbaseline retained.
+
+
+MAC252 follow-up — Actual root253 reached offline router Complete3/error0 and
+ModeSelect5; authored Down was ACKed but selection payload stayed1, with no
+confirm/host attempted. Corrected helper-only axis assumption: source creates
+two payload nodes1/2; GetSelection returns payload, GetSelectionIndex row,
+UINodeList horizontal default advances viaRight. New RO index/node-count gates
+require payload1/row0/two nodes before finiteRight, and payload2/row1 before
+Enter. Explicit --resume-selector freshly validates original ready offline
+selector/local profile/no existing session; it cannot navigate/set that state.
+Pure tests + py_compile pass, no IPC/build/GPU/source change by author. Root
+owns resumed253 actual selection/host/leave proof; audit records prior typo
+and navigation assumption transparently, not a native/protocol defect.
+
+MAC252/253 follow-up — Root253 real local-host smoke PASS: actual offline
+router Complete3/error0, SystemLink CustomRace Running/Host true, UI/network
+max20 and copied20-slot roster1local/0remote, both start getters false. Original
+popup4 Yes/automatic disconnect/NoGames3/browser Escape also completed. Return
+observer's extra CarouselActive=true condition then stalled, though source
+MenuBack only checks controller lock and active_selection branch; elapsed guard
+exit0/601.95s is not desktop exit proof. Removed only that authored WAIT_MP_LEFT
+presentation gate; actual false-CarouselActive snapshot now yields ordinary
+Escape, with negative liveapp/subscreen/locked/running/notReady refusals tested.
+Pure decisions/127-byte builders + py_compile PASS; helper frozen handed to
+root256 fresh host/leave + original desktop verification. No engine/source/
+protocol/build/GPU/IPC change or four-peer claim. Initial navigation gates stay.
+
+### MAC256 — Actual LAN host and ordinary desktop cleanup
+
+Fresh staged Speed242 arm64 app, original Master profile, normal offline
+SystemLink flow: router Complete3/error0, CustomRace host, capacity20, local1,
+remote0, both start gates false. Twenty finite original UI keys create and leave
+the session through popup4, automatic6, browser, MpMain and popup2 to Start2.
+Separate original three-key desktop204 route exits0/120.24s/no primary, before
+420s guard. Post-run strict signature and dependency/notices manifest pass.
+Proof: ignored mac256-lan-proof.json and original logs. This closes253's helper
+presentation-gate desktop gap; no engine change. Entry classification4 remains
+recorded separately from actual offline router success. No remote join/race or
+historical three-player issue repair is claimed.
+
+MAC257 independent bounded source/doc review found two stale documentation
+claims (career cycle still pending; clean-host label253); both corrected.
+MAC258/259 copiedited the acceptance/staging/LAN documents without altering
+engine or input mechanisms. MAC255 publication retains the separate curated
+index, original credential override exclusions and personal GitHub identity.
+
+### MAC255 — Verified career and development staging publication
+
+Curated source-only follow-up includes original normal career non-medal
+results/save/exit243, signature-preserving saved-career reload251, BundleUtilities
+metadata/notices/alias-preserving staging247/248 and local ZIP integrity254.
+Fresh actual LAN host/leave/ordinary desktop256 is documented with remote play
+still unverified. No game data, apps, saves or ignored verification outputs
+enter the public source. Independent packaging/docs review257 found no further
+blocking defect after two stale claims were corrected. Personal author/account
+verified; credential-redacted profile mirror and empty default index preserved.

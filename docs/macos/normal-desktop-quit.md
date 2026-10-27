@@ -68,3 +68,14 @@ maximum action sizes, and rejected key acknowledgements. `py_compile` passes.
 No game, Automation client, shared build, archive, GPU or production source was
 run/changed during MAC211. Actual desktop confirmation verification belongs to
 the root's next owned native game run.
+
+## Actual populated verification follow-up
+
+MAC243 completes the normal20-car3lap/non-medal results/save return and then
+uses the original SP exit and desktop204 confirmations (7finitekeys). Actual
+process exits0/1546.35s with no primary before its3300s guard. MAC249 and the
+correctly signed relocated MAC251 also quit from the owned-car garage through
+ordinary Back/confirmations, with actualexit0/246.35s and0/196.35s respectively.
+251 retains a valid strict bundle signature/manifest after exit. These runs
+verify SP exit confirmation after populated play and the deeper garage route;
+they are not elapsed-guard or external-termination exit evidence.

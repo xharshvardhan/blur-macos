@@ -1,27 +1,26 @@
 # Native macOS port — development status
 
 This local `macos` branch starts from `uKER/BlurRebuilt` commit
-`1965facd3d4860447a043b1e0fea4d55c086d1f5`. The actual original game now
-compiles and links as an arm64 Cocoa/Metal application. Its original startup
-mounts the game archives, verifies secure package signatures and loads the UI
-resources. Actual Brighton/BMW gameplay frames, keyboard motion and steering,
-and populated Debug shutdown with assertions enabled have been verified.
-A one-track keyboard race has naturally finished and exited 0 (MAC183;
-[recorded evidence](docs/macos/PLAYABLE_SLICE.md)). Actual Master frontend runs
-have created and reloaded a career save, completed tutorial movies/autosave,
-and reached the real event garage with an owned/allowed car. Debug197 completed
-that populated frontend's full application shutdown with exit 0 (MAC198).
-The final shutdown in that run was requested by the elapsed-time application
-guard; a separate StartScreen run confirms ordinary Escape/Enter desktop quit
-with actual exit 0 (MAC214). SP exit confirmation after populated play remains
-separate. A normal career event now reaches HUD/Racing with 20 cars and keyboard motion;
-its populated race shutdown now completes with exit 0 after the pickup borrower
-lifetime repair (MAC219). This shutdown used the elapsed application guard. A subsequent normal three-lap
-race reached its original finish, then failed at the automatic results photo.
-The shared photo-clear scene ownership is repaired, and the fixed application
-completes its original Photo Mode capture and return to racing. Full results/save
-progression, real LAN play and portable distribution are still
-being validated. This remains a development port.
+`1965facd3d4860447a043b1e0fea4d55c086d1f5`. The original game builds and runs
+as an arm64 Cocoa/Metal application. Startup mounts the original PC archives,
+verifies secure package signatures and loads the real game and UI resources.
+
+The normal Master frontend has completed a career race with 20 cars and three
+laps using ordinary keyboard input, processed the original non-medal results,
+autosaved, returned to the SP menu and exited through the original desktop
+confirmations with code 0 (MAC243). The test finished 20th; it does not establish
+medal or tier-unlock progression. Manual and automatic results photo capture
+also passed after repairing shared photo-clear scene ownership.
+
+A fresh relocated app then loaded the same save, reached the owned/allowed
+garage and exited normally with code 0. All 21 non-system runtime libraries
+loaded from inside the app; its strict signature and dependency/notices hashes
+passed before and after the run (MAC251). A local development ZIP also passed
+extraction and integrity checks. These are same-host checks; real multiplayer
+races, full content coverage, another clean Mac and notarized distribution
+remain unverified. See [career acceptance](docs/macos/career-cycle-acceptance.md)
+and [the initial playable slice](docs/macos/PLAYABLE_SLICE.md). This remains a
+development port.
 
 The public source snapshot lives at
 [xharshvardhan/blur-macos](https://github.com/xharshvardhan/blur-macos).
@@ -30,12 +29,17 @@ a new blanket license. Private retail game data, profiles, build outputs and
 inherited console payloads are excluded from the published snapshot. Original
 PC game data must be supplied separately and is not bundled with the app.
 
+The original LAN menus also create a host lobby and leave through the normal
+desktop confirmations with exit 0. The observed capacity is 20, with one local
+player; remote joining and multiplayer racing remain unverified
+([LAN evidence](docs/macos/lan-actual-readiness.md)).
+
 ## Build and run
 
 Requirements: Apple Silicon Mac, Xcode Command Line Tools, CMake 3.25+, Ninja,
 Python 3 and the native dependencies listed in
 [dependencies.md](docs/macos/dependencies.md). Current host-supplied FFmpeg,
-libunistring and other dylibs require macOS26; the historical13.0 compilation
+libunistring and other dylibs require macOS 26; the historical 13.0 compilation
 flag does not establish support for older systems.
 
 ```sh
@@ -70,7 +74,7 @@ All generated output belongs under ignored `_work/`. The Windows
 The actual game links its original Amax, GameLogic, UI, GameAudio, RaceBook,
 Kanzen and networking modules. The native boundaries reuse Cocoa, Metal,
 GameController, SDL3, SoundTouch, FFmpeg, MojoShader, glslang/SPIRV-Cross,
-libunistring, zlib, libjpeg and LibTomCrypt/LibTomMath. All693 Jam built-in
+libunistring, zlib, libjpeg and LibTomCrypt/LibTomMath. All 693 Jam built-in
 shaders have native compiled resource equivalents. See the dependency document
 for upstream references and selected reuse decisions.
 
@@ -81,7 +85,7 @@ audio/movie decoding, scheduler/layers and the original network transports.
 Actual retail-data checks separately verify secure game/boot PAK mounts,
 66 UI bundle textures against their stored bytes and both original boot movies.
 Those resource checks do not prove that a complete race works. The source
-snapshot also lacks UITextBox:11 text-entry widgets across seven account,
+snapshot also lacks UITextBox: 11 text-entry widgets across seven account,
 DLC, social/friends and custom-popup screens are omitted by the original
 unknown-type importer
 ([source audit](docs/macos/ui-snapshot-gaps.md)). No replacement widget behavior
@@ -125,25 +129,28 @@ ASan currently hangs in dyld before main on this host, so it supplies no game
 validation evidence.
 
 The original Brighton/BMW keyboard slice completed its checkpoint/lap/finish
-sequence and exited0. The normal frontend created and reloaded a career save,
+sequence and exited with code 0. The normal frontend created and reloaded a career save,
 played tutorial movies, reached the owned-car garage and completed full shutdown.
 Ordinary StartScreen desktop quit confirmation also exits0. A populated20-car
 race completes normal shutdown after the pickup borrower lifetime repair.
 
-A normal20-car3lap career race now reaches its original finish under ordinary
-human keyboard control (MAC232: ordered splits, completedlaps1/2/3 and rawlap4).
-Its process exited1 when the automatic results photo cleared before BeginScene.
-Actual Photo Mode reproduced that exact application call stack. The shared
-photo-clear boundary now owns a temporary scene when needed while preserving
-borrowed scenes. The old regression fails cleanly; the fixed GPU suite passes
-four configurations, and Debug/Speed applications each pass eight affected
-integration checks. Actual MAC243 completes original Photo Mode capture and
-ordinary return to HUD/Racing without the error. Full career results/save-return,
-SP desktop exit after populated play, multiplayer and portable distribution
-remain separate acceptance work. See
-[photo-scene-ownership.md](docs/macos/photo-scene-ownership.md),
-[PLAYABLE_SLICE.md](docs/macos/PLAYABLE_SLICE.md) and
-[BOARD.md](docs/macos/BOARD.md).
+A normal career race with 20 cars and three laps completes its original ordered splits/laps and
+finish under human keyboard control. Its post-race photo, non-medal results
+return, fresh autosave and ordinary desktop exit now pass (MAC243, exit0).
+The test finished20th; it does not establish medal/unlock success.
+
+A newly copied self-contained app reloads the same save (version 1378,
+51,227 decoded bytes,0 unread) and retainsrank1/fans60/stars0, event4597671/state
+none and ownedcar331339493. With dyld override paths unset and a minimal runtime
+PATH, all 21 non-system libraries load from inside that app. Strict signatures
+and notice/dependency hashes pass before and after ordinary exit0 (MAC251).
+The copy preserves all seven library aliases; an earlier private copy that flattened
+them is retained as a failed signature baseline. See
+[career-cycle-acceptance.md](docs/macos/career-cycle-acceptance.md).
+
+Real LAN/multiplayer races, medal/unlock progression, broader content coverage,
+another clean Mac and notarized distribution remain unverified. See
+[BOARD.md](docs/macos/BOARD.md) for the active LAN work.
 
 Native alpha-to-coverage preserves original crowd/mirror requests at existing
 attachment sample counts. Focused GPU checks cover1x/2x/4x, MRT, depth/stencil,
@@ -158,8 +165,9 @@ the repaired worker fixture and ten fresh World processes pass without a test
 timeout increase. See
 [resource-worker-retirement-audit.md](docs/macos/resource-worker-retirement-audit.md).
 
-CMake BundleUtilities can stage a local app with its transitive libraries and
-validate its dependency closure and ad-hoc signatures. The current host libraries
-require macOS26. Metadata, bundled notices, distribution signing and clean-machine
-validation remain in progress; see
-[distribution-readiness-audit.md](docs/macos/distribution-readiness-audit.md).
+CMake BundleUtilities stages a local development app with meaningful metadata,
+all transitive libraries, native/package notices and installed SPDX records.
+Strict signatures, hashes and relocation are checked. The current libraries
+require macOS 26; another Mac and notarized distribution remain unverified. See
+[development-bundle-staging.md](docs/macos/development-bundle-staging.md) for
+commands and the exact acceptance limits.

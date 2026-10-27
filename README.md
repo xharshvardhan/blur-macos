@@ -6,35 +6,33 @@ The game was originally created by Bizarre Creations. This work builds on uKER's
 codebase, modern PC fixes and unlocked-frame-rate work; it is not
 an official release.
 
-**This is a development snapshot, not a finished installer or a complete game
-release.** The current build still needs developer tools and native dependencies.
+**This is a development snapshot, not a finished game release.** Building from
+source requires developer tools and native dependencies.
 
 ## Current status
 
-- The original game engine builds and runs natively on Apple Silicon, with
-  Metal rendering, keyboard input, physics, Lua UI, audio and movie playback.
-- A Brighton/BMW keyboard race completed its original checkpoint/lap sequence,
-  natural race finish and normal exit with code 0
-  ([verification](docs/macos/PLAYABLE_SLICE.md)).
-- Normal startup/menu navigation, local career profile creation and reload,
-  autosave, the single-player hub and unlocked event selection have been
-  exercised with original game data.
-- A populated normal Debug frontend reached the owned-car garage and completed
-  full application shutdown with exit code 0.
-- The repaired normal career lighting pass reaches the HUD with 20 cars and
-  responds to keyboard throttle and steering. The populated 20-car race shuts
-  down normally with exit code 0 after the pickup ownership repair. Native
-  alpha-to-coverage now supports the original crowd/mirror rendering requests.
-  Debug and optimized builds each pass 19 affected integration checks; the
-  worker quit-signal repair also passes ten fresh-process world rollback runs.
-  A normal three-lap, 20-car career race has also reached its original finish.
-  Its post-race photo exposed a scene-ownership gap, now repaired and verified
-  through the original Photo Mode capture/return path. Full results/save-return
-  validation is still in progress.
-- The start-screen desktop quit confirmation exits normally using ordinary keys.
-- Complete normal career race/results/save progression, full content coverage,
-  real LAN/multiplayer play and portable distribution remain in progress.
-  The verified one-track race is a narrower milestone than a complete port.
+- The original engine runs natively on Apple Silicon with Cocoa/Metal rendering,
+  keyboard input, physics, Lua UI, audio and movie playback.
+- A Brighton/BMW keyboard race completed its original checkpoint/lap/finish
+  sequence and exited with code 0 ([slice evidence](docs/macos/PLAYABLE_SLICE.md)).
+- A normal career race with 20 cars and three laps completed through ordinary keyboard input,
+  returned through the original results UI, autosaved and exited through the
+  desktop confirmations with code 0. The test finished 20th with no medal.
+- A fresh relocated app loaded that save and retained its 60 fans/event/car record,
+  with zero unread save bytes. All 21 non-system runtime libraries loaded from
+  inside the app; its signature and dependency/notices manifest remained valid
+  after ordinary exit ([career verification](docs/macos/career-cycle-acceptance.md)).
+- Local development staging uses CMake BundleUtilities and includes app metadata,
+  transitive libraries, notices and installed SPDX metadata. ZIP extraction also
+  preserves the verified signature and library aliases.
+- Real LAN/multiplayer play, medal/unlock progression, full content coverage,
+  another clean Mac and notarized distribution remain unverified. This is a
+  playable development port with bounded verification.
+
+The original LAN menus also create a host lobby and leave through the normal
+desktop confirmations with exit 0. The observed capacity is 20, with one local
+player; remote joining and multiplayer racing remain unverified
+([LAN evidence](docs/macos/lan-actual-readiness.md)).
 
 ## Build and run
 
@@ -53,7 +51,9 @@ Wine is not used.
 
 The current dependency setup has been tested on Apple Silicon with macOS 26.
 A lower deployment-target flag does not establish support for older macOS
-versions. A self-contained application/installer is not available yet.
+versions. A local development bundle can include its runtime libraries; see
+[development staging](docs/macos/development-bundle-staging.md). A notarized
+installer and separate-Mac validation are not available yet.
 
 ## Development
 

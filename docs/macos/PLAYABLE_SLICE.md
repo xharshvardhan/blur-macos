@@ -86,5 +86,10 @@ optimized World rollback passes. Actual232 then completed the normal20-car3lap r
 splits/laps and RaceFinished, but its results photo failed before BeginScene.
 The shared photo-clear ownership repair passes baseline/control GPU checks and
 coherent242 integration. Actual243 also completes original Photo Mode capture
-and ordinary return to racing. Full normal career results/save-return, SP desktop exit
-after populated play, multiplayer and portable distribution remain unverified.
+and ordinary return to racing. The fixed243 run completes all3laps, original non-medal results photo/return,
+fresh autosave and ordinary desktop exit0. A fresh signed relocated251 app
+reloads that save with0unread bytes and retained60fans/event/car record, then
+quits normally with its signature intact. See
+[career-cycle-acceptance.md](career-cycle-acceptance.md). This verifies a20th-place
+completed race; medals/unlocks, broader content, real multiplayer and clean-Mac
+notarized distribution remain separate work.
