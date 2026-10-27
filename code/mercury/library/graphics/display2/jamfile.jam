@@ -1,0 +1,68 @@
+SubDir TOP Code Mercury Library Graphics Display2 ;
+
+# enable SPU Bus error checking code
+SUBDIRSPUBERR = 1 ;
+
+IncludePath
+$(SUBDIR)/include
+$(TOP)/Code/Mercury/Library/Common/Btl/include
+$(TOP)/Code/Mercury/Library/Common/Core/include
+$(TOP)/Code/Mercury/Library/Common/System/include
+;
+
+if $(PLATFORM) = PC
+{
+IncludePath \"$(DXSDK_PATH)/include\" ;
+}
+
+SRC = 
+source/Display2Logger.cpp
+source/context/Context.cpp
+source/device/BaseDevice.cpp
+source/device/Device.cpp
+source/buffer/Buffer.cpp
+source/memory/Memory.cpp
+source/utils/Utils.cpp
+;
+
+# [Blur2PC][x64] The PC D3D9 device is removed; cmake/dx11.cmake adds the native D3D11 backend.
+
+# [Blur2PC][macOS] Native implementation lives beside the engine device.
+if $(PLATFORM) = MACOS
+{
+SRC += source/device/metal/MetalDevice.mm source/device/metal/MetalShaders.mm source/device/metal/MetalVertices.cpp
+       source/device/metal/MetalSurfaces.mm source/device/metal/MetalTextures.mm source/device/metal/MetalContext.mm
+       source/device/metal/MetalPresent.mm source/device/metal/MetalEngineDevice.mm
+       source/device/metal/MetalRenderTextures.mm source/device/metal/MetalResourceTracking.mm
+       source/device/metal/MetalImageLoading.cpp source/device/metal/MetalMemory.cpp
+       source/device/metal/MetalLegacyShader.cpp
+       source/device/metal/MetalSamplerLod.cpp ; # [Blur2PC] Shared PC sampler-state integration for both shader paths.
+}
+
+if ( $(PLATFORM) = "PS3" )
+{
+SRC +=
+source/context/GCMContextSPU.cpp
+source/context/GCMContext.cpp
+source/device/GCMDevice.cpp
+source/memory/GCMMemory.cpp
+source/buffer/GCMBufferSPU.cpp
+source/buffer/GCMBuffer.cpp
+source/utils/GCMUtils.cpp
+source/debug/GCMDebug.cpp
+;
+
+SPUSRC =
+<spu>source/context/GCMContextSPU.cpp
+<spu>source/buffer/GCMBufferSPU.cpp
+;
+
+SrcOptim $(SPUSRC) : -Os ;
+SPULibrary display2_spu : $(SPUSRC) ;
+}
+
+SRC = [ Batch $(SRC) : StdAfx.h ] ;
+
+Library display2 : $(SRC) : StdAfx.cpp ;
+
+ExportVcproj display2 ;
