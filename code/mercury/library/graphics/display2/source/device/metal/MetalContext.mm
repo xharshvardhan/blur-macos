@@ -61,7 +61,7 @@ struct C_Context::Impl {
     std::unordered_map<std::string,id<MTLSamplerState>> samplers;
     std::vector<F32> vertexConstants=std::vector<F32>(1024,0),pixelConstants=std::vector<F32>(1024,0);
     C_Viewport viewport;
-    bool viewportExplicit=false,blendEnabled=false,stencilEnabled=false;
+    bool viewportExplicit=false,blendEnabled=false,stencilEnabled=false,alphaToCoverageEnabled=false;
     C_AlphaTestState alphaState;C_BlendState blendState;C_ColourState colourState;C_CullState cullState;
     std::array<U32,4> colourMasks={15,15,15,15}; // [Blur2PC] Keep serialized C_ColourState unchanged; native MRT masks are live context state.
     C_DepthState depthState;C_FillState fillState;C_ScissorState scissorState;C_StencilState stencilState;
@@ -218,6 +218,9 @@ struct C_Context::Impl {
         append(vertex->identity);append(pixel->identity);append(colours[0]->samples);description.rasterSampleCount=colours[0]->samples;
         for(const auto& e:declaration->elements)append(e);
         for(const auto& stream:streams)append(stream.stride);
+        append(alphaToCoverageEnabled);description.alphaToCoverageEnabled=alphaToCoverageEnabled;
+        // Original PC coverage preserves shader alpha; alpha-to-one is a separate PS3 policy.
+        description.alphaToOneEnabled=NO;
         append(blendEnabled);append(blendState.m_BlendColorSrc);append(blendState.m_BlendColorDst);append(blendState.m_BlendAlphaSrc);append(blendState.m_BlendAlphaDst);append(blendState.m_BlendColorOp);append(blendState.m_BlendAlphaOp);
         for(U32 i=0;i<4;++i) {
             MTLPixelFormat format=colours[i]?colours[i]->texture.pixelFormat:MTLPixelFormatInvalid;append(format);
@@ -615,7 +618,7 @@ void C_Context::SetVertexShaderParamF(const C_VertexShaderParam& p,const F32* da
 void C_Context::SetPixelShaderParamF(const C_PixelShaderParam& p,const F32* data,U32){if(p.m_RegisterCount)SetPixelShaderConstantF(p.m_RegisterIndex,data,p.m_RegisterCount);}
 void C_Context::SetPixelShaderParamArrayF(const C_PixelShaderParam& p,const F32* data,U32 count){SetPixelShaderParamF(p,data,count);}
 #define BOOL_STATE(Method,Field) void C_Context::Method(E_Bool value){m_Impl->check();require(value==E_Bool_False||value==E_Bool_True,"Invalid boolean state");m_Impl->Field=value==E_Bool_True;}
-BOOL_STATE(SetAlphaTestEnable,alpha.enabled) BOOL_STATE(SetDepthEnable,depthState.m_DepthEnable) BOOL_STATE(SetDepthWriteEnable,depthState.m_DepthWriteEnable) BOOL_STATE(SetBlendEnable,blendEnabled) BOOL_STATE(SetStencilEnable,stencilEnabled)
+BOOL_STATE(SetAlphaToMaskEnable,alphaToCoverageEnabled) BOOL_STATE(SetAlphaTestEnable,alpha.enabled) BOOL_STATE(SetDepthEnable,depthState.m_DepthEnable) BOOL_STATE(SetDepthWriteEnable,depthState.m_DepthWriteEnable) BOOL_STATE(SetBlendEnable,blendEnabled) BOOL_STATE(SetStencilEnable,stencilEnabled)
 #undef BOOL_STATE
 void C_Context::SetAlphaTestFunc(E_CmpFunc value){m_Impl->check();require(value>=1&&value<=8,"Invalid alpha comparison");m_Impl->alphaState.m_AlphaTestCmpFunc=value;}
 void C_Context::SetAlphaTestRef(U32 value){m_Impl->check();require(value<=255,"Alpha reference is not a byte");m_Impl->alphaState.m_AlphaTestRef=value;}

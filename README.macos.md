@@ -107,8 +107,9 @@ verification also remains pending.
 
 Debug and optimized actual-game binaries build. The stream/audio/save/UI
 ownership integration passed 19 affected checks per configuration, and the
-lighting repair passed 14 renderer checks per configuration. Exact verification
-and the latest pickup-retirement results are recorded in
+lighting repair passed 14 renderer checks per configuration. The subsequent
+alpha-to-coverage and private worker quit-signal integration passed 19 affected
+checks in each configuration. Exact verification is recorded in
 [LEDGER.md](docs/macos/LEDGER.md). Run game tests and component CTest processes
 sequentially: the original Artery service owns localhost6317.
 
@@ -137,9 +138,17 @@ multiplayer and portable distribution remain unverified. See
 [PLAYABLE_SLICE.md](docs/macos/PLAYABLE_SLICE.md) and
 [BOARD.md](docs/macos/BOARD.md) for the acceptance criteria and current evidence.
 
-The latest layer/borrower integration passes 10 affected checks in Debug. The
-optimized matrix initially passed 9/10, with a 90-second resource-worker rollback
-timeout; its focused retry passed 1/1 in 0.28 seconds. The first failure remains
-recorded and unexplained in
-[resource-worker-pause-audit.md](docs/macos/resource-worker-pause-audit.md).
-No speculative worker repair or timeout increase was applied.
+The earlier optimized layer/borrower matrix retained a 90-second world rollback
+timeout despite a passing retry. Reproduction with live thread capture identified
+resource and layer workers consuming the same named quit event. Their native
+constructors now create private quit signals, preserving general named-event
+sharing and the Windows implementation. A deterministic original-code regression
+fails; the repaired worker fixture and ten fresh-process world rollback runs
+pass. See [the ownership audit](docs/macos/resource-worker-retirement-audit.md).
+The original timeout remains recorded, and its test timeout was not increased.
+
+The normal career run also exposed an unsupported alpha-to-coverage request from
+crowd flags in the mirror view. Native Metal pipeline state now implements that
+request at the existing attachment sample count. GPU checks cover 1x/2x/4x, MRT,
+depth/stencil, blending and state restoration; the full career rerun remains
+separate acceptance work. See [alpha-to-coverage.md](docs/macos/alpha-to-coverage.md).

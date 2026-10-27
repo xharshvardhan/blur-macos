@@ -481,8 +481,10 @@ void C_ContextBase::SetAlphaTestState(const E_Bool alphaTestEnable, const U32 al
 
 void C_ContextBase::SetAlphaToMaskEnable(const E_Bool alphaToMaskEnable)
 {
-#if defined(PLATFORM_MACOS) // [Blur2PC][macOS] MSAA/coverage is not implemented; never report silent success.
-    if(alphaToMaskEnable != E_Bool_False) throw std::logic_error("Native alpha-to-coverage requires multisample integration");
+#if defined(PLATFORM_MACOS) // [Blur2PC] Original PC blend coverage is independent of alpha test/blending.
+    if(alphaToMaskEnable != E_Bool_False && alphaToMaskEnable != E_Bool_True)
+        throw std::invalid_argument("Invalid native alpha-to-coverage boolean");
+    m_Context.SetAlphaToMaskEnable(static_cast<Display2::E_Bool>(alphaToMaskEnable));
 #endif
 	#if CONTEXT_BASE_STUB
 	return;

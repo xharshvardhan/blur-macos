@@ -3253,3 +3253,193 @@ proof mac219-populated-shutdown-proof.json remain ignored. Normal career race
 completion/results/save progress, full content, real LAN and portable packaging
 remain separate work. The222 initial optimized resource-rollback timeout remains
 recorded despite a passing focused retry; no speculative resource-worker change.
+
+
+## 2026-10-27 — MAC224 private finite keyboard pacing operator
+
+Ignorednew drive_keyboard_paced.py imports unchangedold telemetry/Hold transport;
+original183adjacentpoint steering7/11m/s policy retained. Actual215 Qrequested
+22.75/94.93swall(~24percent), median3.18m/s vs1839.47m/s; dutyaddressedfirst.
+Q<=.75default, eachholdfinite<=1; independentaxes, .08pollsleep. ACKdoesnotstart
+releaseclock: fresheligibleadvancingpostACKsample anchorsfullrequestedduration
+wallfence+.08; unknown/rejectedHold stopsoperator. PLAYER0/nonAI/controls/AIR/
+onroute/fresh/finite/advancing/actualseamguards; explicitlayout0confirmedgate
+becauseoriginaloptionsgetterlackskeyboardlayout. Pure852recordreplay745eligible
+plusguard/expiry/duration/seam testsPASS, pycompile/layoutCLInegativePASS; noIPC
+ornativegame/build/productionwrites. keyboard-operator-pacing.md recordsinterface
+andlimits. Root226ownsactualliveperformance/natural3lapcareerresultsverification;
+replaydoesnotpredictdynamics/finish.
+
+## MAC225 timeout reproduction/thread proof preparation only
+
+Prepared ignored optimized world_transaction repeated-process runner +data-only
+LLDB capture. Defaultplan dispatchesno runtime. Explicitrun nonblocking-owns the
+native service slot, real original data/optimized shaders/isolated scratch,
+strictMetal, atmost10s totalcycle budget withslow-cycle all-thread sample and
+optionalbounded ownedPID SB snapshot before termination. First nonpassing or
+diagnosedcycle stopsseries andkeeps logs/status/sample/availableJSON; sampled
+exit0isnot untouchedpass. Source/test/CTesttimeout/sharedarchives unchanged.
+CPU-only Python surrogate termination/deadline selftest andsyntax/plan PASS;
+noGPU/Artery/Automation/Worldfixture launched, no queuedstress while rootlong
+career ownsruntime. resource-worker-stress-plan.md lists exactfutureCLI/limits;
+actualreproduction pendingrootrelease. Initial218 Speedtimeout remainsunexplained.
+
+
+## MAC226 normal career first startline and new alpha-coverage feature boundary
+
+Frozen Speed218 on genuine189Master/profile/save roots, CompleteCareer0,
+ordinary menus to original20car3lap event. Independent realstate backup stored
+before launch. Paced224 finite Q/A/Left/Right actions preserved primaryPLAYER0
+with configuredAI/aiToggle/automatedHuman false; actual startline rawlap0→1
+(completedlap0, not a completedrace) observed. Newly visible geometry then
+failed strictly: Native alpha-to-coverage requires multisample integration.
+Actual process1 after234.79s; full original error cleanup/layers/owners clean,
+no externalkill/timeout. No natural3lap finish/results claim. Baseline actor
+retirement217 remains intact through this error path.227 owns exactcaller
+diagnostic;228 owns originalPC-to-Metal coverage state class. Private logs/
+input/notifications/proof under verification/mac226-*.225stress begins only
+after226slot release, then227 actual run follows.
+
+
+## MAC223 — Genuine normal-career results/save-return source audit
+
+Read-only original StreetRace/rules/AIR/UI/SP/save authority is recorded in
+career-results-flow.md. Global RaceFinished is also emitted on wreck/failure;
+normal3lap acceptance needs ordered completed LapInc0:1/2/3 (rawlap4), real human
+Racing/control flags and actual HUD terminal UI pass, then original results.
+Post-finish forced AI camera control is original behavior. Outside-top3 result
+state none can physically finish and earnfans but grants no medal/timeBest;
+postrace options159 defaults to retry0, while desired return is actual value1.
+Added ONLY ignored career_results_operator.py, reusing passive tagged Observer.
+Finite Enter/Up awaits actual photo/animation/options identity, selects return
+through original keys, observes fresh autosave and SP menu, never calls result/
+progress/save/transition/quit setters. Twelve-key/300sec bounds, fresh fences,
+127-byte source envelope, unknown-popup refusal. Pure decisions/builders,
+expired/refused keys and py_compile PASS; no game/IPC/build/archive/GPU used.
+Helper exit0 proves only ordinary return/newsave/menu observation, explicitly
+not physical finish or disk/restart qualification. Root226 genuinecareer run,
+actual award delta and sameidentity saved-record reload remain separate.
+No production code or original data changed.
+
+
+## MAC230 — Actual worker stop ownership after optimized World timeout
+
+229 fullsample/LLDB proves main LayerManager::NativeQuiesceCreation Join, live
+LayerManagerThread EventWait, no ResourceLoadingThread and idleIO, not a file
+close/blockingResourceMutex diagnosis. Manager.h19 defines REMOVE_BLOCKING_
+RESOURCE_MUTEX;222 candidate is dormant. Real Resource/Layer workers both
+constructed same named EventSignalQuit; native named desktop auto-reset event
+sharing allows one private owner to consume the other's quit. Original PC
+CreateEvent name contract remainsunchanged; native's actual join/return final
+lifecycle requires private signals instead of originalPC TerminateProcess.
+Changed only2 native constructor branches to unnamed per-owner events; noABI
+or genericMT policy/Windows change. New real worker_stop_ownership fixture on
+untouched218Debug baseline isolation exits1 'Layer quit was consumed by Resource
+worker'. Fixed2TUs+fixture compile4configs12/12; private readonly-oldarchives
+with explicitchangedobjectoverride link4/4 and isolation/fullCPU runtimes8/8
+exit0 inclbothUBSan. Fullactualmanager callbacks:24resource payloads/12layer
+restartlifetimes +32earlyquiesce/restart, reciprocal/same-family isolation and
+genericnamed-event contract. NoGPU/Artery/game/sharedwrites. Source/fixture
+frozen, archive lease released; root owns standardleaf/coherent app builds and
+unchanged originalPAK/GPU World stressacceptance. Initial218/225/229failures
+retained; no timeout extension/check removal. Focused source/proof/limits in
+resource-worker-retirement-audit.md; private logs/linkcommands build/mac230.
+
+
+## 2026-10-27 — MAC227 actual mirror crowd alpha-to-coverage proof
+
+Freshhashchecked Debug218/Master189profile+save/CompleteCareer0 observeonly strict
+Metal diagnostic afterexplicitroot229slotrelease. Firstmenuhelper refusedbefore
+logexisted/noIPC; retryafterStartScreen normal event4597671/ownedcar. Actual255s
+HUD/Racing20; retryobserver retired,224finiteordinarykeys. Exact__cxa_throw:
+ContextBase SetAlphaToMaskEnable True485 ← CrowdFlags RenderMain527/Render513 ←
+SceneGraph ← MirrorView Render239. ActualupperMSAANone; colourA8R8G8B8/depthD24S8
+both1152x192/samples1, otherMRTnull; livecommand+encoder, VS1086/PS1088, oneflag.
+PureSBerrors[]/allthreads; no unexecutedgeometrylocalclaims. Ignoredfull+compact
+JSON andalpha-coverage-runtime-proof.md record limits. Owned91179explicitkill9/
+LLDBquit, wrapperdiagnostic0/367.93s slotfree/noexactapp leftovers; helpersended.
+No careerfinish/gameexit0 claim, source/build/statebypass. Parent+228 exactfacts
+sent; featureintegration+actualretry next.
+
+## MAC228 — native alpha-to-coverage (27 October2026)
+
+Actual227 before-throw proof identifies `CrowdFlags::RenderMain`527 explicitly settingTrue inMirrorView,1152×192 A8R8G8B8/D24S8 sample1, no MRT1..3; raw enum valid, no missing-resource or wrong-platform inference. Lower requested coverage bool now reaches Metal pipeline descriptor and cache key independently of blend/test, preserving alpha-to-one=false. Upper Context forwards strict valid enums; upper Device retains its original PC state cache and false DefaultStates reset. No target ownership, samplecount, asset, clear flag or cutout changes. Existing PC/GCM branches preserved.
+
+Private source probes24/24 (four implementation objects and two fixtures across four configs), fixed GPU4/4 Debug/Speed/DebugUBSan/SpeedUBSan exit0 under strictMetal. Real1x/2x/4x MRT coverage, preserved resolved alpha, independent blending/alpha test, real covered depth/stencil writes, partial-clear/default/target cache restoration and invalid-request retry pass; return-to1x also passes. Controlled old-Context baseline exact guard fails1 clean. Artifacts `_work/build/macos/occlusion-agent-alpha-coverage/{runtime-results.json,...}`. First fixture alpha assertion failure was RGB-only default write mask; explicit All-channel test setup fixed it without production change. ExplicitSV_Coverage parity remains outside current693source shaders and is documented, no speculative parser. Shared218 archives untouched, runtime slot released. Root coherent231 and normal-career acceptance still pending.
+
+
+## MAC225/229 actual repeated stall and successful thread proof
+
+Unchanged Speed218 real World rollback fixture:225 first3 freshprocesses passed
+~.21s, fourth stalledsameboundary1 and owned10s watchdogcleaned it; first
+threaddiagnostics timed out beforecapture. Dedicated229 unchangedfixture had
+onepass then stalled. Its30s diagnostic budget allowed successful native sample
+and data-only LLDB allthreads/SB capture before ownedwatchdogkill29.56s.
+Main was joining LayerManagerThread during application destruction; that worker
+waited on itsEvent, resource loading worker hadalreadyretired and bothI/O
+workers wereidle. No resourcepause/close/blockingmutex diagnosis selected from
+staleClosing stderr. Source230 proves two actual workers consumed the same
+named EventSignalQuit: cross-owner stoptheft, not main-ownedblockingmutex
+(the latter is compiledout). Native privatequit ownerrepair and deterministic
+realworker baseline/control+async lifetime probes frozen;231coherent integration
+follows. Original21890s timeout remainsbaselineevidence, not erasedbyretry.
+
+
+## MAC231 coherent alpha coverage/private worker quit integration PASS
+
+Full standard Debug and Speed games built with228/230. Both pass19/19 affected
+coverage/renderer/deferred/context/layer/worker/world/entrypoint checks under
+strictMetal. Unchanged optimized World fixture then passed10/10 freshprocess
+cycles without diagnostictrigger/watchdog ortimeoutincrease, retaining the
+originalfalse/throw rollback and actualworker resourceproof. Native individual
+quitEvent owners fixthe stack-proven shutdownstoptheft; genericNamed contract
+andWindows path remain. AlphaCoverage isrealpipeline/cache state at1x/2x/4x,
+with no forcedsamplecount/asset edit. Exacthashes/timing underignored
+mac231-integration-proof.json and perbuild mac231-build/tests.log. Original
+218failure and captured225/229baselines retained; fresh232normalcareer follows.
+
+
+## 2026-10-27 — MAC233 private guarded transport resilience
+
+Newignored drive_keyboard_guarded.py imports224planner, retainsfullCLIexit/stdout/
+stderr/classification andeachonekeycommand carriesuniqueexecutiontag+raceTime
++fresh1.5simsecdeadline within127bytes. Definitebootstrap/AddPeerfail retriesonly
+newfreshdecision; ambiguoussend/reply/disconnect/timeout neverblindlyreissued.
+Uncertaininput freezesallkeys untilfreshadvancingpostdeadline sample +fullhold
+walltime+.08+anotheradvancing sample,15swithoutproofstop. Acceptedkeys retain
+postACK/postpollaxisfence; prematurefalseHold stopsunknownowner. Originalhuman/
+route/freshness/layout/finiteguards unchanged, noengineprogress/AI/posewrites.
+852actualrecordpurechecks+7mockrealtransportclassifiercases+syntaxPASS/noIPC.
+Source/knownclient16362–16375correlation supportslegacy232KJ247preLuaAddPeer
+rejection (oldrawCLIstatusnotretained); parentreviewedandowns232continuation.
+First117liveguardedrecordsread-onlyaudit nohelperfault; actualtransportrecovery
+notyetobserved. keyboard-transport-resilience.md recordsprotocol/limits/CLI;
+no production/sharedbuild/GPU/gameexecutionby233. Rootruntimefinish/results
+remainrequired, helper0notgamefinishproof.
+
+MAC233 bounded follow-up: first411live guarded records include244accepted
+commands+19explicitguardskips; no capacity/deadline/control violation, no adverse
+transportrecoveryevent observed. LastobservedRacing/onroute/wrongWayfalse,
+distance1109m/rawlap1of3; nofinishclaim. Source/helper remainedfrozen.
+
+
+## MAC234 personal public integration follow-up
+
+Curated separate-index update includes accepted228 Metal coverage,230 private
+worker quit ownership, standard fixtures/CMake leaves and bounded audit docs.
+Coherent231 Debug/Speed each19/19 affected checks; ten fresh optimized World
+rollback runs pass without a watchdog or timeout change. Public source-only
+checkout synchronized from the exact curated tree and full CMake configure
+passes. First configure used a stale checkout missing the earlier public
+follow-up deferred-depth fixture; exact-tree extraction corrected that staging
+checkout, with no production-source or active game change. Original working
+branch/index/history and publication credential mirror retained. Personal
+author/login verified; no private game/save/build payload added.
+
+MAC232 is still running separately: first genuine completedlap1 notification
+and rawlap2 observed under finite ordinary human control. Complete3laps/results
+and save-return are not yet established. Existing300s capture was taken while
+parked beside wall/ledge and has severe foreground occlusion. Independent
+read-only review cannot distinguish camera/nearby geometry from a placement
+defect; it is not evidence of an alpha-coverage fault or full visual fidelity.
+No guessed rendering change or extra capture was made.

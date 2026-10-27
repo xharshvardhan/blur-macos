@@ -4,6 +4,11 @@
 #include <stdexcept>
 #include <string>
 namespace Display::Metal {
+// [Blur2PC] Preserve the original PC device cache and publish only validated coverage state.
+void C_GameDevice::SetAlphaToMaskEnable(E_Bool value){
+    if(value!=E_Bool_False&&value!=E_Bool_True)throw std::invalid_argument("Invalid native alpha-to-coverage boolean");
+    m_Display2.GetContext().SetAlphaToMaskEnable(static_cast<Display2::E_Bool>(value));m_AlphaToMaskEnable=value;
+}
 void C_GameDevice::SetAlphaTestEnable(E_Bool value){m_Display2.GetContext().SetAlphaTestEnable(ToBool2(value));m_AlphaTestEnable=value;m_BlendMode=E_BlendMode_Unknown;}
 void C_GameDevice::SetAlphaTestFunc(E_CmpFunc value){m_Display2.GetContext().SetAlphaTestFunc(ToCmpFunc2(value));m_AlphaTestFunc=value;m_BlendMode=E_BlendMode_Unknown;}
 void C_GameDevice::SetAlphaTestRef(U32 value){m_Display2.GetContext().SetAlphaTestRef(value);m_AlphaTestRef=value;m_BlendMode=E_BlendMode_Unknown;}

@@ -119,6 +119,7 @@ public:
     void SetVertexShaderParamF(const C_VertexShaderParam& parameter,const F32* data);
     void SetPixelShaderParamF(const C_PixelShaderParam& parameter,const F32* data,U32 count=1);
     void SetPixelShaderParamArrayF(const C_PixelShaderParam& parameter,const F32* data,U32 count=1);
+    void SetAlphaToMaskEnable(E_Bool enable);
     void SetAlphaTestEnable(E_Bool enable); void SetAlphaTestFunc(E_CmpFunc function); void SetAlphaTestRef(U32 reference);
     void SetDepthEnable(E_Bool enable); void SetDepthWriteEnable(E_Bool enable); void SetDepthFunc(E_CmpFunc function);
     void SetCullMode(E_CullMode mode); void SetColourWriteEnable(U32 mask);
@@ -179,6 +180,7 @@ public:
     NATIVE_CONTEXT_VIEW(SetVertexShaderParamF)
     NATIVE_CONTEXT_VIEW(SetPixelShaderParamF)
     NATIVE_CONTEXT_VIEW(SetPixelShaderParamArrayF)
+    NATIVE_CONTEXT_VIEW(SetAlphaToMaskEnable)
     NATIVE_CONTEXT_VIEW(SetAlphaTestEnable)
     NATIVE_CONTEXT_VIEW(SetAlphaTestFunc)
     NATIVE_CONTEXT_VIEW(SetAlphaTestRef)

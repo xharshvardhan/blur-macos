@@ -12,7 +12,11 @@ namespace Framework
 // C_LayerManagerThread
 
 C_LayerManagerThread::C_LayerManagerThread( C_LayerManager* pLayerManager )
+#if defined(PLATFORM_MACOS) // [Blur2PC] A private stop token must not alias another worker's auto-reset named event.
+    : m_EventSignalQuit()
+#else
 	: m_EventSignalQuit("EventSignalQuit")
+#endif
 	, m_pLayerManager(pLayerManager)
 {
 

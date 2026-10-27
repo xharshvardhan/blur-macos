@@ -1,0 +1,37 @@
+# Native alpha-to-coverage (MAC228)
+
+MAC226 reached the original normal career race with20 cars and finite ordinary keyboard input, then stopped at the upper native `C_ContextBase::SetAlphaToMaskEnable` unsupported-state guard. MAC227 captured the actual direct `C_CrowdFlags::RenderMain` request: `E_Bool_True`, in the mirror view with one real flag, colour0 A8R8G8B8 and D24S8 depth both1152×192 and one sample, no additional MRTs. The call follows alpha-test enable/ref0 and real flag shader binding. It is a genuine single-sample rendering capability gap, not a Default enum, missing material, altered asset or wrong platform branch. Before-unwind SB proof has no field errors at `_work/runtime/verification/mac227/alpha-proof.json`. The implementation below is not yet a real-career acceptance result.
+
+## Source contract
+
+The engine stores alpha-to-mask independently of alpha testing and blend factors. `RenderingData::BlendState` has a one-bit field, serialized through a `bool`; `FX::Context::SetRenderState` forwards the material value when `setAlphaToMask` is selected and otherwise explicitly disables it. SceneGraph pass state and CrowdFlags also set it explicitly. There is no justification for changing their cutout values or enabling MSAA globally.
+
+The recovered PC device setter in `D3D11GameDeviceNative.cpp` stores the requested state and updates `D3D11_BLEND_DESC::AlphaToCoverageEnable`. `ApplyBlend` includes this field in its cached blend descriptor while binding the current MRTs. PC `DefaultStates` restores the false default. The PS3 setter additionally sets alpha-to-one; that is a separate console policy which the PC native backend must not inherit. The [core D3D9 render-state enumeration](https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3drenderstatetype) does not expose a dedicated alpha-to-coverage render state; this adapter follows the explicit engine state and the repository's recovered D3D11 PC implementation rather than inventing a vendor FourCC extension.
+
+The [D3D11 functional specification, section17.18](https://microsoft.github.io/DirectX-Specs/d3d/archive/D3D11_3_FunctionalSpec.htm#17.18%20Alpha-to-Coverage) defines output0 alpha converted into an n-step mask, shared by all active MRTs and ANDed with primitive/sample coverage. It preserves the alpha sent to blending. Zero or lower alpha means no coverage; one or higher means full coverage; intermediate quantization/dithering is implementation dependent. The specification does not provide a portable fixed threshold for the one-sample case. This implementation therefore preserves the same requested state at1x as atMSAA samplecounts, rather than silently disabling it or emulating it with a guessed alpha test.
+
+Apple exposes the matching [Metal pipeline property](https://developer.apple.com/documentation/metal/mtlrenderpipelinedescriptor/isalphatocoverageenabled?language=objc) and documents the output0 coverage mask in [MTLRenderPipelineDescriptor](https://developer.apple.com/documentation/metal/mtlrenderpipelinedescriptor?language=objc). `rasterSampleCount` remains the actual attachment samplecount. `alphaToOneEnabled` remains false.
+
+## State and ownership
+
+Native Display2 stores a separate requested boolean, without changing the serialized four-byte blend-state layout. Its strict boolean setter checks thread ownership and validates the enum before publication. The pipeline key includes alpha coverage and the already-existing samplecount, shader identities, formats, MRT write masks, declaration and blend factors. The descriptor uses the same value. Compilation/reflection must succeed before the compiled pipeline is inserted into the cache; no successful-looking placeholder is published.
+
+Upper Context forwards valid coverage requests to its lifetime-checked lower context view. The native Device also has the PC cached setter and restores its false default at the existing frame/reset boundary. Blend-state replacement, alpha-test changes, target transitions, internal viewport clears and resolves do not silently mutate the coverage request. Internal clear pipelines keep coverage disabled so a zero-alpha clear still updates its entire requested rectangle.
+
+This adds no surface/view ownership, replacement textures, samplecount changes, shader regeneration or asset edits. Existing native attachment bounds, sample compatibility, map/scene ownership and feedback validation remain in force.
+
+## Bounded validation
+
+`tools/macos/alpha_coverage_test.cpp` uses actual upper Context/Device requests and authored native shaders with actual MRT/depth/stencil surfaces. It measures real resolved GPU output at1x/2x/4x, output0-alpha masking of both MRTs, preserved output alpha, monotonic coverage, independent alpha testing/blending, invalid-request retry, internal partial-clear state preservation and frame-default reset. It also checks that the same coverage gates depth and stencil writes, and revisits1x after the MSAA cases. The fixture accepts hardware-specific intermediate coverage rather than requiring a particular D3D/Metal dither pattern.
+
+Private source probes compile the four affected implementations plus the new fixture and the adjusted existing `game_context` fixture in all four configurations (24/24). The existing context fixture now rejects the invalid Unknown enum instead of expecting the implemented true state to fail; its other unsupported-state checks remain unchanged.
+
+A controlled Debug baseline retained the old upper Context implementation and failed with the exact original `Native alpha-to-coverage requires multisample integration` diagnostic, exit1 with complete cleanup. The fixed Debug, Speed, DebugUBSan and SpeedUBSan private executables all passed the complete GPU suite under `MTL_DEBUG_LAYER=1` and `UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1`, each exit0. Mean red-channel coverage for alpha0/.25/.5/.75/1 was0/0/0/1/1 at1x,0/.25098/.501961/.75098/1 at2x and0/.25098/.501961/.74902/1 at4x. These are measured host results, not portable threshold requirements. The1x case was repeated after the MSAA cases.
+
+The first draft fixture correctly exposed that `DefaultStates` restores the original RGB-only default write mask: subsequent alpha readback remained clear0. The fixture now explicitly requests All channels before measuring preserved alpha. No production default or coverage math was changed to make that assertion pass. Preserved resolved alpha is checked against shaderAlpha×measuredCoverage with clear alpha0.
+
+Logs, source probes, private replacement archives and `runtime-results.json` are under `_work/build/macos/occlusion-agent-alpha-coverage`. They leave the frozen218 shared archives unchanged. Root coherent231 subsequently built both standard applications and passed19/19 affected checks in each Debug and Speed configuration. The real normal-career rerun remains the next acceptance boundary.
+
+## Explicit limits
+
+D3D11 disables alpha-to-coverage when a pixel shader outputs `SV_Coverage`; Metal instead combines its fragment `sample_mask` with alpha coverage. The currently source-built shader corpus has no sample-mask outputs. Parity for such explicitly authored coverage-output shaders is not established by this ordinary output0 fixture and must not be inferred from it. This change also does not establish identical intermediate dither patterns across GPU vendors, which neither API promises.

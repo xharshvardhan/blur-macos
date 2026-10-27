@@ -43,6 +43,7 @@ public:
     void DefaultStates();void Reset();void Unbind();
     void SetBlendMode(E_BlendMode mode);
     void SetAlphaTestEnable(E_Bool);void SetAlphaTestFunc(E_CmpFunc);void SetAlphaTestRef(U32);
+    void SetAlphaToMaskEnable(E_Bool);
     void SetBlendEnable(E_Bool);void SetBlendSrc(E_Blend);void SetBlendDst(E_Blend);void SetBlendOp(E_BlendOp);
     void SetBlend(E_Blend src,E_Blend dst,E_BlendOp op,E_Blend srcAlpha,E_Blend dstAlpha,E_BlendOp opAlpha){SetBlendSrc(src);SetBlendDst(dst);SetBlendOp(op);SetBlendSrcAlpha(srcAlpha);SetBlendDstAlpha(dstAlpha);SetBlendOpAlpha(opAlpha);}
     void SetBlendSrcAlpha(E_Blend);void SetBlendDstAlpha(E_Blend);void SetBlendOpAlpha(E_BlendOp);

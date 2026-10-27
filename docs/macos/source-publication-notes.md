@@ -16,5 +16,16 @@ restored and both coherent builds pass 14 affected renderer checks. The actual
 normal-career rerun reaches HUD/Racing with 20 cars and ordinary keyboard motion,
 and its subsequent populated shutdown completes with exit 0 after the native
 pickup job/object/actor-lookup lifetime repair. Normal career completion/results
-are not established. The optimized resource-rollback check also retains a first
-90-second timeout alongside a passing focused retry; see the worker audit.
+are not established.
+
+The later coverage/worker integration passes19 affected checks in each Debug
+and optimized build. Metal alpha-to-coverage implements the original crowd and
+mirror request at existing sample counts, with focused GPU coverage at1x/2x/4x.
+The optimized rollback timeout was subsequently reproduced with live thread
+capture: resource and layer workers shared a private quit-event name. Native
+per-owner quit signals fix that class while preserving general named sharing;
+a deterministic old-code regression fails and ten unchanged optimized World
+rollback processes now pass. The original timeout remains recorded without a
+test timeout increase. See [the worker ownership audit](resource-worker-retirement-audit.md)
+and [coverage validation](alpha-to-coverage.md). Full normal career results and
+save-return acceptance remain separate from these component results.

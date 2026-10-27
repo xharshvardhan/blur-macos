@@ -3,8 +3,8 @@
 The immediate user-approved scope is one Brighton route, one BMW, keyboard
 control, a completed race and clean exit. Normal menu flow, career save/reload,
 multiplayer enhancements and distribution follow only after this slice works.
-Completed source-only work outside the slice remains local and is not evidence
-that those later goals have been met.
+Source availability outside the slice does not establish that those later
+goals have been met.
 
 ## Configuration and source authority
 
@@ -15,8 +15,8 @@ UISetup.lua. The original DebugScreen launches the configured level through
 its normal MenuNext/Return handler. Its configuration is Brighton_1, one BMW,
 controller0, one viewport, one lap, no random cars and no additional debug cars.
 The original DebugCarScreen permits one car and RaceLogic has a single-car
-spawn branch. Race-mode and finish behavior still require source/runtime
-verification; a lap setting alone is not proof that the event can finish.
+spawn branch. A lap setting alone did not establish finish behavior; MAC183
+subsequently verified the original race rules through the actual game path.
 
 The implementation keeps simulation on its fixed original ticks with unlocked
 rendering. Configuration and normal input may select/start the event; tests
@@ -68,10 +68,20 @@ travel and successful exit; `mac183-game-frame.png` is the gameplay frame;
 `mac183-notifications.log` and `mac183-keyboard-drive.jsonl` retain the observed
 race and input records. The screenshot alone does not prove the finish.
 
-Normal Master menu flow is now the active phase, using independent configuration,
-profile identity and save roots. Actual190 created a genuine career save with
-career-completion overrides disabled. Actual194 Debug reloaded version1378 with50903bytes/0unread and reached
-normal SP hub/tier/first unlocked event, with genuine intro-movie autosave.
-Its shutdown asserted in the audio PagedArray and failed;195/196 investigate.
-Normal career results, end-to-end clean menu exit, multiplayer and distribution
-are not yet verified.
+Normal Master menu flow uses independent configuration, profile identity and
+save roots, with career-completion overrides disabled. Actual190 created a
+genuine career save; actual194 reloaded version1378 with50903bytes/0unread.
+After the audio retirement repair, actual198 reached the normal SP hub, first
+unlocked event and owned-car garage, completed tutorial movies/autosave and
+shut down with exit0. Actual214 separately verifies ordinary StartScreen desktop
+quit confirmation. Actual219 reaches the normal20-car race and completes full
+populated shutdown with exit0 after the pickup borrower repair; that shutdown
+used the elapsed application guard.
+
+The later career run exposed crowd/mirror alpha-to-coverage, now implemented in
+Metal without changing assets or sample counts. A separately reproduced worker
+rollback stall was traced to shared private quit signals and repaired. Coherent
+Debug/Speed231 each pass19 affected integration checks, followed by10 fresh
+optimized World rollback passes. Actual232 is the next full normal-career
+acceptance run. Normal career completion/results/save-return, SP desktop exit
+after populated play, multiplayer and portable distribution remain unverified.
