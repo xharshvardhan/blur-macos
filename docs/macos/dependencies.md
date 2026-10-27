@@ -48,7 +48,9 @@ from the host package manager. Their installed binaries require macOS26 despite
 the project's historical13.0 compile flag. Current-host verification establishes
 Apple Silicon/macOS26 behavior only. A portable distributable must build/bundle
 these dependencies for its chosen deployment target and remove host paths.
-No portable game bundle has been delivered yet.
+The local 0.1.4 development bundle has passed same-host ZIP extraction, relocation,
+strict signatures and dependency/notices integrity. Another clean Mac and older
+macOS deployment remain unverified.
 
 Primary references: [SDL macOS](https://wiki.libsdl.org/SDL3/README-macos),
 [MojoShader](https://github.com/icculus/mojoshader),
@@ -57,3 +59,11 @@ Primary references: [SDL macOS](https://wiki.libsdl.org/SDL3/README-macos),
 [GNU libunistring](https://www.gnu.org/software/libunistring/manual/libunistring.html),
 [ICU formatted I/O](https://unicode-org.github.io/icu/userguide/io/),
 [FFmpeg](https://ffmpeg.org/).
+
+
+The 2026-10-28 [optimization/reuse audit](optimization-and-reuse-audit.md) reviews
+SDL3, the existing shader tools, optional Tracy, bgfx/wgpu and DXVK Native/Vulkan
+portability. These alternatives are not newly integrated and are not measured
+performance improvements. Preserve the working direct Metal path while testing
+bounded changes; generic platform/rendering libraries do not remove engine or
+asset-schema adaptation.

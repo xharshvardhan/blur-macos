@@ -1,9 +1,9 @@
-# Native dynamic CPU texture mirror (MAC298, GPU validated; actual comparison pending)
+# Native dynamic CPU texture mirror (MAC298)
 
 MAC296 completed its qualified90-second unpaused/no-input window:31851 native
 download waits consume5.39seconds (mean0.169ms), with no dropped trace records.
 MAC298 implements this bounded repair under the user's existing instruction to
-fix measured performance classes. Actual moving-game comparison remains pending.
+fix measured performance classes. Subsequent actual-game comparisons are recorded in the final integration below.
 No synchronization barrier is removed.
 
 ## Why these six locks exist
@@ -125,3 +125,15 @@ pre298 versions. Independent actual GPU bytes remain exact, but the fixture exit
 cleanly with its expected regression:56downloads versus20. This separates plain-lock
 pixel correctness from the removed redundant-transfer invariant without mixing
 old/new object layouts. Source/header hashes and logs are retained privately.
+
+
+## Completed integration (status reconciled by MAC324)
+
+The proposal/source-freeze status above is historical. MAC303/304 completed
+actual moving-game comparisons with the mirror and bounded presentation changes;
+[remaining-audio-jitter.md](remaining-audio-jitter.md) records combined gains and
+contrary frame-tail evidence. Both final 320 148-test suites and actual 323 driving/
+exit pass with this implementation. Those results do not isolate a universal
+mirror-only percentage gain or establish perceptually clean music. The next
+resource optimization candidates are in
+[optimization-and-reuse-audit.md](optimization-and-reuse-audit.md).

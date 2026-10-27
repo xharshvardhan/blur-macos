@@ -46,3 +46,15 @@ checks. No performance improvement is claimed until the same actual-game,
 no-readback observation windows compare total frame intervals and all wait
 phases. The next Context acquisition deliberately retains synchronization;
 any wait migration must be included in that comparison.
+
+
+## Completed integration (status reconciled by MAC324)
+
+The pending source-freeze paragraph above records the original proposal stage.
+MAC303/304 subsequently completed the actual-game comparison, documented in
+[remaining-audio-jitter.md](remaining-audio-jitter.md). Final 320 passes both 148-test
+suites and actual 322 hosting/323 driving exits with the bounded dependency intact.
+Combined submission-throughput improvements are established in those selected
+windows; universal smoothness, displayed FPS and an independent presentation-only
+gain are not. Further synchronization changes still require ownership and
+critical-path proof.

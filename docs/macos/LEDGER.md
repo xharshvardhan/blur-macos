@@ -4559,3 +4559,47 @@ manager; no broad staging, reset or generated target-list edits.
 Remaining: perceptual race music assessment, occasional frame tails, remote LAN
 join/racing and clean-Mac/notarized distribution. Do not mark full game/LAN goal
 complete based on these local controls/resize/audio ownership results.
+
+## 2026-10-28 — MAC324-CPU whole-port optimization and reuse audit
+
+Read-only audit distinguishes update-tail attribution gaps from concrete repeated
+work: allocator domain/size classification, default reused audio task-arena scans,
+global scheduler completion retirement, SDL device/queue polling and named-object
+registry sweeps. Existing traces provide phase costs, not current per-subsystem
+causes; older malloc_size samples support a candidate, not a present speed claim.
+Each proposed benchmark retains exact quality, fixed cadence, worker/resource
+retirement, original PCM and callback contracts. Adapter tests and bounded traces
+are reusable; game scheduler policies/bank formats/state stay Blur-specific.
+Findings handed to root for the combined report; private detailed handoff is
+`_work/research/mac324-cpu-audit.md`. No source changes, builds, runtime, GPU or
+IPC by this agent. Native agent_context helper rejects this phase name, as before.
+
+
+## 2026-10-28 — MAC324 optimization and reusable toolkit audit
+
+Three disjoint read-only subagent audits cover graphics, CPU/audio/scheduler,
+and loading/platform boundaries. Root verified primary maintained-library and
+Metal references and consolidated optimization-and-reuse-audit.md. Specific
+candidates include per-draw depth/stencil-state creation, DDS full-read/discard/
+reopen, draw scratch allocation, first-use shader compilation, redundant encoder
+endings, subresource uploads/snapshots, allocator classification and arena/name
+scans. Source repetition is proven; current cost and percentage savings are not.
+Existing CPU-only traces cannot establish GPU timing or a current memory census.
+
+The existing Metal/window/SDL/ABI seams are engine-coupled; no standalone SDK or
+universal Windows executable converter is claimed. Proposed first extraction is
+an explicit host contract consumed from an installed package by an independent
+client without Mercury/Blur headers/assets, then Blur through the same package,
+then a second actual engine. Reuse SDL/shader/profiling libraries and preserve
+hostOS/runtimeABI/renderer/PC-asset distinctions. Native game quality, timing,
+required waits and ownership are unchanged. Reconciled stale pending-comparison
+and pre-bundle status paragraphs with accepted final game evidence.
+
+Verification: all 19 delivered production/fixture hashes remain identical to
+mac320-source-freeze.json; documentation/local-link validation and curated
+publication checks follow. No game/SDL/GPU launch, build, profile, runtime input,
+new performance measurement or binary replacement was necessary for this audit.
+Next implementation milestone: add bounded counters and qualify immutable
+Metal depth/stencil reuse, then investigate the DDS single-read path with exact
+pixels, authentication, row-pitch and peak-memory checks. SDK extraction design
+remains proposed; no additional permission question blocks the completed audit.

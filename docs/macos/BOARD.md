@@ -513,3 +513,9 @@ The inherited `tools/agent_context.py context` was attempted and rejects this ne
 | MAC322 | Final320 actual left-Control hosting | Codex /root | accepted; original Host/CustomGame/lobby/leave/desktop, helpers0/0 and process0/116.661s | ignored source-qualified runtime/proof | Muted; capacity20/one local/zero remote; no multi-machine claim |
 
 | MAC323 | Final320 actual WASD and original race exit | Codex /root | accepted; actual WASD,90s/45s qualified windows,654.29m moving displacement, original exit0/309.113s | ignored source-qualified quiet operator/proof | No setters, captures/readback/profiler or measurement IPC; source285 state isolated |
+
+| MAC324-GFX | Whole-port quality-preserving graphics optimization and reusable boundaries audit | Codex /root/metal_occlusion | delivered; ranked source candidates and reusable-boundary limits sent to root | existing Metal/context/resource/profiling files; root combined audit owns report | Read-only; no production edits/build/runtime; no new measured gain or visual-fidelity claim |
+
+| MAC324 | Quality-preserving optimization and reusable source-port architecture audit | Codex /root | audit complete; ranked source candidates, benchmark gates and proposed extraction milestone documented | docs/macos optimization/toolkit report, analysis/decisions/ledger/board only | Three disjoint read-only agent audits; no production tuning, quality downgrade, new public toolkit or performance claim before qualification |
+
+| MAC324-CPU | Quality-preserving CPU/audio/scheduler/memory audit | Codex /root/physics_port | read-only audit complete; measured evidence and unmeasured candidates separated | native allocator, SDL writer, audio task arena, scheduler completion, named synchronization source + existing traces | Root owns combined report; no builds/runtime/production edits; preserve quality, ownership, timing and callbacks |

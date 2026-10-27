@@ -41,3 +41,30 @@ mixer and replace DirectSound output through a small adapter. Pin the upstream
 release and preserve its notices automatically. Do not interrupt source work
 for routine dependency choices. Track actual integration and remaining work
 in dependencies.md; an acquired dependency alone is not game functionality.
+
+
+## MAC-D07 — Reusable source-port toolkit scope (user request, 2026-10-28)
+
+The user wants optimization without quality reduction and reuse beyond one game.
+Audit the existing seams before extracting a generic package. Scope supported
+by current work is source-available/reconstructed engine ports with explicit
+engine adapters. A general Windows executable/ABI compatibility runtime is not
+provided by this port. Reuse maintained SDL/shader/profiling components rather
+than rebuild their functionality. Host OS, runtime ABI, renderer and asset schema remain
+separate capabilities.
+
+The staged host-package/external-client architecture in
+optimization-and-reuse-audit.md is proposed, not an already extracted SDK or an
+accepted replacement renderer. Routine read-only auditing and documenting this
+proposal are within the user's current instruction and require no new approval.
+Independent packaging, an authored second client, unchanged Blur acceptance and
+a second real-engine adapter are the milestones for progressively broader reuse
+claims. Keep independently authored toolkit code, inherited engine adapters and
+third-party provenance explicit.
+
+Publication record: the user subsequently authorized the personal public source
+repository; public/main 178ffbbf was verified after build320 delivery. Thus the
+local-only publication state in earlier D03/D05 is historical. This records that
+explicit user steering and source-only publication; it assigns no blanket new
+license to inherited engine code. No standalone toolkit repository or API has
+been published by the audit.

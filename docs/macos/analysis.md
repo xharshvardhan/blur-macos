@@ -1806,3 +1806,27 @@ shaders pass the modified engine loader; all4 focused GPU binaries exit0.
 Anisotropic biased explicit gradients and opaque sampler provenance remain
 truthful unsupported boundaries, not silently ignored state. See
 sampler-lod-contract.md; coherent actual-game validation remains pending.
+
+
+## MAC324 — Quality-preserving optimization and reuse audit (2026-10-28)
+
+Current delivered baseline is 0.1.4/build320, public 178ffbbf; historical bootstrap
+limitations earlier in this append-only file are not current game status.
+Read-only source audit confirms per-draw immutable depth/stencil creation,
+DDS metadata path full-read/discard followed by a second mip read, temporary
+draw preparation, synchronous shader compilation and unconditional target-setter
+encoder endings. These are concrete repeated operations; new measured savings
+are unknown. Existing Metal trace is CPU-span-only, so GPU/CPU bottleneck and
+current memory high-water marks remain to be measured. See
+[the ranked audit and validation contracts](optimization-and-reuse-audit.md).
+
+Public host/window/playback headers still include original Core.h; Display2 Metal
+links engine-system and embeds legacy state/shader contracts. Useful seams exist,
+but an engine-independent installed SDK/second-client proof does not. Keep host
+OS, runtime pointer ABI, GPU backend and PC serialized data schemas distinct.
+Actual game asset loading uses original PakFs/PakEntryFile/GameSystems, not the
+standalone NativePakArchive inspector. Reusable scope is source-port adapters,
+maintained libraries, build/diagnostic tools and conformance fixtures; arbitrary
+Windows executable conversion is not implemented. All 19 production/fixture
+hashes from the delivered freeze remain unchanged; this audit adds no measured
+performance gain or new game build.

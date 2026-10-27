@@ -75,6 +75,10 @@ offline eligibility and unavailable online accounts. The actual game reports
 offline 0 and online 2; router connection and LAN session creation remain
 separate checks ([entry contract](docs/macos/native-network-entry.md)).
 
+See the [optimization and reusable source-port toolkit audit](docs/macos/optimization-and-reuse-audit.md)
+for ranked performance opportunities, existing abstraction boundaries and the
+independent-client milestone required before claiming a general SDK.
+
 ## Build and run
 
 Requirements: Apple Silicon Mac, Xcode Command Line Tools, CMake 3.25+, Ninja,
