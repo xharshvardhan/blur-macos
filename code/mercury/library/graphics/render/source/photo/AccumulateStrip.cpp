@@ -130,17 +130,10 @@ bool C_AccumulateStrip::OnCreateVolatile()
 	#endif
 #endif
 
-#if defined(PLATFORM_MACOS) // [Blur2PC] Original application creation/resize calls this outside BeginScene.
-	const bool ownsScene = !Device()->InScene();
-	if (ownsScene && !Device()->BeginScene()) {
-		MEMORY_TRACKER_POP("graphics.renderers.photomode");
-		return false;
-	}
+#if defined(PLATFORM_MACOS) // [Blur2PC] Shared clear boundary owns its scene; creation retains its resource rollback.
 	try {
 		ClearTextures();
-		if (ownsScene) Device()->EndScene();
 	} catch (...) {
-		if (ownsScene && Device()->InScene()) Device()->EndScene();
 		OnDestroyVolatile();
 		MEMORY_TRACKER_POP("graphics.renderers.photomode");
 		throw;
@@ -211,6 +204,14 @@ void C_AccumulateStrip::ResolveRenderTarget(C_RenderTexture2D* tex)
 
 void C_AccumulateStrip::ClearTextures()
 {
+#if defined(PLATFORM_MACOS)
+	// [Blur2PC] PhotoCapture::RenderStart runs before its first sample's BeginScene.
+	// Creation and capture-start share this boundary; never close a borrowed scene.
+	const bool ownsScene = !Device()->InScene();
+	if (ownsScene && !Device()->BeginScene())
+		throw std::runtime_error("Native photo clear could not begin its render scene");
+	try {
+#endif
 	// Clear texture:
 	SetRenderTarget(m_PhotoTex);
 	Device()->Clear(E_Clear_Colour, RGBA(0xff000000));
@@ -226,6 +227,13 @@ void C_AccumulateStrip::ClearTextures()
 		Device()->Clear(E_Clear_Colour, RGBA(0xff000000));
 		ResolveRenderTarget(m_ScreenStrip);
 	}
+#if defined(PLATFORM_MACOS)
+		if (ownsScene) Device()->EndScene();
+	} catch (...) {
+		if (ownsScene && Device()->InScene()) Device()->EndScene();
+		throw;
+	}
+#endif
 }
 
 C_Texture2D* C_AccumulateStrip::GetTexture()

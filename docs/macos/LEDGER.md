@@ -3443,3 +3443,140 @@ parked beside wall/ledge and has severe foreground occlusion. Independent
 read-only review cannot distinguish camera/nearby geometry from a placement
 defect; it is not evidence of an alpha-coverage fault or full visual fidelity.
 No guessed rendering change or extra capture was made.
+
+
+## 2026-10-27 — MAC235 relocatable app distribution audit
+
+Read-only actualSpeed231 appSHAa2502036…df2c6: arm64exe minOS13 but9direct/
+21nonSystemdylibs from16Homebrewpackages ALLarm64/minOS26; no unresolvedhost
+refs, noFrameworksbundled. BlankbundleID/versions/minOS; linkeradhoconly
+plistunbound/resourcesunsealed.693bundleshaderfiles5.3MB/NSBundlepath, original
+datachooser/externalprofiles+saves recovered. Existing stage_bundle.cmake already
+reuses maintainedCMakeBundleUtilities fixup_bundle/verify_app/transitiveclosure,
+derivedminOS andadhocsign; recommendfinishthatpathnotnewrewriter. Noticesfrom
+SDL/SoundTouch/Mojo currentlybesideapp lostbyapp-onlystage; actualHomebrew16
+SBOMs available, FFmpegGPL/version3/x264/x265 exactconfig documented. Primary
+CMake/Apple sources checked; optionalCPackDMGlater. distribution-readiness-audit.md
+recordsmetadata/notices/signing/minOS/relocation/testplan/limits, ignoredclosure
+JSONinpublication/mac235. No package/install/build/GPU/input/source changes.
+
+## MAC238/240 — original photo-start native scene owner
+
+232genuine3-lap normal20-car completion reachesSpFinished then strictlower BeginScene error. Source audit: GameApp.OnRender callsPhotoCapture.OnAppRender beforeRenderNow/BeginRender; RenderSingle callsAppPhotoCapture.RenderStart→AccumulateStrip.Start→ClearTextures beforefirstRenderAddSample.BeginScene. Actual237before-unwind proof pending. Priorphoto fixture manuallybeganScene beforeallStartcalls.
+
+240native owned-scene policy movedfromvolatileCreate-only tosharedClearTextures; preserveborrowedactiveScene onnormal/error, requirednewBegin failuretruthful, ownercleanupEndScene onthrow, volatileallocationrollback remainsacquisitionboundary. OnlyAccumulateStrip.cpp+photo_test.cpp changed (sourceASCII/Latin1preserved); Windows unchanged. NewfixtureoutsideStart1/2sample +realCPU-mapconflict/ownedversusborrowedthrowcleanup/retry joins originalGPUstrip/readback/recreate/teardown checks. Privatefour-configsourceprobes initiated; noGPU/sharedarchivewrites while237ownsdiagnostic. Ordinarysingle-playerPause→Photo→MenuNext isshorterfaithfulapprepro; noforcedresults/progress.
+
+
+## MAC239/241 — Postrace photo owner audit and ordinary reproduction operator
+
+232 actuallastUI SpFinished/Finished20 after genuine3laps; errorBeginScene then
+exit1, noresultsoperatorinput. SourceGameApp OnRender callsqueuedPhotoCapture
+beforeRenderNow/BeginRender; RenderSingle→RenderStart→AccumulateStrip.Start
+clearsoutside scene beforeRenderAddSample BeginScene. ExistingCreateVolatile
+hasownedsceneclear wrapper; photo fixture begins scene beforeStart andmisses
+actualapporder. Exact237firstthrowpending;240graphicsownsclassrepair. Source
+audit doesnotclaim unseenawards/timelinecallactuallycaptured. Ordinaryoffline
+Racing HUD F1→Paused actualunlockedPhoto carousel→PhotoModeCamera Enter reaches
+sameAppPhotoCapture withoutresult/finish/selectionsetter; Garagehasnosuchroute.
+Onlyignored photo_mode_operator.py added; twelvekey/180s finite F1/Right/Enter,
+Main0 actualscreen/mode/branch/pause/readiness/freshnessfences,127bytebuilders,
+unknown/refusedinputstop. CameraEnterACKthenALLIPCstops; helper0onlyacceptance
+notphoto/process/diagnosisproof. Pureguardtests+py_compilePASS, noIPC/build/game/
+GPU/productionchange. Parent237ownsactualruntime, postrace/save remainsseparate.
+postrace-scene-lifecycle-audit.md records sourcepaths/testgap/CLI/limits.
+
+
+## MAC232 genuine normal career finish and post-race scene failure
+
+FrozenSpeed231 actual20car3lap normalMaster event4597671/car331339493
+completed original ordered split1/2 crossings and LapInc0:1/2/3, then
+RaceFinished/rawlap4/vehicleState1.2996 observed Racing records retain
+configuredAI/aiToggle/automatedHuman=false. No pose/checkpoint/lap/result writes.
+Early224 operator stopped on source-proven pre-dispatch peer rejection; guarded
+233 resumed ordinaryfinite input and reached naturalfinish. OriginalSpFinished
+screen then exposed Draw operation requires BeginScene; actualprocess exited1
+after1762.3s with full error cleanup. No resultsoperator ran and savebytes
+remain unchanged. mac232-career-proof.json records the narrow pass and failed
+results/save/exit gate; wrapper lap_qualified_finish=false is one-lap autoquit
+bookkeeping disabled in observe-only mode, not a contradictory physicalproof.
+238/239 identify automaticphoto RenderStart before firstsampleBeginScene;240
+sharedphoto-clear class repair and237actualPhotoMode diagnostic follow.
+
+MAC241 actual-root passive-query correction: original helper bareIsNetworkRace
+was Paused-only global, nil inHUD; ProtectedLoadRunString error beforeanykey.
+Privatehelper now actualregisteredAmax.IsGameModeSplitScreen/IsNetworkRace on
+all3screens, per-screen fieldaudit, sourcebinding checks +terminalfreshLuaerror
+classification ratherthan repeatedtimeoutretry. No productionfault or actual
+photo proof inferred. Correctedpuretests/syntaxPASS; noIPC byagent, root237
+owns correctedactualoperator/capture. Sourcefrozen again.
+
+MAC240 validation afterexplicit237release: actual237pureSB errors[] confirms ClearTextures→Start→RenderStart→RenderSingle→OnAppRender→GameAppOnRender beforefirstsampleBeginScene. Diagnosticonly ownedkill, notcleanGameexit. Privateold231baseline exactBeginScene diagnostic exits1clean with realbuiltinshader/devicecleanup. FixedDebug/Speed/DebugUBSan/SpeedUBSan4/4 strictMetal+haltUBSan GPU exit0,0.56–0.79s;8/8 sourceprobes. OutsideStart1/2samples andborrowedStart, realmappedtargetowned/borrowedthrowcleanup/retry, exact34×18pixels/partialstrip/RW/recreate/teardown allpass. Logs+runtime-results.json underocclusion-agent-photo-scene. SourceLatin1preserved, Windowspathunchanged, lowerguardnotrelaxed; allprivatearchiveleases/runtime released. Root242coherentbuildsdone; integratedchecks andfixedapp/results acceptance pendinghandoff.
+
+
+## MAC237 actual ordinary PhotoMode class proof / MAC242 integration
+
+FrozenDebug231 normalMaster20car race, finiteF1/right/Enter throughactual
+unlockedPausedPhoto/Camera. No progress/result setters or syntheticfinish.
+Before-throwpureSB237 errors[] confirms require→Impl::check(active=true,
+command=nil)→Clear→AccumulateStrip::ClearTextures216→Start256→
+AppPhotoCapture::RenderStart182→PhotoCapture::RenderSingle155→OnAppRender
+→GameApp::OnRender1056. This confirms the real application class viaPhotoMode;
+232's exactpostraceUIcallback was not itself captured. OwnedLLDBinferior killed
+afterproof, wrapperdiagnostic0/573.02s and slotreleased, not clean gameexit.
+First241helper stoppedbeforekeys afterbareIsNetworkRace querynil; corrected
+registeredAmax getters reachedtheoriginalcapture with7finitekeys andnootherIPC
+afterACK.
+
+240class repair/fixture8of8sourceprobes, old231baseline exactguard exit1clean,
+fixedfourconfigGPU4of4 understrictMetal/UBSan. Coherent242 standardDebug+Speed
+apps build andeachpasses8 affected photo/coverage/context/feedback/renderer
+transaction/graph/engine/entrypointchecks. No lowerguard relaxation, samplecount
+change, originalPCflow change or resultscallbackshortcut. FrozenSpeed242 actual
+243 manualphoto→resume→normal3laps/results/save-return follows.
+
+
+MAC241 explicitreturnextension sourcefrozen: --return-to-race preservesdefault
+captureACKstop, optin waits2freshconsistent Viewing/UI-restored negativeflag
+snapshots thenoriginalESC Viewing→Camera→Paused→HUD/unpausedRacing viaactual
+MenuBack handlers/EndPhotoCam/UnPause. Separatephasepolicy neverreshootsCamera,
+neverEnterViewing/photo-save, max16keys/180s,127bytes andoriginalsourceguards.
+Puredecision/mode/readiness/actiontests+syntaxPASS/noIPCbyagent. Exit0labels
+render/UI lifecycleonly, notphotoGPU/progress/finish/process success. Root243
+ownsactualcombinedSpeed242 photo/return/humanraceacceptance.
+
+
+## MAC243 fixed real PhotoMode lifecycle / MAC244 local stage
+
+FrozenSpeed242 actualnormalMaster20car race. Ordinary10-key F1/carouselPhoto/
+CameraEnter andEsc return sequence reachesoriginalViewing twicewith
+enable_render_in<0, healthyfreshstable snapshots, thenCamera→Paused→HUD/
+Racing/unpaused. No saved-photoEnter/result/progress setters. Exact240missing
+scene class no longer recurs; fixture supplies exactGPU pixels separately, UI
+lifecycle alone isnotclaimed as a pixelreadback. Guardedfinitehuman driving
+resumes toward original3lapfinish/automaticpostracephoto/results. Private243
+launcherlogmarker was overescaped, so its automaticobserverretirement marker
+didnotmatch; actualfrontendobserver hadalreadyexited and root confirmed no
+competinginputhelpers beforePhotoMode. Game unaffected; runtimeproof records
+manualhandoff.
+
+Unchangedexisting CMake BundleUtilities stagedfrozen242 into newignored244app,
+rewrote actual transitiveMachOclosure andpassed strictadhocsignaturevalidation.
+Allnon-systemabsolute dependencies absent, actualbundled minimumOS26.0.
+This replaces236old231binary as candidateforlaterrealrelocatedreload. Metadata/
+notices/distributionsigning/cleanmachineacceptance remain235audit work; no
+retaildata orrelease included.
+
+MAC245 source-only diagnostics audit: NoDObjMesh missingbit1 check remainsactive butonlyobjectcollider setter iscommentedout; activeworld/newcarphysicscolliders separatebits, no missingrendermesh proof. InvPartSC licenseplate front_hull/back_hull failsexactlocationname lookup, then skipsper-part dynamicmaterial parameterassignment; SetupDynamicMaterials3calls explainsrepeatednotifications. NoOSbranch atparser/guard; actualhullprimitive/physicsmetadata notinspected, so required/optional classification remainsunproven. AIBROKEN usesAllOK (includesm_safeToSimulate) atRLC POST_INITIALISE beforeStreamerStarted/InitRace; historicalMAC114samefinding. Legacyanalysisfalse latch/laterAIconsumer correctness notcertified. Existingrequiredmodel/wheelselection/renderlayerstatus contracts distinct fromdiagnosticlabels. No production/fixture/build/runtime/input/capture changes; visualfidelity remainsbounded/unverified. Seevehicle-diagnostic-contracts.md.
+
+
+## MAC246 personal public photo ownership snapshot
+
+Curatedsourcefollow-up includes sharednative photo-clear scene ownership and
+meaningful outside-scene baseline/control fixture, acceptedfourconfig GPU
+checks, coherent242 Debug/Speed builds/eightchecks each and actual243original
+PhotoMode capture/return. It also records actual2323lapfinish/postracefailure,
+245bounded legacydiagnostic audit and235localdistribution limits. Current243
+fullcareerresults/save-return remains explicitlypending; no finishedinstaller
+orfullgameparity claim. Sourcepathsunchanged/CMakeintegrationalreadybuilt, no
+redundantfullconfigure. Separatepublicationindex retains exactredactedprofile
+mirror and sourceonlyexclusions, originalbranch/defaultindex/historyintact.

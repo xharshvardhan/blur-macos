@@ -82,6 +82,9 @@ The later career run exposed crowd/mirror alpha-to-coverage, now implemented in
 Metal without changing assets or sample counts. A separately reproduced worker
 rollback stall was traced to shared private quit signals and repaired. Coherent
 Debug/Speed231 each pass19 affected integration checks, followed by10 fresh
-optimized World rollback passes. Actual232 is the next full normal-career
-acceptance run. Normal career completion/results/save-return, SP desktop exit
+optimized World rollback passes. Actual232 then completed the normal20-car3lap race through original ordered
+splits/laps and RaceFinished, but its results photo failed before BeginScene.
+The shared photo-clear ownership repair passes baseline/control GPU checks and
+coherent242 integration. Actual243 also completes original Photo Mode capture
+and ordinary return to racing. Full normal career results/save-return, SP desktop exit
 after populated play, multiplayer and portable distribution remain unverified.

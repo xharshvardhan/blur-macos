@@ -376,8 +376,32 @@ The inherited `tools/agent_context.py context` was attempted and rejects this ne
 
 | MAC231 | Coherent coverage pipeline and per-worker quit ownership integration | Codex /root | PASS Debug/Speedgame +19/19each;10/10freshWorldprocesses passafterquitfix | CMake alpha_coverage/worker_stop_ownership;standardDebug/Speedgame +19affectedchecks | Keep realPCcoverage semantics/samplecounts and named-eventgeneralcontract; laterfullcareer3lap acceptance remainsrequired |
 
-| MAC232 | Actual normal career3laps/results/save after coverage+quit fixes | Codex /root | starting frozenSpeed231 withnormalmenu +224pacedfinitekeys | real189Master/profile/save/data; before-statebackup; unique232app/logs | Requireactualcompletedlaps1/2/3/rawlap>=4 andUIpass, normalresultsreturn/autosave/reload/exit; no forcedfinish orprogress |
+| MAC232 | Actual normal career3laps/results/save after coverage+quit fixes | Codex /root | real20car3lap naturalfinishPASS; postracephoto sceneFAIL exit1/1762.3s;237proof/240fix | real189Master/profile/save/data; before-statebackup; unique232app/logs | Requireactualcompletedlaps1/2/3/rawlap>=4 andUIpass, normalresultsreturn/autosave/reload/exit; no forcedfinish orprogress |
 
 | MAC233 | Private finite key transport resilience | Codex /root/physics_port | frozen;852-record/7 mock transport cases PASS; first411 live records reviewed | ignored drive_keyboard_guarded.py; keyboard-transport-resilience.md; BOARD/LEDGER only | Full transport status, source-proven predispatch rejection retry, one-key deadline, no uncertain reissue before postdeadline/postpoll expiry; production frozen |
 
 | MAC234 | Personal public coverage/worker integration follow-up | Codex /root | PASS curatedsourceconfigure/review; publication follow-up, actual232 stillrunning | README/README.macos/PLAYABLE_SLICE/source-publication notes; separate publication index | Publish tested231 mechanisms/fixtures, preserve personal identity and excluded payload/credential mirror; no unverified career completion claim |
+
+| MAC235 | Relocatable Apple Silicon app distribution audit | Codex /root/physics_port | complete; raw app9direct/21transitive Homebrew libs allminOS26; existing CMake bundler fits | distribution-readiness-audit.md; BOARD/LEDGER only | Actual Speed231 Mach-O closure/resources/minOS/signing/notices, existing maintained bundler recommendation; no package/install/build/GPU/production edits |
+
+| MAC236 | Existing CMake bundler local staging and relocated reload | Codex /root | active; stage frozenSpeed231 into ignored newdestination | unchanged stage_bundle.cmake; ignored mac236-stage/log/proof; no production edits | BundleUtilities transitive closure/signature/minOS checks, then real profile reload after232 exits; no parallel GPU/service run or portable release claim |
+
+| MAC239 | Actual normal postrace UI/photo draw-scene lifecycle audit | Codex /root/dynamic_port | source audit complete; exact237 caller pending;240owns repair | postrace-scene-lifecycle-audit.md;BOARD/LEDGER;UI/photo sources read-only |232lastSpFinished; queuedphoto Start clear before sampleBeginScene; no unseenawards/runtimeproof claim |
+
+| MAC237 | Actual post-career photo before-throw scene proof | Codex /root | complete exactphotoClear/Start/RenderStart sceneproof errors[]; ownedkill/slotfree | unique237app/ignoredSB capture +guardedfinitekeys; no progresssetters | Confirm exact232 BeginScene failure stack beforeunwind; ownsruntime slot, all otherGPU/game runs deferred |
+
+| MAC238 | Postrace native scene/clear ownership source audit | Codex /root/metal_occlusion | complete; actual237 before-unwind confirms exact source chain | photo-scene-ownership.md;BOARD/LEDGER | Genuine232 Finished then strict BeginScene failure; OnRender→PhotoCapture→Start clears before RenderAddSample scene; existing photo fixture wrappedStart and missed boundary |
+
+| MAC240 | Shared native photo-clear scene ownership | Codex /root/metal_occlusion | frozen;8/8 sourceprobes+4/4 strictMetal GPU PASS;baselineexactguard fails1clean | render/photo/AccumulateStrip.cpp;tools/macos/photo_test.cpp;photo-scene-ownership.md | SharedClearTextures owner scope forCreateVolatile/Start; preserveborrowedscene/PCflow/strictlowerguard; actualGPU outsideStart/retry/borrowedscene/mapfailure proof;237exactcallerconfirmed,242coherentactualintegration pending |
+
+| MAC241 | Private ordinary PhotoMode reproduction/return operator | Codex /root/dynamic_port | frozen;pure guard/127-byte tests+syntax PASS;noIPC byagent | ignored photo_mode_operator.py;postrace-scene-lifecycle-audit.md;BOARD/LEDGER | default stopACK; explicit --return-to-race waitsViewing/UIrestored→ESC Camera→ESC Paused→ESC HUD/unpaused; parent243runtime owned |
+
+| MAC242 | Coherent shared photo-clear scene integration | Codex /root | PASS Debug/Speedgame builds +8/8 affectedchecks each; actual243pending | standardapps/photo+renderer affectedchecks; frozen240source | Preserve strictBeginScene and borrowed scene; old231 renderarchive copiedbeforebuild; no simultaneousruntime |
+
+| MAC243 | Actual fixed photo then normal career results/save/exit | Codex /root | active frozenSpeed242 actualnormalmenu, manualPhotoMode acceptance then3laps | genuine189profile/data/save, unique243app, finite originalUI/keyboard, no setters | Proveactualphoto beforefullcareerresults; onecapture400s, originalsave-return/reload/desktopexit remainrequired |
+
+| MAC244 | Relocated fixed-photo native app stage | Codex /root | active unchanged BundleUtilities staging frozenSpeed242 | ignorednew244stage/log/proof; no data/build source mutations | Replaces236oldbinary candidate forpost243actualreload; closure/signature/minOS tests and realrun remainseparate; notdistributionready |
+
+| MAC246 | Personal public photo ownership follow-up | Codex /root | PASS accepted242source/fixture/review; personalpublicfollow-up | README/README.macos/PLAYABLE_SLICE/source-publication notes +separatepublicationindex | Natural2323lapfinishverified butpostracefailure; fixed243PhotoModecapture/returnverified; fullresults/save-return stillrunning |
+
+| MAC245 | Required-vs-optional vehicle/AI automation diagnostics | Codex /root/metal_occlusion | bounded read-only source audit complete | vehicle-diagnostic-contracts.md;BOARD/LEDGER only | NoDObj bit1setter commented/stalereport; licenseplate exactsuffix/material-control mismatch unresolvedmetadata; AIBROKEN before InitRace simulation gate; no newfatal/default/asset/engine/runtime changes |

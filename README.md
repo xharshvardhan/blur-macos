@@ -27,7 +27,10 @@ release.** The current build still needs developer tools and native dependencies
   alpha-to-coverage now supports the original crowd/mirror rendering requests.
   Debug and optimized builds each pass 19 affected integration checks; the
   worker quit-signal repair also passes ten fresh-process world rollback runs.
-  Normal career race completion/results remain unverified.
+  A normal three-lap, 20-car career race has also reached its original finish.
+  Its post-race photo exposed a scene-ownership gap, now repaired and verified
+  through the original Photo Mode capture/return path. Full results/save-return
+  validation is still in progress.
 - The start-screen desktop quit confirmation exits normally using ordinary keys.
 - Complete normal career race/results/save progression, full content coverage,
   real LAN/multiplayer play and portable distribution remain in progress.

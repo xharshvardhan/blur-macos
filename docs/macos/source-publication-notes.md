@@ -8,24 +8,33 @@ The snapshot has its own initial commit, so excluded upstream payloads and crede
 
 The native game builds its runtime dependencies from pinned source or the host packages described in [dependencies.md](dependencies.md). This source snapshot does not provide an installer, game data or the upstream prebuilt Windows toolchain. Supply your own complete original PC data separately when running the native application.
 
-Validation distinguishes source checks from game proof. The stream/audio/save/UI integration passed 19 affected checks in each configuration. An original Brighton/BMW keyboard race completed its natural checkpoint/lap sequence and exited 0. A populated normal Debug frontend has also created/reloaded a career profile, played its tutorial movies, reached the owned-car garage and shut down with exit 0. Normal career race/results progression, real LAN play, portable packaging and SP exit confirmation after populated play remain separate verification work. A separate StartScreen run verified ordinary desktop confirmation and actual exit 0.
+Validation distinguishes source checks from game proof. The Brighton/BMW
+keyboard slice completed its original checkpoint/lap/finish sequence and exited0.
+The normal frontend created/reloaded a career profile, played tutorial movies,
+reached the owned-car garage and shut down with exit0. Ordinary StartScreen
+desktop confirmation also exits0; the populated20-car shutdown completes after
+the native pickup borrower repair.
 
-The next normal career event reached its race introduction but stopped on a
-missing stencil attachment. The PC borrowed-depth pass contract is now
-restored and both coherent builds pass 14 affected renderer checks. The actual
-normal-career rerun reaches HUD/Racing with 20 cars and ordinary keyboard motion,
-and its subsequent populated shutdown completes with exit 0 after the native
-pickup job/object/actor-lookup lifetime repair. Normal career completion/results
-are not established.
+A normal20-car3lap career race completed its original ordered splits/laps and
+RaceFinished under human keyboard control (232), then failed when the automatic
+results photo cleared before BeginScene. Actual ordinary Photo Mode reproduced
+the precise application call stack. The shared native photo-clear boundary now
+owns a temporary scene or borrows its caller's scene, with cleanup/retry tests
+and exact GPU accumulation pixels. Debug/Speed applications each pass eight
+affected checks; the fixed actual Photo Mode completes capture and ordinary
+return to racing. Full career results/save-return remains separate acceptance
+work. See [photo-scene-ownership.md](photo-scene-ownership.md).
 
-The later coverage/worker integration passes19 affected checks in each Debug
-and optimized build. Metal alpha-to-coverage implements the original crowd and
-mirror request at existing sample counts, with focused GPU coverage at1x/2x/4x.
-The optimized rollback timeout was subsequently reproduced with live thread
-capture: resource and layer workers shared a private quit-event name. Native
-per-owner quit signals fix that class while preserving general named sharing;
-a deterministic old-code regression fails and ten unchanged optimized World
-rollback processes now pass. The original timeout remains recorded without a
-test timeout increase. See [the worker ownership audit](resource-worker-retirement-audit.md)
-and [coverage validation](alpha-to-coverage.md). Full normal career results and
-save-return acceptance remain separate from these component results.
+The coverage/worker integration passes19 affected checks in each Debug and
+optimized build. Metal alpha-to-coverage implements original crowd/mirror
+requests at existing sample counts, with focused GPU coverage at1x/2x/4x. The
+optimized rollback timeout was reproduced with live thread capture: resource
+and layer workers shared a private quit-event name. Native per-owner signals
+fix that class while preserving general named sharing. A deterministic old-code
+regression fails and ten unchanged optimized World processes pass without a
+test timeout increase. See [the worker audit](resource-worker-retirement-audit.md)
+and [coverage validation](alpha-to-coverage.md).
+
+Local BundleUtilities staging passes dependency-closure and signature checks,
+but portable distribution, clean-machine runs and real LAN play remain
+unverified. See [distribution-readiness-audit.md](distribution-readiness-audit.md).

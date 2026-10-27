@@ -16,8 +16,11 @@ guard; a separate StartScreen run confirms ordinary Escape/Enter desktop quit
 with actual exit 0 (MAC214). SP exit confirmation after populated play remains
 separate. A normal career event now reaches HUD/Racing with 20 cars and keyboard motion;
 its populated race shutdown now completes with exit 0 after the pickup borrower
-lifetime repair (MAC219). This shutdown used the elapsed application guard. Career
-completion/results progression, real LAN play and portable distribution are still
+lifetime repair (MAC219). This shutdown used the elapsed application guard. A subsequent normal three-lap
+race reached its original finish, then failed at the automatic results photo.
+The shared photo-clear scene ownership is repaired, and the fixed application
+completes its original Photo Mode capture and return to racing. Full results/save
+progression, real LAN play and portable distribution are still
 being validated. This remains a development port.
 
 The public source snapshot lives at
@@ -121,34 +124,42 @@ not fabricated this component or disabled vptr checks to conceal that gap.
 ASan currently hangs in dyld before main on this host, so it supplies no game
 validation evidence.
 
-The original Brighton/BMW keyboard slice completed its natural checkpoint,
-lap and race-finish sequence and exited 0. The assert-enabled normal frontend
-created/reloaded a career profile, reached the owned-car garage and completed
-full shutdown with exit 0. A subsequent normal career event reached its race
-introduction, then stopped on a missing stencil attachment. The original PC
-borrowed-depth pass contract is now restored, with Debug/Speed 14 affected
-renderer checks passing. Actual MAC215 reaches the normal 20-car HUD/Racing, renders
-a completed GPU frame and accepts keyboard motion. Its initial shutdown returned 245;
-MAC216 identified pickup destruction querying an already-cleared actor list.
-The native repair joins pickup jobs and retains that borrow until all pickup
-callbacks finish. Actual MAC219 now completes the populated shutdown with exit 0. Ordinary
-StartScreen desktop confirmation also exits 0. Normal career results, SP exit
-confirmation after populated play,
-multiplayer and portable distribution remain unverified. See
+The original Brighton/BMW keyboard slice completed its checkpoint/lap/finish
+sequence and exited0. The normal frontend created and reloaded a career save,
+played tutorial movies, reached the owned-car garage and completed full shutdown.
+Ordinary StartScreen desktop quit confirmation also exits0. A populated20-car
+race completes normal shutdown after the pickup borrower lifetime repair.
+
+A normal20-car3lap career race now reaches its original finish under ordinary
+human keyboard control (MAC232: ordered splits, completedlaps1/2/3 and rawlap4).
+Its process exited1 when the automatic results photo cleared before BeginScene.
+Actual Photo Mode reproduced that exact application call stack. The shared
+photo-clear boundary now owns a temporary scene when needed while preserving
+borrowed scenes. The old regression fails cleanly; the fixed GPU suite passes
+four configurations, and Debug/Speed applications each pass eight affected
+integration checks. Actual MAC243 completes original Photo Mode capture and
+ordinary return to HUD/Racing without the error. Full career results/save-return,
+SP desktop exit after populated play, multiplayer and portable distribution
+remain separate acceptance work. See
+[photo-scene-ownership.md](docs/macos/photo-scene-ownership.md),
 [PLAYABLE_SLICE.md](docs/macos/PLAYABLE_SLICE.md) and
-[BOARD.md](docs/macos/BOARD.md) for the acceptance criteria and current evidence.
+[BOARD.md](docs/macos/BOARD.md).
 
-The earlier optimized layer/borrower matrix retained a 90-second world rollback
-timeout despite a passing retry. Reproduction with live thread capture identified
-resource and layer workers consuming the same named quit event. Their native
-constructors now create private quit signals, preserving general named-event
-sharing and the Windows implementation. A deterministic original-code regression
-fails; the repaired worker fixture and ten fresh-process world rollback runs
-pass. See [the ownership audit](docs/macos/resource-worker-retirement-audit.md).
-The original timeout remains recorded, and its test timeout was not increased.
+Native alpha-to-coverage preserves original crowd/mirror requests at existing
+attachment sample counts. Focused GPU checks cover1x/2x/4x, MRT, depth/stencil,
+blending and state restoration; see
+[alpha-to-coverage.md](docs/macos/alpha-to-coverage.md).
 
-The normal career run also exposed an unsupported alpha-to-coverage request from
-crowd flags in the mirror view. Native Metal pipeline state now implements that
-request at the existing attachment sample count. GPU checks cover 1x/2x/4x, MRT,
-depth/stencil, blending and state restoration; the full career rerun remains
-separate acceptance work. See [alpha-to-coverage.md](docs/macos/alpha-to-coverage.md).
+The earlier optimized World rollback timeout was reproduced with live thread
+capture and traced to resource/layer workers sharing a private quit-event name.
+Their native constructors now use private signals; general named-event sharing
+and Windows code remain unchanged. The original-code regression fails, while
+the repaired worker fixture and ten fresh World processes pass without a test
+timeout increase. See
+[resource-worker-retirement-audit.md](docs/macos/resource-worker-retirement-audit.md).
+
+CMake BundleUtilities can stage a local app with its transitive libraries and
+validate its dependency closure and ad-hoc signatures. The current host libraries
+require macOS26. Metadata, bundled notices, distribution signing and clean-machine
+validation remain in progress; see
+[distribution-readiness-audit.md](docs/macos/distribution-readiness-audit.md).
