@@ -68,12 +68,18 @@ const int g_SmallBlockNumberOfSizes = (sizeof(g_SmallBlockAllocatorSizes) / size
 
 // Global instance of the small block allocator
 #if defined(PLATFORM_MACOS)
-// [Blur2PC] PreStatic initialization runs at101. Register the allocator's
-// destructor next within this translation unit. The native link policy also
-// places this original bootstrap before game archives, because Mach-O does not
-// sort priorities across archive members. Retained static CPU buffers must be
-// freed while allocator ownership metadata is alive.
-Memory::BlockAllocator g_SmallBlockAllocator __attribute__((init_priority(102)));
+// [Blur2PC] The native global-new domain also owns C++ buffers in framework
+// workers (including Metal telemetry) that can free while cxa_finalize runs.
+// Keep its mutex/ownership bitmap alive until process death. Payloads still
+// return through the original Free/FreeBlock paths; this does not retain game
+// owners between CoreSystems lifetimes. Preserve PreStatic101/constructor102
+// and the existing bootstrap link order, including early malloc fallback.
+#if !defined(__clang__)
+#error Native global allocator requires Clang no_destroy process-lifetime storage
+#elif !__has_attribute(no_destroy)
+#error Native global allocator requires Clang no_destroy process-lifetime storage
+#endif
+Memory::BlockAllocator g_SmallBlockAllocator __attribute__((no_destroy,init_priority(102)));
 #else
 Memory::BlockAllocator g_SmallBlockAllocator;
 #endif

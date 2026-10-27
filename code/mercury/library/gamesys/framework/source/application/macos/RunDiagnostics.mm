@@ -7,6 +7,8 @@
 #import <ImageIO/ImageIO.h>
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
+#include <algorithm>
 #include <cstring>
 #include <filesystem>
 #include <stdexcept>
@@ -17,7 +19,29 @@ struct Diagnostics {
     std::string pngPath;
     double captureAfter=-1,quitAfter=-1;
     bool captureAttempted=false,quitAttempted=false;
+    bool framesEnabled=false,framesStarted=false,counterAvailable=false;
+    double windowStart=0,lastFrame=0,maxInterval=0;
+    U64 callbacks=0,basePresents=0,lastPresents=0;
+    const Display::C_Device* counterOwner=nullptr;
 } diagnostics;
+// Tick is invoked once after actual OnRender/endRender. This wall-clock
+// observation is independent of the fixed simulation-tick timer. The native
+// counter measures submitted presents, not compositor/displayed GPU frames.
+void ObserveFrame(double elapsed){
+    bool available=Display::DeviceExists()&&Display::Device()->IsCreated();
+    const auto* owner=available?Display::Device():nullptr;
+    const U64 presents=available?Display::Device()->GetDisplay2().GetSubmittedPresentCount():0;
+    auto restart=[&]{diagnostics.framesStarted=true;diagnostics.windowStart=diagnostics.lastFrame=elapsed;diagnostics.maxInterval=0;diagnostics.callbacks=0;diagnostics.counterAvailable=available;diagnostics.counterOwner=owner;diagnostics.basePresents=diagnostics.lastPresents=presents;};
+    if(!diagnostics.framesStarted||elapsed<diagnostics.lastFrame||available!=diagnostics.counterAvailable||owner!=diagnostics.counterOwner||presents<diagnostics.lastPresents){restart();return;}
+    const double interval=elapsed-diagnostics.lastFrame;
+    diagnostics.lastFrame=elapsed;diagnostics.lastPresents=presents;
+    diagnostics.maxInterval=std::max(diagnostics.maxInterval,interval);++diagnostics.callbacks;
+    const double window=elapsed-diagnostics.windowStart;
+    if(window<5)return;
+    const U64 submitted=presents-diagnostics.basePresents;
+    std::fprintf(stderr,"Native frame diagnostics: elapsed=%.6f window=%.6f callbacks=%llu callback_hz=%.3f interval_mean_ms=%.3f interval_max_ms=%.3f submitted_presents=%llu submit_hz=%.3f counter_available=%u\n",elapsed,window,static_cast<unsigned long long>(diagnostics.callbacks),double(diagnostics.callbacks)/window,window*1000/double(diagnostics.callbacks),diagnostics.maxInterval*1000,static_cast<unsigned long long>(submitted),double(submitted)/window,unsigned(available));
+    restart();
+}
 template<class T> struct CFHandle {
     T value=nullptr;
     explicit CFHandle(T object):value(object){}
@@ -63,12 +87,15 @@ void CaptureFrame(const std::string& filename){
 void ConfigureRunDiagnostics(const std::string& pngPath,double captureAfterSeconds,double quitAfterSeconds){
     if(!std::isfinite(captureAfterSeconds)||!std::isfinite(quitAfterSeconds))throw std::invalid_argument("Native run diagnostic deadlines must be finite");
     diagnostics={pngPath,captureAfterSeconds,quitAfterSeconds,false,false};
+    const char* frames=std::getenv("BLUR_MAC_FRAME_DIAGNOSTICS");
+    diagnostics.framesEnabled=frames&&std::strcmp(frames,"1")==0;
 }
 void TickRunDiagnostics(double elapsedSeconds){
     const bool capture=!diagnostics.captureAttempted&&!diagnostics.pngPath.empty()&&diagnostics.captureAfter>=0;
     const bool quit=!diagnostics.quitAttempted&&diagnostics.quitAfter>=0;
-    if(!capture&&!quit)return;
+    if(!capture&&!quit&&!diagnostics.framesEnabled)return;
     if(!std::isfinite(elapsedSeconds)||elapsedSeconds<0)throw std::invalid_argument("Native run diagnostic elapsed time must be finite and nonnegative");
+    if(diagnostics.framesEnabled)ObserveFrame(elapsedSeconds);
     if(capture&&elapsedSeconds>=diagnostics.captureAfter){
         diagnostics.captureAttempted=true;
         try{CaptureFrame(diagnostics.pngPath);}catch(const std::exception& error){std::fprintf(stderr,"Native run capture failed: %s\n",error.what());}

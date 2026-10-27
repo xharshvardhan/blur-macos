@@ -45,7 +45,13 @@ C_GameProfile::C_GameProfile():
 #if defined(PLATFORM_PC) || defined(PLATFORM_MACOS) // [Blur2PC] Native profile uses the original PC keyboard/save layout.
 	// [Blur2PC] retail's profiles are static objects, so the keyboard layout reads 0 until set; ProfileOptions::Init
 	// (0x00b9e790) does not touch it
+#if defined(PLATFORM_MACOS)
+	// [Blur2PC] New native profiles start with retail layout 1 (WASD/arrow
+	// power-ups). Existing profile deserialisation still restores its saved choice.
+	mOptions.mKeyboardLayout = 1;
+#else
 	mOptions.mKeyboardLayout = 0;
+#endif
 	// [Blur2PC] T250: likewise the option bytes nothing in retail touches stay zero
 	memset( mOptions.mOnlineLoginName, 0, sizeof(mOptions.mOnlineLoginName) );
 	memset( mOptions.mOnlineLoginPassword, 0, sizeof(mOptions.mOnlineLoginPassword) );
@@ -368,6 +374,8 @@ void ProfileOptions::ReadLegacyOptions( Sys::BinaryDeserialiserAutoEndian& in, i
 	if( version == 1373 )
 	{
 		InitKeyboard();
+		// [Blur2PC] A legacy 1373 save predates this choice; preserve its PC layout 0.
+		mKeyboardIsCustom = 0;
 		mKeyboardLayout = 0;
 	}
 	else
@@ -399,7 +407,13 @@ void ProfileOptions::InsertAudioQualityIntoLegacyOptions()
 // Retail ProfileOptions::Init (0x00b9e790): not custom, the custom keys start as layout 0
 void ProfileOptions::InitKeyboard()
 {
+#if defined(PLATFORM_MACOS)
+	// [Blur2PC] The retail UI calls this field IsCustom but 0/1 select its two
+	// standard layouts. Keep a new native profile's visible choice with layout 1.
+	mKeyboardIsCustom	= 1;
+#else
 	mKeyboardIsCustom	= 0;
+#endif
 	mKeyThrottle		= Input::C_Keyboard::E_Button_Q;
 	mKeyBrake			= Input::C_Keyboard::E_Button_A;
 	mKeyEBrake			= Input::C_Keyboard::E_Button_Down;

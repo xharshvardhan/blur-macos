@@ -15,7 +15,7 @@
 #include <Game/GameControls/GameControls.h>
 // Cocoa virtual key codes from the public macOS HIToolbox/Events.h.
 // Avoid Carbon umbrella imports: its global Component typedef conflicts with game namespaces.
-enum : U16 { kVK_ANSI_A=0x00,kVK_ANSI_S=0x01,kVK_ANSI_D=0x02,kVK_ANSI_Q=0x0c,kVK_ANSI_W=0x0d,kVK_LeftArrow=0x7b,kVK_RightArrow=0x7c,kVK_DownArrow=0x7d,kVK_UpArrow=0x7e };
+enum : U16 { kVK_ANSI_A=0x00,kVK_ANSI_S=0x01,kVK_ANSI_D=0x02,kVK_ANSI_Q=0x0c,kVK_ANSI_W=0x0d,kVK_Space=0x31,kVK_RightControl=0x3e,kVK_LeftArrow=0x7b,kVK_RightArrow=0x7c,kVK_DownArrow=0x7d,kVK_UpArrow=0x7e };
 #include <cmath>
 #include <iostream>
 #include <memory>
@@ -32,7 +32,7 @@ int main(){try{
     UI::C_ControlConfig config = UI::C_ControlConfig();config.m_GameFunctionRT=Game::E_Button_Throttle;config.m_GameFunctionLT=Game::E_Button_Brake;
     auto events=Input::Mac::GetEvents(manager.get());
     auto sample=[&]{manager->Update();controls.Update();};
-    auto reset=[&]{for(U16 code:{U16(kVK_ANSI_Q),U16(kVK_ANSI_W),U16(kVK_ANSI_A),U16(kVK_ANSI_S),U16(kVK_ANSI_D),U16(kVK_LeftArrow),U16(kVK_RightArrow),U16(kVK_UpArrow),U16(kVK_DownArrow)})events.key(code,false,0,false);sample();};
+    auto reset=[&]{for(U16 code:{U16(kVK_ANSI_Q),U16(kVK_ANSI_W),U16(kVK_ANSI_A),U16(kVK_ANSI_S),U16(kVK_ANSI_D),U16(kVK_Space),U16(kVK_RightControl),U16(kVK_LeftArrow),U16(kVK_RightArrow),U16(kVK_UpArrow),U16(kVK_DownArrow)})events.key(code,false,0,false);sample();};
     auto key=[&](U16 code,bool down){events.key(code,down,0,false);sample();};
     for(S32 layout:{0,1}){
         reset();Game::SetupAmaxUserControlsPC(input,pad.get(),keyboard.get(),mouse.get(),layout,false,&config,0);sample();
@@ -57,7 +57,18 @@ int main(){try{
         key(backward,true);
         require(input->GetButtonPressedDebounced(Game::E_Button_UsePickupBackward)&&!input->GetButtonPressed(Game::E_Button_UsePickupForward),"Original PC backward pickup-fire binding missing or crossed");
         key(backward,false);require(input->GetButtonReleasedDebounced(Game::E_Button_UsePickupBackward),"Backward pickup-fire release lost");
+        const U16 change=layout?kVK_LeftArrow:kVK_UpArrow,discard=layout?kVK_RightArrow:kVK_ANSI_D;
+        key(change,true);require(input->GetButtonPressedDebounced(Game::E_Button_SwitchPickup),"Original PC pickup-selection binding missing");
+        require(input->GetButtonPressed(Game::E_UiButton_PadOrAxis_Up)==!layout&&input->GetButtonPressed(Game::E_UiButton_PadOrAxis_Left)==bool(layout),"Layout selection changed original arrow menu navigation");
+        if(layout)require(std::abs(input->GetAxisSignedValue(Game::E_Axis_Steering))<1e-6f,"Layout1 pickup-selection arrow also steered the car");
+        key(change,false);require(input->GetButtonReleasedDebounced(Game::E_Button_SwitchPickup),"Pickup-selection release lost");
+        key(discard,true);require(input->GetButtonPressedDebounced(Game::E_Button_DiscardPickup),"Original PC discard binding missing");
+        if(layout){require(input->GetButtonPressed(Game::E_UiButton_PadOrAxis_Right),"Layout1 discard arrow lost ordinary menu navigation");require(std::abs(input->GetAxisSignedValue(Game::E_Axis_Steering))<1e-6f,"Layout1 discard arrow also steered the car");}
+        key(discard,false);require(input->GetButtonReleasedDebounced(Game::E_Button_DiscardPickup),"Pickup discard release lost");
+        const U16 handbrake=layout?kVK_Space:kVK_DownArrow;
+        key(handbrake,true);require(input->GetButtonPressed(Game::E_Button_Handbrake)&&!input->GetButtonPressed(Game::E_Button_Brake),"Original PC handbrake missing or crossed brake");key(handbrake,false);
+        key(kVK_RightControl,true);require(input->GetButtonPressedDebounced(Game::E_Button_UsePickup),"Original PC neutral pickup-fire binding missing");key(kVK_RightControl,false);
         if(layout){key(kVK_ANSI_Q,true);require(!input->GetButtonPressed(Game::E_Button_Throttle),"Old layout0 throttle leaked into layout1");key(kVK_ANSI_Q,false);}
     }
-    std::cout<<"Native profile/options binding selection: original layout0 Q/A/arrows and layout1 WASD, dedicated pickup-fire keys, pad-remap regression and keyboard ownership PASS\n";return 0;
+    std::cout<<"Native profile/options binding selection: original layout0 Q/A/arrows and layout1 WASD, dedicated fire/switch/discard/handbrake keys, independent arrow menu navigation, pad-remap regression and keyboard ownership PASS\n";return 0;
 }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 1;}}

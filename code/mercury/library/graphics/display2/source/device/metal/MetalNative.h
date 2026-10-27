@@ -90,7 +90,12 @@ struct Surface {
     std::thread::id owner;
     U32 width=0, height=0, depth=1, pitch=0, bytes=0, block=1;
     E_SurfaceFormat format=E_SurfaceFormat_Unknown;
-    ~Surface() { @autoreleasepool { if(pending) [pending waitUntilCompleted]; } }
+    ~Surface() { @autoreleasepool {
+        // Ordinary Metal commands retain the actual texture/staging resources
+        // until GPU completion. They do not use this CPU ownership wrapper.
+        // An explicitly unretained command still needs the old lifetime barrier.
+        if(pending&&!pending.retainedReferences) [pending waitUntilCompleted];
+    } }
     bool wait() { if(!pending)return true; [pending waitUntilCompleted]; bool ok=pending.status==MTLCommandBufferStatusCompleted; pending=nil; return ok; }
 };
 struct Texture {

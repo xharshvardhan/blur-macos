@@ -107,7 +107,9 @@ static void renderOutput(){
                 require(engine.SetOutputSampleRate(rate),engine.Error().c_str());
                 require(std::abs(F32(fOutputRateRatio)-24000.f/F32(rate))<1e-6f,"Native audio quality lost original pitch correction");
                 until([&]{return engine.SubmittedFrames()>=1024;},"Quality change did not restart original renderer consumption");
-                require(engine.QueuedFrames()<=S64(rate/60+uFrameLength),"Native output queue grew without backpressure");
+                const auto measured=engine.Diagnostics();
+                require(measured.output.deviceRate&&measured.output.devicePeriodFrames&&measured.maximumQueueTargetFrames,"Native output device period/usable-output target is unavailable");
+                require(engine.QueuedFrames()<=S64(measured.maximumQueueTargetFrames+uFrameLength),"Native output queue grew beyond its measured usable-output target and one mixer quantum");
             }
         }
         require(!engine.IsRunning()&&engine.QueuedFrames()==-1,"Renderer destruction retained a native PCM owner");

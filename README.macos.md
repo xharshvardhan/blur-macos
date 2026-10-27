@@ -22,6 +22,16 @@ remain unverified. See [career acceptance](docs/macos/career-cycle-acceptance.md
 and [the initial playable slice](docs/macos/PLAYABLE_SLICE.md). This remains a
 development port.
 
+The native Options menu now registers the original PC keyboard callbacks. New
+profiles use the original Layout 2: W/S accelerate/brake, A/D steer, Space
+handbrake, Up/Down fire forward/backward, Left switch power-up, Right discard,
+and Right Control fire the selected power-up. Existing saved choices are
+preserved; select Layout 2 in Options > Keyboard to change them. Arrows still
+navigate menus. Native graphics settings remain unavailable and their menu row
+is omitted until the complete backend exists.
+See [player-feedback acceptance](docs/macos/player-feedback-acceptance.md) for
+the actual UI/save/reload route, measured rendering results and remaining limits.
+
 The public source snapshot lives at
 [xharshvardhan/blur-macos](https://github.com/xharshvardhan/blur-macos).
 It credits the upstream source and preserves inherited notices without assigning
@@ -51,6 +61,16 @@ flag does not establish support for older systems.
 sh tools/macos/build.sh
 _work/run/BlurNativeGame.app/Contents/MacOS/BlurNativeGame --data-root /path/to/complete/game-data
 ```
+
+For quiet testing, launch with `BLUR_MAC_AUDIO_MUTE=1`. This mutes the game's
+SDL streams before playback without changing system volume or saved options;
+decoding, mixing and device buffering still run. `BLUR_MAC_AUDIO_DIAGNOSTICS=1`
+reports device-period buffering statistics at shutdown. Optional
+`BLUR_MAC_FRAME_DIAGNOSTICS=1` reports actual render-loop intervals and submitted
+presents in five-second windows. Those are submission measurements, not proof
+of compositor/displayed FPS; the inherited simulation FPS counter cannot measure
+unlocked rendering. See [the renderer audit](docs/macos/renderer-performance-audit.md)
+and [the audio buffer repair](docs/macos/audio-device-period.md).
 
 The build script builds the actual game, runs the component tests, then checks
 the separate diagnostic bootstrap. These checks do not establish gameplay

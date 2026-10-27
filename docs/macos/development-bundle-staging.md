@@ -138,3 +138,14 @@ data selected separately, including movies/gameplay/save/reload/quit. The chosen
 public signing/notary workflow also remains required. Ad-hoc signature
 verification is local integrity evidence, not Developer ID or notarization
 evidence.
+
+## Local development 0.1.2 (MAC289)
+
+The final feedback build is version0.1.2/build289, arm64 and derived macOS26+.
+Its new local ZIP passes strict app signatures, dependency/notices manifest,
+symlink-preserving extraction and relocation checks. It contains no original
+game data or profiles. ZIP SHA256 is
+`1bc041c4a6f856719da7378c610e2e2bc94d5a3e5c8c439d9196f19dc838fe40` (27427394 bytes).
+This is a local ad-hoc development package, not a notarized or public binary
+release. Both141-test suites pass; actual menu/save/reload and renderer results
+are recorded in [feedback acceptance](player-feedback-acceptance.md).

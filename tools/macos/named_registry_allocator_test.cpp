@@ -16,9 +16,9 @@ struct NativeGameStaticOwner {
 };
 static NativeGameStaticOwner nativeGameStaticOwner;
 
-// Actual libc++ teardown releases a malloc-backed string after Main's SBA.
-// Keep a system allocation until that same ordering boundary without retaining
-// or leaking a game-allocator block.
+// Actual libc++ teardown can release a malloc-backed string during late exit.
+// The native interposed allocator domain remains alive for framework workers;
+// genuine malloc allocations must still be classified independently.
 struct EarlySystemStaticOwner {
     void* retained;
     EarlySystemStaticOwner() : retained(std::malloc(32)) { if(!retained)std::abort(); }
@@ -40,9 +40,9 @@ static EarlyNamedRegistries earlyNamedRegistries __attribute__((init_priority(10
 #include <system/memory/AllocatorFunctions.inl>
 
 EarlySystemStaticOwner::~EarlySystemStaticOwner() {
-    if(g_SmallBlockAllocator.Initialized() || malloc_size(retained)==0)std::abort();
+    if(!g_SmallBlockAllocator.Initialized() || malloc_size(retained)==0)std::abort();
     ::operator delete(retained);
-    std::puts("Late genuine system allocation released through real global delete PASS");
+    std::puts("Late genuine system allocation released through real global delete with process allocator domain alive PASS");
 }
 
 NativeGameStaticOwner::~NativeGameStaticOwner() {

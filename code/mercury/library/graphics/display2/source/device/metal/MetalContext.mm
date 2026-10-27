@@ -75,6 +75,9 @@ struct C_Context::Impl {
         std::array<U32,16> vertexUniformBytes={},pixelUniformBytes={};
     };
     std::unordered_map<std::string,Pipeline> pipelines;
+    // Scene ownership serializes draws. Reuse the lookup bytes on cache hits;
+    // each inserted map key still owns an independent copy.
+    std::string pipelineKeyScratch;
     std::unordered_map<std::string,id<MTLRenderPipelineState>> clearPipelines;
     explicit Impl(C_MetalDevice::State* state):device(state){}
     void check(bool active=false)const {
@@ -211,27 +214,32 @@ struct C_Context::Impl {
         require(vertex&&pixel&&declaration,"Draw requires shaders and a vertex declaration");
         require(!vertex->unsupportedImages&&!pixel->unsupportedImages,"Shader uses an unsupported image binding type");
         require(vertex->library.device==device->device&&pixel->library.device==device->device,"Shader belongs to another GPU");
-        auto description=[MTLRenderPipelineDescriptor new];description.vertexFunction=vertex->function;description.fragmentFunction=pixel->function;
-        auto layout=[MTLVertexDescriptor vertexDescriptor];
-        std::string key;
+        auto& key=pipelineKeyScratch;key.clear();
         auto append=[&](auto value){key.append(reinterpret_cast<const char*>(&value),sizeof(value));};
-        append(vertex->identity);append(pixel->identity);append(colours[0]->samples);description.rasterSampleCount=colours[0]->samples;
+        append(vertex->identity);append(pixel->identity);append(colours[0]->samples);
         for(const auto& e:declaration->elements)append(e);
         for(const auto& stream:streams)append(stream.stride);
-        append(alphaToCoverageEnabled);description.alphaToCoverageEnabled=alphaToCoverageEnabled;
+        append(alphaToCoverageEnabled);
+        append(blendEnabled);append(blendState.m_BlendColorSrc);append(blendState.m_BlendColorDst);append(blendState.m_BlendAlphaSrc);append(blendState.m_BlendAlphaDst);append(blendState.m_BlendColorOp);append(blendState.m_BlendAlphaOp);
+        std::array<MTLPixelFormat,4> colourFormats;
+        for(U32 i=0;i<4;++i){colourFormats[i]=colours[i]?colours[i]->texture.pixelFormat:MTLPixelFormatInvalid;append(colourFormats[i]);append(colourMasks[i]);}
+        const auto depthFormat=depth?depth->texture.pixelFormat:MTLPixelFormatInvalid;append(depthFormat);
+        auto found=pipelines.find(key);if(found!=pipelines.end())return found->second;
+        // Descriptors/layouts are compilation inputs, not per-draw state. Build
+        // them only for a real miss, preserving the same validation/mappings.
+        auto description=[MTLRenderPipelineDescriptor new];description.vertexFunction=vertex->function;description.fragmentFunction=pixel->function;
+        auto layout=[MTLVertexDescriptor vertexDescriptor];description.rasterSampleCount=colours[0]->samples;
+        description.alphaToCoverageEnabled=alphaToCoverageEnabled;
         // Original PC coverage preserves shader alpha; alpha-to-one is a separate PS3 policy.
         description.alphaToOneEnabled=NO;
-        append(blendEnabled);append(blendState.m_BlendColorSrc);append(blendState.m_BlendColorDst);append(blendState.m_BlendAlphaSrc);append(blendState.m_BlendAlphaDst);append(blendState.m_BlendColorOp);append(blendState.m_BlendAlphaOp);
-        for(U32 i=0;i<4;++i) {
-            MTLPixelFormat format=colours[i]?colours[i]->texture.pixelFormat:MTLPixelFormatInvalid;append(format);
-            append(colourMasks[i]);auto colour=description.colorAttachments[i];colour.pixelFormat=format;colour.writeMask=colourMask(colourMasks[i]);
+        for(U32 i=0;i<4;++i){
+            auto colour=description.colorAttachments[i];colour.pixelFormat=colourFormats[i];colour.writeMask=colourMask(colourMasks[i]);
             colour.blendingEnabled=blendEnabled;colour.sourceRGBBlendFactor=blendFactor(blendState.m_BlendColorSrc);colour.destinationRGBBlendFactor=blendFactor(blendState.m_BlendColorDst);
             colour.sourceAlphaBlendFactor=blendFactor(blendState.m_BlendAlphaSrc);colour.destinationAlphaBlendFactor=blendFactor(blendState.m_BlendAlphaDst);
             colour.rgbBlendOperation=blendOperation(blendState.m_BlendColorOp);colour.alphaBlendOperation=blendOperation(blendState.m_BlendAlphaOp);
         }
-        auto depthFormat=depth?depth->texture.pixelFormat:MTLPixelFormatInvalid;append(depthFormat);description.depthAttachmentPixelFormat=depthFormat;
+        description.depthAttachmentPixelFormat=depthFormat;
         if(hasStencil())description.stencilAttachmentPixelFormat=depthFormat;
-        auto found=pipelines.find(key);if(found!=pipelines.end())return found->second;
         U32 packedCount=0;
         for(std::size_t i=0;i<vertex->semantics.size();++i) {
             const auto& semantic=vertex->semantics[i];
@@ -269,7 +277,7 @@ struct C_Context::Impl {
         };
         reflect(reflection.vertexBindings,vertex,true,compiled.vertexUniformBytes);
         reflect(reflection.fragmentBindings,pixel,false,compiled.pixelUniformBytes);
-        return pipelines.emplace(std::move(key),std::move(compiled)).first->second;
+        return pipelines.emplace(key,std::move(compiled)).first->second;
     }
     void constants(const std::shared_ptr<Metal::Shader>& shader,bool vertexStage,const std::array<U32,16>& requiredBytes) {
         auto& bank=vertexStage?vertexConstants:pixelConstants;
@@ -288,10 +296,20 @@ struct C_Context::Impl {
             else if(uniform.kind==3){require(uniform.size==sizeof(lodState),"Invalid private sampler LOD layout");data=lodState.data();}
             else{if(bank.size()*4<uniform.size)bank.resize((uniform.size+3)/4,0);data=bank.data();}
             const U32 bytes=std::max(uniform.size,requiredBytes[uniform.slot]);
-            id<MTLBuffer> buffer=[device->device newBufferWithLength:bytes options:MTLResourceStorageModeShared];
-            require(bool(buffer)&&buffer.contents,"Shader constant upload allocation failed");
-            std::memset(buffer.contents,0,bytes);std::memcpy(buffer.contents,data,uniform.size);
-            if(vertexStage)[encoder setVertexBuffer:buffer offset:0 atIndex:uniform.slot];else[encoder setFragmentBuffer:buffer offset:0 atIndex:uniform.slot];
+            // Metal copies these single-draw bytes while encoding. Its documented
+            // transient binding contract is strictly smaller than4KB; preserve
+            // the explicit buffer path at that boundary and above. Reflection
+            // tail padding is part of the binding and remains initialized.
+            if(bytes<4096){
+                alignas(16) std::array<U8,4096> transient;
+                std::memset(transient.data(),0,bytes);std::memcpy(transient.data(),data,uniform.size);
+                if(vertexStage)[encoder setVertexBytes:transient.data() length:bytes atIndex:uniform.slot];else[encoder setFragmentBytes:transient.data() length:bytes atIndex:uniform.slot];
+            }else{
+                id<MTLBuffer> buffer=[device->device newBufferWithLength:bytes options:MTLResourceStorageModeShared];
+                require(bool(buffer)&&buffer.contents,"Shader constant upload allocation failed");
+                std::memset(buffer.contents,0,bytes);std::memcpy(buffer.contents,data,uniform.size);
+                if(vertexStage)[encoder setVertexBuffer:buffer offset:0 atIndex:uniform.slot];else[encoder setFragmentBuffer:buffer offset:0 atIndex:uniform.slot];
+            }
         }
     }
     id<MTLSamplerState> sampler(const C_SamplerState& s,U32 anisotropy){

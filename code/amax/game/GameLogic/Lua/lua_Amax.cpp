@@ -3031,7 +3031,7 @@ static int GetOptionsDefaults( lua_State* pState )
 	return 0;
 }
 
-#ifdef PLATFORM_PC
+#if defined(PLATFORM_PC) || defined(PLATFORM_MACOS) // [Blur2PC] PC-format keyboard UI is also used by the native host.
 // [Blur2PC] Retail Blur PC keyboard options (Options > Keyboard, Shared\Options_Control.lua).
 // Amax.UpdateCustomKeyboardControls (retail 0x00b83d80). No argument: a table with IsCustom and the key names
 // of the custom layout. (table [, layout]): a numeric layout becomes the profile's keyboard layout, then,
@@ -3072,11 +3072,18 @@ static int UpdateCustomKeyboardControls( lua_State* pState )
 // for which the keyboard screen swaps the Q/A and Z/W labels)
 static int GetPCKeyboard( lua_State* pState )
 {
+#if defined(PLATFORM_MACOS)
+	// [Blur2PC] NativeInput samples physical Cocoa key codes using the portable
+	// key names. It has no Windows KLID or AZERTY character remapping; an empty
+	// identifier keeps the UI labels in the same physical-key namespace.
+	lua_pushstring( pState, "" );
+#else
 	char layoutName[ KL_NAMELENGTH ];
 	if( GetKeyboardLayoutNameA( layoutName ) )
 		lua_pushstring( pState, layoutName );
 	else
 		lua_pushstring( pState, "" );
+#endif
 	return 1;
 }
 
@@ -7236,11 +7243,13 @@ static const luaL_reg amax_lib[] =
 #ifdef PLATFORM_PC
 	// [Blur2PC] retail Blur PC graphics options
 	{"UpdateGraphicsOptions",		UpdateGraphicsOptions},
-	{"UpdateCustomKeyboardControls",	UpdateCustomKeyboardControls},	// [Blur2PC] retail Blur PC keyboard options
-	{"GetPCKeyboard",				GetPCKeyboard},
-	{"SetSplitscreenKeyboards",	SetSplitscreenKeyboards},	// [Blur2PC] retail PC split-screen input
 	{"GraphicResolutionCount",		GraphicResolutionCount},
 	{"GraphicAACount",				GraphicAACount},
+#endif
+#if defined(PLATFORM_PC) || defined(PLATFORM_MACOS) // [Blur2PC] Match the PC-format Options/Keyboard scripts on both hosts.
+	{"UpdateCustomKeyboardControls",	UpdateCustomKeyboardControls},
+	{"GetPCKeyboard",				GetPCKeyboard},
+	{"SetSplitscreenKeyboards",	SetSplitscreenKeyboards},
 #endif
 #if defined(PLATFORM_PC) || defined(PLATFORM_MACOS) // [Blur2PC] Register the existing dimension query required during GUIBank initialization.
 	{"GetScreenResolution",			GetScreenResolution},

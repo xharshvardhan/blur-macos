@@ -2,6 +2,8 @@
 #include "../../code/mercury/library/gamesys/blobshadows/stdafx.h"
 #include <blobshadows/BlobShadows.h>
 #include <scenegraph/Context.h>
+#define SCENEGRAPH_ALLOW_INCLUDE
+#include <scenegraph/SceneGraphImpl.h>
 #include <fx/Fx.h>
 #include <fx/RenderMutex.h>
 #include <display/buffer/VertexDeclarations.h>
@@ -58,7 +60,9 @@ int main(int argc,char** argv){try {
     }
     Display::CreateVertexDeclarations();Display::CreateVertexShaders();Display::CreatePixelShaders();FX::Initialise();
     {
-        Resource::C_Manager resources;resources.SetFileSystems(&fs,nullptr);SceneGraph::C_Context context;context.Initialise();context.CloneState(nullptr);
+        Resource::C_Manager resources;resources.SetFileSystems(&fs,nullptr);
+        // [Blur2PC] CloneState(nullptr) reads the owning graph flags; use the original graph-owned context.
+        SceneGraph::C_SceneGraph scene;auto& context=*scene.GetContext();context.CloneState(nullptr);
         {
             BlobShadows::C_BlobShadows blob;BlobShadows::C_BlobShadows::C_BlobShadowsInitSettings settings;settings.m_Num256Textures=0;settings.m_Num128Textures=0;settings.m_Num64Textures=1;settings.m_Num32Textures=0;settings.m_MinBlurResolution=128;
             blob.Create(settings,&context);Require(blob.Display::I_Renderer::Create()&&blob.CreateVolatile(),"Actual original blob shaders/targets failed required initialization");

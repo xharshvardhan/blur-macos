@@ -3822,3 +3822,202 @@ mac266-lan-proof.json, mac265-delivery-proof.json. Four removed upstream login
 literals remain absent from the native executable. Personal public follow-up
 preserves curated source-only history/redacted profile/empty default index.
 Remote joins/races, >3-player behavior, clean-Mac and notarization remain open.
+
+MAC268 claimed — User's manual 0.1.1 Options→Controls dark/incomplete menu and
+requested WASD driving/arrow powerups under source audit. Parent owns live267
+observations, shared build/game/GPU/input; audio269 is separate. No production
+writes before bounded original PC/native control and UI contract inventory.
+
+MAC270 actualmanualSpeed performance audit source+root267sample: main2846samples, OnRender2368total. Inclusiveconstants720(25.3%), topAGXBuffer648subset; pipeline281(9.9%); newdepthstate14(0.5%); commandcompletionwait923(32.4%), Surface-dtor420subset(14.8%),419atEndScene/releaseRecordingfreshcommittedtemporaryretirement. NotGPUexecutiontiming/FPSgain proof. ProposeAppletransientbytes<4096 whilepreservingpadding/alluniformkinds/largefallback; separatedeferredretirementrequiresnativecommandresourceownershipproof, notblanketwaitremove. NativeApplication hasno30fpssleepcap; simticks1/60aggregatednotrenderduration. PhysicalRetinabackingextent used; noquality/resolution/vsync/tickedit. StartupnotattributedfromOptionssample. Onlydocs/BOARD/LEDGER edited; announcedfutureconstants/testscopeawaitrootcoordination.
+
+MAC268 source freeze — Codex /root/controls_options owns the keyboard/Options
+contract repair. Actual MAC267 first error is Options.lua:46 calling missing
+Amax.UpdateCustomKeyboardControls; later list errors follow its aborted Init.
+lua_Amax.cpp now compiles/registers the existing portable keyboard family on
+macOS. GetPCKeyboard keeps Windows KLID behavior on Windows; native physical-key
+input returns no Windows identifier, preserving canonical labels. New native
+profiles choose original layout 1 (WASD and arrow power-ups); existing saved
+choices and legacy 1373 layout 0 are preserved. Focused native physical-event
+fixture extended for switch/discard/handbrake/fire and independent arrow menu
+navigation. No game/GPU/IPC/build/archive run by this agent. Root owns coherent
+build, actual populated Options/Keyboard flow, ordinary layout acceptance/save,
+resume/reload verification. options-keyboard-initialization.md records the
+separate unported graphics API family and exact native apply boundary; no fake
+capability or no-op apply introduced. Source/fixture freeze, runtime acceptance
+pending.
+
+MAC270 bounded upload source frozen: native constants() transient setVertex/FragmentBytes strictly actual padded size<4096, old explicit buffers4096+; all ordinary/private uniform kinds and reflection indices/padding preserved. New uniform_upload_test pairs realVS/PS twoUBOs/stage, eight distinct GPU stripes/threeframes/encoder+submit boundaries, logical/reflected20/32,404/416,4068/4080,4084/4096,4100/4112. Four-config source probes8/8; Debug/Speed strictGPU controls pass. Three alternating controlledSpeed baseline/fixed process pairs,2000draws/fivetrials:15.6303–16.1074ms vs3.18233–3.32625ms CPUencoding; excludes completion/present and isnot gameFPS/startup proof. Older mixed-headerUBSan Context-only linkage reused firstshader; oldcontrol passes, fullcoherentprivate lower targets compiled and pairedruntime queuedbehindroot272. All waits unchanged; Surface retirement retained-native-storage proposal only, no implementation.
+
+MAC270 final two-class freeze: coherent firstupload GPU4/4PASS Debug/Speed/DebugUBSan/SpeedUBSan strictMetal+haltUBSan and matching olduploadcontrolsPASS. Fullcurrent lowerclosure fixes excludedmixed-headerUBSan linkage, no production workaround. Second boundedchange ONLY Surface::~Surface waits pending&&!retainedReferences; Metal retainsactualtexture/view/staging objects, CPUwrappernotusedbyGPU, no rawC++callback/no-copydeallocator found. AppleaddCompletedHandler review forbidslatepostcommit registration, so no completioncallback added. Existingallmap/download/use/Present/Buffer/query/WaitIdle unchanged. New surface_retirement_test.mm baselineoldunconditionalwait cleanexit1 exactretainedretirementguard aftersafeGPUgateopening+exactpixels. Finalfixed4/4PASS1.4–1.5sec strictMetal/haltUBSan: retainedtexture/view/staginglivebeforegate, unretainedblockedfallback, CPUexceptionunwind, callercommandrefreleased(queueowns),12realengine snapshot/sample/submit/drop/readbacks, repeateddevicecleanup. No deliberateGPUfaultinjection, existingerrorstatuspaths unchanged. All sharedarchive read/GPUleases RELEASED. Rootcoherent273 +actualgameframe/startupprofile acceptance pending; no FPSclaim.
+
+## 2026-10-27 — MAC269 measured native audio queue/usable-output repair
+
+User reported noisy/choppy/laggy music in signed 0.1.1. Source audit preserved
+original PC 128-frame/24k mixer, quality-rate correction and decoder behavior.
+Actual silent original-renderer baseline reproduced all four configurations:
+48k device consumes 1024 frames, old16.7ms target fills only896;12/12 steady
+callbacks miss12288 inputbytes total (128stereo frames each), producer-not-ready
+delta0. User process sampling mostly shows sleeping writer/renderer; no actual
+user-game dropped counter was captured, so it does not prove starvation counts.
+
+Native Engine/SDLPlayback now queries current device/stream formats and period,
+then batches queued-input/usable-output reads with public recursive SDL stream
+lock; device query precedes stream lock to preserve lock order. Initial
+period-only correction failed a real24k→44.1k steady window with one8-byte
+approximate demand shortfall; failed source/binary/log retained. Final target
+includes measured input retained by SDL conversion, not guessed filter padding;
+wait only above target with one usable device period. Writes stay within one
+128-frame quantum above measured target. Additional retained input is bounded
+by the existing CreateRenderer eight-buffer ring1024, explicit error/stop on
+unsupported excess, device period itself uncapped. No buffer-ring enlargement,
+thread-priority/quality/decoder change. Opt-in BLUR_MAC_AUDIO_DIAGNOSTICS=1 adds
+lock-free/quiet callback counts and joined-writer summary including startup,
+clipping/nonfinite/gap/demand/target/padding; demand remains labeled approximate.
+
+Final private source/fixture probes and actual silent runtime pass all4 configs:
+12 steady callbacks each24/36/48k with0shortfalls; actual24/36→44.1k withheld7
+inputframes and max targets565/843; authored120ms producer stall detected and
+recovered. A paused48k sibling device proves actual44.1→48k rawSDL conversion,
+ceil inputperiod941 and12steady callbacks0shortfalls. Opt-in/off/restart and
+scoped scheduler cleanup pass. Existing audio_core_test queue assertion uses
+measured target plus128. No game assets, audible signal or runtime fault hooks.
+Private baseline/final logs, binaries and proof under ignored
+_work/build/macos/audio-diagnostics-agent; docs/macos/audio-device-period.md.
+Production/fixtures frozen, no shared archive reads after private copies, no
+shared build/game/GPU/IPC; hardware fixture exclusive slot released. Root owns
+coherent delivery and real music listening; this is not an all-audio fidelity
+acceptance claim. Source-only additional-padding budget limit is documented.
+
+MAC271 source freeze — Shared/Options.lua separates PC-format UI assets from
+actual graphics backend capability. Requires all four registered callbacks before
+creating Graphics row 4, counts only created audio/graphics entries, rejects a
+remembered missing PC row 4 and stale dispatch/capability loss. Original full
+Windows backend and console image/storage paths remain. No fake API, no-op apply
+or graphics backend claim. Existing Lua/UI fixture now executes the actual
+Options.lua in the original Lua VM with a bounded authored UI host; full/partial/
+non-function/lost capabilities, rows/dispatch/count/fallback/console cases added.
+Root owns build/checks and actual game menu verification. CMake already declares
+every source Lua as an embedded-bundle generation dependency; normal game build
+regenerates it. No game/GPU/IPC/build/archive use by this agent.
+
+### MAC269 follow-up — automated stream mute, system volume unchanged
+
+User requires sound off for automated tests without changing system volume.
+Single frozen SDLPlayback.cpp change reads BLUR_MAC_AUDIO_MUTE=1 and sets the
+new paused stream's gain to zero through the installed public
+SDL_SetAudioStreamGain API before any resume. SDL rejection closes the owned
+stream and preserves the actual error. The default is unchanged for manual use.
+No system/device-global volume API, persisted options, mixer or decoder change.
+Engine PCM diagnostics remain before stream gain, and the native movie path
+uses the same Playback owner. Installed SDL source confirms per-stream gain
+storage; four configuration source probes pass. No new runtime was launched
+for this small follow-up; root supplies the mute environment to future automated
+wrappers/CTest and owns coherent build validation. audio-device-period.md records
+this requirement; production source frozen for queued MAC273 integration.
+
+MAC273 full-suite follow-up (fixture-only, MAC270 owner): game_device_test still expected E_PresentInterval_Two unsupported and caught invalid_argument. That predates MAC036 actual multi-refresh support; current published1965fac MetalPresent/MetalGameDevice already acceptTwo and reject unknownbits via runtime_error withoutmutatingactiveparams. Replacedstalenegative withTwo success, genuineinvalidbitcombination3 rejection preservingTwo/sync, thenImmediate restore. Existingpresent_test independentlyrenders18actualsingle/2x/4xdrawables acrossImmediate/Default/One/Two/Three/Four. No productionpresentation/performancepolicy edited. Rootbuild/runtime validation pending; no privateGPU/sharedbuild run.
+
+## 2026-10-27 — MAC275 native process-lifetime allocation domain
+
+Actual Debug suite deferred-UI SIGSEGV is captured in Apple IPS fault thread 1:
+Metal context telemetry → CoreAnalytics JSON/libc++ string growth → global delete
+→ BizInternalFree → BlockAllocator::Free → PageUsage::GetBit, while main is in
+exit/cxa finalization. Expected missing ui_common bundle errors do not locate the
+fault. Fresh LLDB and preserved older whole fixture exit 0 do not disprove the
+race; the older baseline used repo cwd, not identical CTest cwd. No UI/deferred
+queue or missing-resource bypass was applied.
+
+Approved production change is only native g_SmallBlockAllocator's declaration:
+Clang no_destroy with existing priority 102 and explicit feature gate. Its type,
+symbol, PreStatic 101/bootstrap order, early malloc route and Windows destructor
+semantics are preserved. The process-wide replacement allocation domain also
+owns framework C++ buffers, so its mutex/areas/bitmap survive until OS process
+exit. CoreSystems shutdown never owned this domain. Original client frees and
+empty-page release remain active; no heapwide leak fallback, sleep, telemetry
+disabling or production forced exit. Named-registry fixture changes only its
+late live-domain expectation and diagnostic text.
+
+New process_allocator_lifetime_test uses actual global new/delete, early malloc
+classification, eight balanced payload generations, retained SBA payload free
+and an owned pthread doing 4,096 small/large allocation pairs during late cxa.
+Late live-count baseline balances. Private single-token old declaration control
+exits cleanly with 73 before worker release or dead metadata access. All four
+configurations: both positive fixtures exit 0, negative exits 73; eight positive
+TU probes/links and four negative variants pass. Runtime serialized under
+exclusive wrapper, MallocScribble=1 and BLUR_MAC_AUDIO_MUTE=1, no audio/GPU/game/IPC.
+Private copies only after closure capture; shared archive lease released before
+root rebuild. Source/tests frozen; process-allocator-domain.md records mechanism,
+primary Clang API authority and limits. Root owns coherent application and
+broader UI/CoreSystems integration; no full-game cleanup claim from this leaf.
+
+## 2026-10-27 — MAC287 blob fixture graph ownership
+
+Speed279 mac_blob_shadows SIGSEGV is a fixture setup fault, not shutdown: Apple
+IPS fault0 main CloneState+40→main+4024 reads0x598 before BlobShadows construction
+or GPU coverage checks. Standalone SceneGraph::C_Context leaves its graph pointer
+unassigned; inherited Initialise initializes device subcontexts only. Original
+CloneState(nullptr) legitimately reads its existing owner's render flags. The
+C_SceneGraph constructor assigns that owner before Initialise. Previous Debug
+success does not validate the uninitialized read; its exact escape mechanism is
+unknown. No attribution to audio, GPU retirement or allocator changes.
+
+Approved fixture-only repair includes SceneGraphImpl, creates a real scene and
+borrows scene.GetContext() through blob teardown and resource drain. Null clone,
+strict renderer validation and production code remain unchanged. Debug/Speed
+actual CMake TU probes pass; matching commands plus existing UBSan flags also
+pass. Sanitized scene-target initial command lacked blob includes (host mismatch,
+corrected using actual blob closure). No private links/runtimes/shared builds;
+parent owns coherent fixture rebuilding and serialized GPU validation. Source
+frozen; docs/macos/blob-context-fixture.md records exact source authority/limits.
+
+MAC279 performance qualification follow-up: source-only actual-render telemetry inRunDiagnostics.mm, opt-in BLUR_MAC_FRAME_DIAGNOSTICS=1/defaultoff. ExistingpostOnRender Tick observesrealelapsed/unclampedcallbackintervals+existingGetSubmittedPresentCount,5s count/wall/mean/max +counteravailable; calls/submittedvsGPUcompleted/displayed explicitlydifferent. Clock/device/counter resetstartsnewwindow, no readback/wait/gamepolicy. Existingrundiagnosticsfixture testsdefault/window/reset/invalidclock andactualoffscreenGPUcounter0/available1 (no fakepresent). Fourconfigprivatecompile8/8PASS; no privatebuildlink/runtime, rootcoherentacceptancepending. Privateperformance template requiresfreshHUD→oneordinaryF1→freshPaused+true+2560x1440+20cars bookends/timebudget/quietsentinel/marked30swindow thenseparateCPUprofile; no unknownkey/window replay. Parser excludesfirststraddling5sreport, requires>=3fullnativecounterwindows, rejectsTimerFPS interpretation. Purehelper/parser testsPASS, no actualrun launched. MAC278 failedlatecapture/sample explicitlyunqualified: Paused observed~180s, guardexit182.45 beforequery/sample. MainoldsampleOnRender corrected2370incltiny2 thirdrange; constants720/wait923/Surface420/AGX648 unchanged.
+
+MAC288 source/fixture frozen: actual281postsamplepipeline507/3157inclusive(16.06%); descriptorinit/dealloc172 andstringappend184 overlappingallocation/free subsets, no sampledcompilation.97.267msquietwindow117.420883–122.451219 hasno Automation/capture butpostwindowCPU cannotattributethatframe; hitchesremainunresolved. MetalContext.mm ONLYpipelinecacheclass: samebyteorder/completekeyfields; reusablecontextscratch; exactmap-ownedkeycopyonmiss; nativeMTLdescriptors/layoutafterlookup; existingchecks/reflection unchanged. Newpipeline_cache_test.cpp real25statevariants twiceA/B/A, VS/PSrecreate,3layouts/strides, blendfactors/ops, RGBA/BGRA,MRT/masks,D16/D24S8,1/2/4samples+coverage actualpixels. TU8/8PASS; strictMetalGPU4/4PASSDebug/Speed/DebugUBSan/SpeedUBSan~.64–.95s +oldpipelinecontrolPASS. ControlledSpeed3alternatingpairs5trials2000warmdrawCPU3.33883–3.44979ms→1.30592–1.34662ms excludingcompletion; noactualgameFPSclaim. Baseline284privatearchiveSHAmanifest preserved; no sharedarchivewrites; allarchive/GPUleases RELEASED. RootcoherentGame+regression pending. MAC280/281firsttwofixesactualpaused20car2560x1440controlsubmission24.8338→32.1246Hz(+29.36%) butmax61.256→97.267ms: throughputimproves, smooth/nohitch/60FPS notproven.
+
+
+## MAC289 — coherent player-feedback integration, game-only muted testing
+
+Owner: Codex /root. Found in native actual user267; belongs to the native
+keyboard/UI, audio period, Metal ownership/cache and allocator domain boundaries.
+Includes frozen268/269/270/271/275/288 and fixture287; no retail resource gates,
+quality/resolution settings, fixed simulation cadence or save formats bypassed.
+
+- Standard Debug and Speed applications build with all changes. Final complete
+  CTest suites pass141/141 each (151.05s Debug;92.12s Speed). Earlier273fixture
+  omissions/stale presentation assertion,279late allocator race and shadow
+  fixture ownership failure are preserved, repaired and revalidated.
+- Actual285: original Escape→Options3rows→Keyboard13rows→retailLayout2→accept/save
+  →two fresh unpausedHUD observations;9ordinaryOptionskeys. OriginalExitRace39,
+  event/tierBack anddesktopconfirmations exit0/206.98s before420guard. Source189
+  profile/save unchanged; copied state only. No direct transition/profile setter.
+- Actual283 fresh process copies accepted285bytes; real1378/51227decoded/0unread
+  loader and two freshSPmain layout1 reads. Supplemental source-guarded observer
+  waits expectedprofileloading; oldwrapperfalse remains. Ordinarydesktop quit0
+  at232.03s before240guard. Independent proof records both successful helpers.
+- Actual280/281/289 same original data/source-profile hashes, productionframework,
+  audio/UI code and2560x1440/20cars. Fresh originalPaused fences; quietmarked30s
+  rate window excludes firststraddling5s report, watch/checkpointIPC andlater
+  CPU sampling. Five complete windows each:24.8338→32.1246→51.3502 submittedHz;
+  finalmean19.4741ms/max40.188ms. Countermeasures submissions, notdisplayedFPS;
+  ordinarypause timing/AIposes are not claimedidentical. No steady60FPS claim.
+- Finalpipeline sample1.385%mainwall samples (16.060%intermediate); uniform2.181%,
+  Surfacewrapper0%. GPU/CPU absolute durations and individualhitch cause remain
+  unproven. Realstate/lifetime shadercache matrix andownership fixtures pass.
+- Every new testlaunch sets BLUR_MAC_AUDIO_MUTE=1 beforestreamresume; systemvolume
+  andsavedoptions unchanged. Deviceperiod steadyshortfallclass repaired; actual
+  diagnosticstartup/loading/capture windows stillshowoccasional demandshortfalls.
+  Perceptualmusicquality andzero dropouts are not established bymuted tests.
+
+Evidence under ignored runtime/verification/mac{280,281,283,285,289}; coherent
+build/test logs under build/{macos,macos-release}/mac289-*; local stage289 is
+version0.1.2/build289. Source publication andZIP verification follow after the
+owned finalguarded process completes. Original manualuser267 log is retained.
+
+MAC289 completion: actualguardedexit0/241.73s/no primary. Local0.1.2/build289 ZIP
+strict signature, dependency/notices inventory, symlinkpreservation/extraction
+and relocatedcopy verification PASS (27427394bytes, SHA256
+`1bc041c4a6f856719da7378c610e2e2bc94d5a3e5c8c439d9196f19dc838fe40`). No original game data/profiles
+bundled. This is localdevelopment packaging, not clean-Mac/notarized/publicbinary
+release evidence. Finalaudio summary19/11261 approximate-demand shortfalls with
+startup/loading/capture included; PCM finite/unclipped. Source-only publication
+uses personal login and separateindex, preserving redacted profile mirror.

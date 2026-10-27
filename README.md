@@ -13,6 +13,9 @@ source requires developer tools and native dependencies.
 
 - The original engine runs natively on Apple Silicon with Cocoa/Metal rendering,
   keyboard input, physics, Lua UI, audio and movie playback.
+- The original Options/Keyboard menu now saves and reloads the WASD layout.
+  Renderer allocation and audio-buffer repairs have bounded
+  [player-feedback verification](docs/macos/player-feedback-acceptance.md).
 - A Brighton/BMW keyboard race completed its original checkpoint/lap/finish
   sequence and exited with code 0 ([slice evidence](docs/macos/PLAYABLE_SLICE.md)).
 - A normal career race with 20 cars and three laps completed through ordinary keyboard input,

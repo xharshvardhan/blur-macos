@@ -1,3 +1,12 @@
+-- [Blur2PC] PC asset selection does not imply that every host has the PC
+-- graphics apply backend. Offer that child only with its complete Lua contract.
+local function GraphicsOptionsAvailable()
+	return type( Amax.GraphicResolutionCount ) == "function"
+		and type( Amax.GraphicAACount ) == "function"
+		and type( Amax.UpdateGraphicsOptions ) == "function"
+		and type( Amax.GetScreenResolution ) == "function"
+end
+
 GUI =
 {
 	finished = false,	
@@ -71,6 +80,7 @@ function Init()
 	
 	
 	GUI.MenuId = SCUI.name_to_id[ "menu" ]
+	GUI.graphics_options_available = GraphicsOptionsAvailable()
 	
 	local num = 0
 	
@@ -102,12 +112,16 @@ function Init()
 		if UIEnums.CurrentPlatform == UIEnums.Platform.PC then
 			-- [Blur2PC] retail Blur PC offers Audio (3) and Graphics (4); image adjust (gamma) is reached from the graphics screen
 			Mp_SetupMenuItemHelpText( GUI.MenuId, 3,	UIText.CMN_OPT_AUDIO,			UIText.CMN_HLP_OPT_AUDIO,				"large_speaker",		"common_icons" )
-			Mp_SetupMenuItemHelpText( GUI.MenuId, 4,	UIText.CMN_OPT_GRAPHICS,		UIText.CMN_HLP_OPT_GRAPHICS,			"Graphics",				"common_icons" )
+			num = num + 1
+			if GUI.graphics_options_available == true then
+				Mp_SetupMenuItemHelpText( GUI.MenuId, 4,	UIText.CMN_OPT_GRAPHICS,		UIText.CMN_HLP_OPT_GRAPHICS,			"Graphics",				"common_icons" )
+				num = num + 1
+			end
 		else
 		Mp_SetupMenuItemHelpText( GUI.MenuId, 2,	UIText.CMN_OPT_IMAGE_ADJUST,	UIText.CMN_HLP_OPT_IMAGE_ADJUST,		"brightness",			"common_icons" )
 		Mp_SetupMenuItemHelpText( GUI.MenuId, 3,	UIText.CMN_OPT_AUDIO,			UIText.CMN_HLP_OPT_AUDIO,				"large_speaker",		"common_icons" )
+			num = num + 2
 		end
-		num = num + 2
 	end
 	
 	-- Remove save location on Ps3
@@ -178,7 +192,9 @@ function PostInit()
 	
 	-- Set to previous selection if it exists
 	UIButtons.SetSelection( GUI.MenuId, start_index )
-	if IsNumber( s ) == true then
+	if IsNumber( s ) == true and ( UIEnums.CurrentPlatform ~= UIEnums.Platform.PC
+		or s ~= 4 or GUI.graphics_options_available == true ) then
+		-- [Blur2PC] A remembered graphics row may no longer exist on this host.
 		UIButtons.SetSelection( GUI.MenuId, s )
 	end
 end
@@ -214,7 +230,8 @@ function MessageUpdate( message, arg1, arg2, arg3, arg4 )
 			elseif selected == 3 then
 				UIGlobals.SaveOptions = true
 				GoScreen("Shared\\Options_Audio.lua")
-			else
+			elseif GUI.graphics_options_available == true and GraphicsOptionsAvailable() == true then
+				-- [Blur2PC] Also reject a stale/injected row 4 after capability loss.
 				UIGlobals.SaveGraphicOptions = true
 				GoScreen("Shared\\Options_Graphics.lua")
 			end

@@ -3,8 +3,20 @@
 #include <core/Core.h>
 #include <memory>
 #include <string>
+#include <audio/macos/SDLPlayback.h>
 namespace Audio::Core {
 class Renderer;
+// [Blur2PC] Last/current opt-in output window, reset on each device start.
+struct EngineDiagnostics {
+    bool enabled=false;
+    U32 sampleRate=0,channels=0;
+    U64 submittedFrames=0,producerNotReady=0,emptyQueueObservations=0,backpressurePolls=0;
+    U64 clippedSamples=0,nonfiniteSamples=0;
+    U64 maximumQueueTargetFrames=0,maximumObservedPaddingFrames=0;
+    F64 elapsedSeconds=0,maximumSubmissionGapMilliseconds=0;
+    F32 peakAbsolute=0;
+    Audio::Mac::PlaybackDiagnostics output;
+};
 class Engine {
 public:
     Engine();~Engine();
@@ -17,6 +29,7 @@ public:
     S64 QueuedFrames()const;
     bool IsRunning()const;
     std::string Error()const;
+    EngineDiagnostics Diagnostics()const;
 protected:
     // One physical implementation is shared with the original PC engine.
     void MixMono(const F32* input,F32* output,U32 channels);
