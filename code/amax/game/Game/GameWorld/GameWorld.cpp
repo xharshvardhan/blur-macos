@@ -1779,9 +1779,33 @@ bool C_GameWorld::Destroy()
 
 
 #if defined(PLATFORM_MACOS)
+// [Blur2PC] This pause spans updates while the streamer owns disc access. The
+// renderer may throw before its normal completion; retirement must pair the
+// exact acquisition before joining the resource worker, without consuming an
+// unrelated caller's recursive pause or releasing a different thread's mutex.
+void C_GameWorld::NativeAcquireStreamerPause()
+{
+	if(m_Native.streamerPauseManager)throw std::logic_error("World already owns a streamer resource pause");
+	auto* manager=Resource::C_Manager::GetInstance();
+	if(!manager || !manager->PauseLoadingThread())throw std::runtime_error("Cannot acquire streamer resource pause");
+	m_Native.streamerPauseManager=manager;
+	m_Native.streamerPauseThread=MT::GetThreadId();
+}
+
+void C_GameWorld::NativeReleaseStreamerPause()
+{
+	if(!m_Native.streamerPauseManager)return;
+	if(m_Native.streamerPauseThread!=MT::GetThreadId())throw std::logic_error("Streamer resource pause must retire on its acquiring thread");
+	if(m_Native.streamerPauseManager!=Resource::C_Manager::GetInstance())throw std::logic_error("Streamer resource pause outlived its resource manager");
+	if(!m_Native.streamerPauseManager->ResumeLoadingThread())throw std::runtime_error("Cannot release streamer resource pause");
+	m_Native.streamerPauseManager=nullptr;
+	m_Native.streamerPauseThread=0;
+}
+
 bool C_GameWorld::NativeDestroy()
 {
 	if(m_Native.destroying)return true;
+	NativeReleaseStreamerPause(); // [Blur2PC] Failure/cancel must not join a worker behind our still-owned pause.
 	m_Native.destroying=true;
 	struct Unwinding {bool& flag;~Unwinding(){flag=false;}} unwinding{m_Native.destroying};
 	const bool wasCreated=m_Native.created;m_Native.created=false;
@@ -3030,7 +3054,11 @@ void C_GameWorld::GlobalUpdate()
 			//Pause resource loading to allow streamer to get exclusive disc access. Don't pause on PS3 as level data
 			//and models are on different drives.
 #ifndef PLATFORM_PS3
+#if defined(PLATFORM_MACOS) // [Blur2PC] Record the exact pause until completion or world cancellation.
+			NativeAcquireStreamerPause();
+#else
 			Resource::C_Manager::GetInstance()->PauseLoadingThread();
+#endif
 #endif
 
 
@@ -3053,7 +3081,11 @@ void C_GameWorld::GlobalUpdate()
 
 #ifndef PLATFORM_PS3
 			//Streamer's done, resume resource loading.
+#if defined(PLATFORM_MACOS) // [Blur2PC] Release this world's acquisition only.
+			NativeReleaseStreamerPause();
+#else
 			Resource::C_Manager::GetInstance()->ResumeLoadingThread();
+#endif
 #endif
 		}
 

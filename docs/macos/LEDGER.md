@@ -4292,3 +4292,270 @@ ignored _work/run/BlurNativeGame.app; prior delivered app is preserved privately
 No runtime is launched by packaging or delivery; automated tests remain muted.
 The public source update uses the personal account and isolated curated index;
 original data, profiles, binaries and private research evidence stay excluded.
+
+## 2026-10-27 — MAC313 owned streamer pause cancellation
+
+The manual build 308 loading-screen failure had a separate teardown hang after
+all layers, including audio, logged destruction. Actual PID 88590 sample at
+verification/mac312/user-hang.sample.txt shows main in resource final drain →
+StopLoadingThread → Join and ResourceLoadingThread in WaitIfPaused → recursive
+mutex entry. The log's unmatched pause is GameWorld::GlobalUpdate's cross-frame
+streamer acquisition: Streamer started, never finished/resumed before the
+viewport-clear exception. NativeDestroy previously erased streamer flags while
+retaining that mutex depth, so the owner then joined its own blocked worker.
+
+After parent scope approval, production changes are only native GameWorld.cpp/h.
+Explicit manager pointer + acquiring thread ID pair one streamer pause through
+normal completion and NativeDestroy cancellation. Duplicate acquisition rejects;
+release is idempotent and checks same owner thread/live manager before releasing
+exactly one recursive depth. No force unlock, resource stop/check suppression,
+audio scheduling change or Windows behavior change. Native layout grew, requiring
+coherent dependent archives. The root owns separate MAC312 viewport repair.
+
+Extended actual world_transaction fixture: real World normal completion and
+authored render-failure cancellation, independent outer recursive pause, duplicate
+and foreign-owner rejection, repeated Destroy, real queued resource file staying
+blocked by the outer pause then loading after its release, and actual worker
+join/drain/restart. Recovery permits a bounded old-body negative without a hung
+runner. All four configurations passed both changed World and fixture TU probes
+(8/8); proof at streamer-pause-agent/source-probes.json. No shared builds,
+hardware runs, process control or current-ABI/private-old-archive links by this
+agent. Parent owns coherent fixture and actual app validation. The original
+negative is the preserved real manual-process sample/log; a differential may
+remove only the cancellation release call with otherwise coherent new layout.
+See streamer-pause-shutdown.md for exact contract and verification limits.
+
+## MAC316 — compact Mac modifier actions and hosting instructions
+
+Source tracing identified a binding mismatch, not a missing Control event: native
+`kVK_Control` maps to portable left Control, while the recovered stock PC fire
+and primary menu Option2/Y rows require right Control. Many compact Mac
+keyboards have no physical right Control. The actual LAN browser's ButtonY
+handler opens MpModeSelect; its Custom Game branch calls CreateLanServer and
+opens MpLobby on success. The original primary menu X/Refresh similarly uses
+right Shift.
+
+Native-only GameControls.cpp additions use the existing max/OR combiner: left
+Control is an alternative for stock non-split fire and primary menu Host/Y;
+left Shift is an alternative for primary menu Refresh/X. No raw key aliases,
+profile writes, serialized action IDs, layout reset, or Windows policy changes.
+Explicit replacement bindings and secondary split/keypad columns remain exact.
+
+Existing input/options/window fixtures now cover physical Control sidedness and
+focus/release, original Layout 1 and 2 actions, both modifier sides with one
+debounced action, Return/Escape/camera/rearview, explicit right-only replacement,
+secondary keypad preservation, and authored Cocoa flagsChanged routing. Four
+source TUs across Debug, Speed, DebugUBSan and SpeedUBSan compiled privately:
+**16/16 PASS**. Artifact `_work/build/macos/occlusion-agent-mac316/compile-results.json`.
+No shared build, hardware, process control, or actual game run by this agent;
+coherent runtime verification remains pending root. The tests are input/action
+contract tests and do not establish multi-machine LAN or power-up gameplay.
+
+User-facing map and original hosting flow are recorded in
+`native-keyboard-hosting.md`. PC prompt labels remain unchanged and may still
+name the right modifier. A separate bounded audit notes that original Insert
+menu-left-shoulder has no physical native mapping; no unverified shortcut or
+letter substitution was introduced for that gap.
+
+MAC312 controls_options source/fixture freeze: actual foreground startup throw
+was Clear→LightingPrepass Begin→MainView RenderPrepass1 following a window resize.
+Async world graph capture preceded Ready→Running publication, while Resize
+broadcast only visited Running layers. Add native nonblocking resize lease:
+async Create holds lifecycle through Ready/failure publication; async Destroy
+through callback+delete. Main Display owner try-enters only, deferring/coalescing
+pending dimensions while worker busy or Ready remains unpublished. Existing full
+framebuffer/renderer/view/owner Resize then reaches the completed world. Deferred
+path restores normal layer drawable dimensions and presentation interval to the
+committed framebuffer, preserving ongoing old-frame presentation while bounds
+scale. No viewport clamp or prepass-only dimensions patch. Synchronous main Create
+callback policy remains unchanged. No callback runs under Ready-list lock.
+Private LayerManager and application source/fixture probes pass; new actual CPU
+layer_resize_test links with new manager body and exits0 across gated Create,
+Ready refusal, normal Running Resize, gated async Destroy, original creator
+failure and owner-exception lease release. Actual application_resize_test is
+authored/syntax checked: two real graph RTs, coalesced latest physical size,
+continued old-size frames, exact GPU pixels and cleanup; parent owns hardware,
+coherent ABI rebuild and foreground acceptance. See async-window-resize.md.
+
+MAC316 shoulder follow-up (parent requested after317 build freeze): primary menu
+left/right shoulder actions now also accept [ / ], preserving original Insert /
+Forward Delete and secondary columns. NativeInput translates Cocoa Help0x72 to
+the original portable Insert key. No raw bracket alias is created, so ] does
+not also trigger the original Delete/right-thumb action. Existing input,
+options-controls and window fixtures cover Help/Insert keyDown/up, bracket
+identity, original and alternative shoulder OR/release behavior, unrelated
+right-thumb isolation and secondary menu preservation. Final five TUs × four
+configurations privately compiled **20/20 PASS**; logs in
+`_work/build/macos/occlusion-agent-mac316/shoulders/compile-results.json`.
+Source/doc freeze communicated to root; no runtime or shared builds by agent.
+This supersedes the initial missing-Insert mapping note above.
+
+## 2026-10-27 — MAC317 first coherent resize/input integration
+
+Both Debug and Speed coherent builds exit0 with new LayerManager ABI, streamer
+pause owner fields, native modifier action alternatives and two new fixtures.
+Speed strict Metal focused checks6/6 PASS (resource shutdown, options controls,
+application resize, input, layer resize, world transaction). The intended window
+fixture name is mac_cocoa_window, not mac_window; it is not included in this
+six-test selector and remains part of final integration. Both full test suites
+now register148 checks. Final shoulder/Help mapping and required-lighting resize
+failure checks are being prepared under separate source ownership before the
+next coherent build. No game/device tests are audible.
+
+ABI-safe original ApplicationMac body/current header layout negative control:
+only its object is replaced in a copied current application-host archive, linked
+to the same new GPU resize fixture and unchanged remainder closure. Strict Metal
+run exits expected1 with 'Resize committed while graph creator was in flight';
+positive317 exits0. Shared archives remain unchanged. This proves the authored
+real-window/real-resource regression independently of the live failure stack.
+MAC314 earlier visible diagnostics-stage run reached MPmain and recreated views
+at3024x1898; it ended under its240s wrapper guard (exit124), so it is a diagnostic
+observation, not ordinary-exit or final-build acceptance. Its source predates the
+resize lease. Initial failed debugger runs with Artery already bound by a
+secondary app are retained as invalid probes, not classified as the resize bug.
+
+## 2026-10-27 — MAC312 required-lighting resize follow-up source freeze
+
+The native full resize chain now reports false results from required point-light
+and deferred-manager volatile creation before rendering. Three new, unpublished
+colour/depth wrappers remain locally owned until publication, preserving original
+rollback ownership for earlier published resources. The actual lighting fixture
+uses invalid native colour/depth setups, requires the upper failure, checks real
+GPU tracker baselines and retries original healthy setups. All three translation
+units passed four-configuration probes (12/12); coherent runtime is pending root.
+The existing manual device-ownership and tracker scopes on thrown creation are
+not claimed repaired or tested. Detailed scope and limits are in
+`required-lighting-resize.md`. No game/device run or shared build by this agent.
+
+MAC313's earlier owner-level streamer-pause repair has now passed parent coherent
+Speed `mac_world_transaction` and `mac_resource_shutdown` (2/2); actual foreground
+startup and ordinary exit remain separate acceptance.
+
+
+MAC317 final first-pass strict Metal focused matrix: six keyboard/Cocoa/resize/
+resource checks pass; extended world_transaction fails at its healthy lighting
+precondition. Its pre-existing fixture view index0 makes +index/-index collide;
+actual game views use nonzero index1. The fixture now temporarily adopts/restores
+that real view identity; required failure assertions remain unchanged. No failed
+matrix is counted as full acceptance. Source/fixture correction owned by
+physics_port; final rebuild and complete suites follow after its probe freeze.
+Staged optimized production bundle0.1.4/build317 is immutable while the fixture
+correction compiles. MAC318 original-menu LCONTROL Host run is muted and owns
+the global native runtime lease; this is functional acceptance, not a benchmark.
+
+The first follow-up Speed run failed the new lighting fixture's healthy
+precondition because its standalone view index was 0 (`+0` and `-0` alias the
+normal/depth and lighting setup mappings). The fixture now uses scoped index 1,
+restoring the original index afterwards. Production is unchanged; corrected
+Debug and Speed object compiles pass. This is a fixture prerequisite correction,
+not evidence of a production allocation failure. Root owns the coherent rerun.
+
+
+MAC317 corrected actual lighting fixture uses original nonzero view1 and restores
+its caller's index/flags. Speed strict Metal focused world_transaction rerun
+PASS (1.45s), including point-light base rejection, real colour/depth target
+false returns, upper required-resource errors, successful retry and baseline
+retirement. Full coherent Debug suite148/148 PASS in158.97s; optimized suite
+queued behind the same global native runtime lease. Production/fixture17path
+hash freeze remains exact after the fixture correction.
+
+MAC318 actual staged0.1.4/build317 left-Control Host acceptance: original LAN
+browser LCONTROL→CustomGame→real lobby capacity20/one local/zero remote;
+CanStart=false is original readiness, not a bypass. Original lobby leave and
+desktop popup204 accepted; process exit0/113.814s, no primary error, source state
+unchanged, mute1 throughout. Initial private wrapper missed final desktop helper
+collection when process exited first; original proof preserved false, typed tap
+and actual process status independently qualify supplemental combined-proof.
+Future wrapper now collects active helper after process exit. No remote join,
+multiplayer racing or three-player-limit repair is claimed. No capture/readback
+or profiler/watch requested. Final minimal-diagnostics driving run319 queued.
+
+
+MAC317 optimized full suite147/148 (100.33s): mac_audio_stereo_planes fails its
+unchanged original producer-plane signal assertion. All resize/keyboard/world
+checks pass; no optimized148/148 claim. Physics read-only audit identifies a
+real false-GetNextFrame write: after consuming frame0, a not-ready request clears
+scratch0 while the producer may be filling/publishing its next block. U32 modulo
+means initial -1 maps to7 for eight buffers; no negative-write claim. Native
+Engine.WritePCM is the sole production native consumer and ignores pointers on
+false. MAC320 is explicitly assigned to physics_port: deterministic actual
+callback gate proving scratch overlap, native-only false no-write behavior,
+preserved Windows/console and caller cadence, original64frame/2/6/8channel signal
+assertions retained. Current319 runs the immutable pre320 stage and becomes
+integration evidence only for that earlier binary. Final app requires refreshed
+freeze/build/stage/full checks and new actual-game source-qualified runs.
+
+## 2026-10-27 — MAC320 native failed-read PCM ownership
+
+The final MAC317 Speed suite failed the exact stereo-plane signal check while
+Debug passed. Read-only audit identified the consumer's legacy failed-read
+`ClearFrame(read % count)` writing producer scratch slot 0 after frame 0 was
+consumed. Native Engine waits on false and never consumes its returned pointers.
+The native branch now leaves all PCM untouched on false, preserving drop count,
+wait semantics and the Windows/console body. The existing fixture gates actual
+frame 1 after MoveAudio and before publication, forces the false read, and keeps
+all 64 independent-channel checks and real writer statistics unchanged.
+
+All 12 current/old-body/fixture object probes across four configurations pass;
+no SDL/hardware run by this agent while race 319 owns the lease. Coherent
+positive/negative runtimes are pending. Detailed source contract and limitations
+are recorded in `audio-failed-read-ownership.md`; no perceptual music-fix claim.
+
+
+MAC320 coherent Debug/Speed builds exit0. Final strict focused matrix8/8 PASS
+includes gated audio ownership regression, keyboard/Cocoa, window/async lease,
+world lighting false/retry and streamer cancellation. ABI-compatible private
+old-body audio archive runtime exits expected1 at unchanged planar assertion;
+current fixture passes. Initial private archive member-case link error was
+corrected before execution; shared archives untouched. Final19path freeze uses
+the canonical lowercase audio/source/core/renderer.cpp public path. Staged
+optimized0.1.4/build320 signs/verifies with bundled dependencies/notices; final
+full suites and actual322/323 are queued, all mute1.
+
+Pre320 MAC319 remains an incomplete driving experiment: first W accepted, next
+S guarded snapshot returns nil/nil (source VehicleState explicitly refuses
+when scheduler jobs are active), so Lua short-circuits before any S hold. No
+measurement or subsequent input success inferred. Supplemental original race/
+desktop exit helpers return0; process exit0/323.541s, no primary error. Future
+private operator passively retries only this proven no-dispatch nil result with
+fresh original HUD/human observations, at most3attempts/10s. Accepted, rejected,
+expired or uncertain actions never retry; nonempty invalid state still stops.
+No engine observation fence, input limit or source assertion is weakened.
+This is a private harness change, not a simulation/controller alteration.
+
+
+Final source320 Debug148/148 PASS134.14s and optimized148/148 PASS81.01s.
+No production/fixture change followed these suites. Final native keyboard Host
+MAC322 qualifies normally, without supplemental status: lan0/desktop0, actual
+exit0/116.661s before420guard, LCONTROL originalHost→CustomGame→capacity20 local
+lobby, originalleave/desktop204, no primary error/source-state mutation, mute1.
+New final actual323 copied the same immutable accepted source state and started
+only after the service lease was acquired. Its90s quiet race window has begun;
+no builds, captures, readbacks, profiler or measurement IPC during that window.
+
+
+MAC323 final same-stage build320 actual race acceptance PASS: measure0/race_exit0/
+desktop0, actual exit0/309.113s before480guard, no primaryerror, source285 state
+unchanged. Original20car human Focus/layout1; W1s/S0.5s/A0.12s/D0.12s and finite
+W45s all accepted without a nil-snapshot retry in this final run.90.005s no-input
+and45.154s moving windows qualify actual human bookends, advancing race time
+and654.290m moving displacement. No profiler/readback/capture/watch or IPC in
+measurement windows. No new FPS/music-quality or complete-race claim. Final322
+and323 source-proof hashes match exactly;19production/fixture freeze unchanged.
+Package0.1.4/build320 verification and curated personal source publication follow.
+
+
+MAC317/MAC320 final local development delivery accepted:0.1.4/build320 source19
+paths unchanged; both148 suites and actual322/323 ordinary exits pass. Strict
+signatures/notices/dependency manifest and ZIP extraction/relocation PASS.
+ZIP27,443,727bytes SHA256
+`a44efdfa21f7617f3232dfa98166944334d3091214592382d03ad2c981feaf61`.
+Verified optimized app installed at standard_work/run/BlurNativeGame.app;
+previous raw Debug bundle preserved atmac320-stable-previous. Future manual
+launcher0.1.4 remains audible with5s frame summaries/audio shutdown statistics;
+all tests mute1. No game left running, no original data/profiles bundled.
+Curated personal publication uses separate index and preserves redacted profile
+manager; no broad staging, reset or generated target-list edits.
+Remaining: perceptual race music assessment, occasional frame tails, remote LAN
+join/racing and clean-Mac/notarized distribution. Do not mark full game/LAN goal
+complete based on these local controls/resize/audio ownership results.

@@ -227,3 +227,17 @@ these reports and has no rate claim. Startup observation briefly timed out durin
 loading; no key was retried, and later fresh HUD/vehicle observations establish
 the actual race and human controls. This does not explain the earlier 289 ms
 outlier or isolate diagnostic overhead from different live contact states.
+
+
+## Later failed-read ownership finding (MAC320)
+
+A subsequent optimized full-suite signal failure exposed a separate actual
+renderer race: an unsuccessful consumer read cleared producer scratch0 while a
+new quantum was mixed but unpublished. Native failed reads now leave PCM
+untouched and keep their existing false/wait contract. A deterministic actual
+callback gate fails with the old body and passes with the repair, preserving all
+exact independent-channel assertions. See
+[audio-failed-read-ownership.md](audio-failed-read-ownership.md). This supersedes
+any inference that the earlier absence of positive device demand ruled out all
+signal corruption. It does not establish perceptually clean race music; muted
+actual-game acceptance and audible manual assessment remain distinct.

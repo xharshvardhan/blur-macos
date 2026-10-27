@@ -280,6 +280,14 @@ void SetupAmaxUserControlsPC( C_GameInput* pGameInput, C_Device* pPad, C_Device*
 				pDevice = pMouse;
 			if (pDevice)
 				pCombiner->AddButtonInput(new C_ButtonInputFromDevice(pDevice, row.m_Key[keyboardLayout]));
+#if defined(PLATFORM_MACOS)
+			// [Blur2PC] Compact Mac keyboards have only left Control. Keep physical
+			// key identity and profile/action IDs intact; widen only the stock,
+			// single-keyboard fire action, not split-screen or custom bindings.
+			if (!splitScreen && pDevice == pKeyboard && row.m_Button == E_Button_UsePickup &&
+				row.m_Key[keyboardLayout] == C_Keyboard::E_Button_RControl)
+				pCombiner->AddButtonInput(new C_ButtonInputFromDevice(pKeyboard, C_Keyboard::E_Button_LControl));
+#endif
 		}
 
 		if (pPad && pPadConfig)
@@ -330,6 +338,26 @@ void SetupAmaxUserControlsPC( C_GameInput* pGameInput, C_Device* pPad, C_Device*
 
 		if (pKeyboard && row.m_Key[menuKeyColumn] != kNoKey)
 			pCombiner->AddButtonInput(new C_ButtonInputFromDevice(pKeyboard, row.m_Key[menuKeyColumn]));
+#if defined(PLATFORM_MACOS)
+		// [Blur2PC] Original PC Y/Host and X/Refresh prompts require right-side
+		// modifiers. Accept their left-side counterparts for the primary menu
+		// keyboard through the existing max/OR combiner, so two held keys still
+		// produce one action and one debounced press. Secondary keys stay exact.
+		if (pKeyboard && menuKeyColumn == 0)
+		{
+			if (row.m_Button == E_UiButton_Option2 && row.m_Key[0] == C_Keyboard::E_Button_RControl)
+				pCombiner->AddButtonInput(new C_ButtonInputFromDevice(pKeyboard, C_Keyboard::E_Button_LControl));
+			if (row.m_Button == E_UiButton_Option1 && row.m_Key[0] == C_Keyboard::E_Button_RShift)
+				pCombiner->AddButtonInput(new C_ButtonInputFromDevice(pKeyboard, C_Keyboard::E_Button_LShift));
+			// Compact keyboards also lack Insert/Forward Delete as dedicated
+			// keys. Brackets are unused by the immutable primary menu table;
+			// keep the original keys and secondary keypad actions available.
+			if (row.m_Button == E_UiButton_LeftShoulder && row.m_Key[0] == C_Keyboard::E_Button_Insert)
+				pCombiner->AddButtonInput(new C_ButtonInputFromDevice(pKeyboard, C_Keyboard::E_Button_LBracket));
+			if (row.m_Button == E_UiButton_RightShoulder && row.m_Key[0] == C_Keyboard::E_Button_Delete)
+				pCombiner->AddButtonInput(new C_ButtonInputFromDevice(pKeyboard, C_Keyboard::E_Button_RBracket));
+		}
+#endif
 		if (pPad && row.m_Pad != kNoKey)
 			pCombiner->AddButtonInput(new C_ButtonInputFromDevice(pPad, row.m_Pad));
 

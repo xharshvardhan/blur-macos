@@ -2204,8 +2204,10 @@ bool Audio::Core::Renderer::GetNextFrame(F32** pfSurroundLFE, F32** pfSurround, 
 		//printf("[dropout] (%d) read=%d, write=%d\n", sDiff, m_sCurrRead, m_sNextWrite);
 		m_uDropped++;
 
+#if !defined(PLATFORM_MACOS) // [Blur2PC] Native false consumers wait; they must not clear producer-owned scratch or unpublished slots.
 		if (g_bClearDroppedFrames)
 			ClearFrame( m_sCurrRead % m_uNumBuffers );
+#endif
 
 		bReady = false;	// [Blur2PC] T144
 	}

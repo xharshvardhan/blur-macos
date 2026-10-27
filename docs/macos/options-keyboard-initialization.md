@@ -101,3 +101,7 @@ row fallback, and original PS3 image/Xenon storage behavior. This validates the
 script contract; real menu rendering remains a separate runtime check. The
 standard native game's Lua bundle custom command depends on every source Lua
 file, so a normal `BlurNativeGame` build regenerates the embedded bundle.
+
+MAC316 adds native left Control alternatives to the stock fire/Host actions and
+left Shift to the primary menu's X/Refresh action. The physical sides and saved
+layout remain distinct; see [native keyboard controls and hosting](native-keyboard-hosting.md).

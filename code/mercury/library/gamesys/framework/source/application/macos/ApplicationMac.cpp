@@ -65,6 +65,20 @@ void C_Application::UpdateGraphicsSettings(){
     if(!m_PendingWidth||!m_PendingHeight||!m_pDisplayDevice)return;
     const U32 width=m_PendingWidth,height=m_PendingHeight;m_PendingWidth=m_PendingHeight=0;
     if(width==m_DisplayDeviceParams.m_Width&&height==m_DisplayDeviceParams.m_Height)return;
+    C_LayerManager::NativeResizeLease lifecycle(m_LayerManager);
+    if(!lifecycle){
+        // Cocoa has already changed drawableSize. Keep presenting the committed
+        // framebuffer (scaled by its view) while an async graph owns creation,
+        // or until a completed Ready layer joins the normal Resize broadcast.
+        // This path must never wait for lifecycle while holding Display.
+        m_PendingWidth=width;m_PendingHeight=height;
+        auto& native=m_pDisplayDevice->GetDisplay2();
+        if(!native.SetPresentationLayer(m_Window.MetalLayer(),m_DisplayDeviceParams.m_Width,m_DisplayDeviceParams.m_Height,
+                m_DisplayDeviceParams.m_PresentInterval!=Display::E_PresentInterval_Immediate)||
+           !native.SetPresentationInterval(static_cast<Display2::E_PresentInterval>(m_DisplayDeviceParams.m_PresentInterval)))
+            throw std::runtime_error("Native deferred resize could not retain committed presentation");
+        return;
+    }
     m_pDisplayDevice->BlockUntilIdle();m_pDisplayDevice->DestroyRenderersVolatile();m_pDisplayDevice->DestroyVolatile();
     m_DisplayDeviceParams.m_Width=m_DisplayDeviceParams.m_ScreenWidth=m_DisplayDeviceParams.m_WindowBufferWidth=width;
     m_DisplayDeviceParams.m_Height=m_DisplayDeviceParams.m_ScreenHeight=m_DisplayDeviceParams.m_WindowBufferHeight=height;

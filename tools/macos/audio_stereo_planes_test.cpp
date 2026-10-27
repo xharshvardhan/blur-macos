@@ -13,10 +13,14 @@ static void require(bool ok,const char* text){if(!ok)throw std::runtime_error(te
 struct OutputSource:Audio::Core::Output {
     OutputSource():Output("authored-stereo-route",2,0){m_uOutBuffer=0;}
 };
+struct FrameGate {
+    std::atomic<bool> entered{false},released{false},expired{false};
+};
 struct Source {
     OutputSource output;
     std::array<F32,2*Audio::Core::uFrameLength> planes{};
     U64 frame=0;
+    FrameGate* gate=nullptr;
     static void Begin(void* data){
         auto& s=*static_cast<Source*>(data);
         for(U32 i=0;i<Audio::Core::uFrameLength;++i){
@@ -25,7 +29,18 @@ struct Source {
             s.planes[Audio::Core::uFrameLength+i]=F32(.4*std::cos(time*2*3.141592653589793*733));
         }
         Audio::Core::ProcessInfo info{};info.pStaticBuffers=s.planes.data();
-        s.output.SetActive(true);s.output.MoveAudio(info);++s.frame;
+        s.output.SetActive(true);s.output.MoveAudio(info);
+        // Hold the actual second mixed quantum in renderer scratch slot 0,
+        // before Execute copies/publishes it into the producer ring.
+        if(s.gate&&s.frame==1){
+            s.gate->entered.store(true);
+            const auto deadline=std::chrono::steady_clock::now()+std::chrono::seconds(3);
+            while(!s.gate->released.load()){
+                if(std::chrono::steady_clock::now()>=deadline){s.gate->expired.store(true);break;}
+                MT::Thread::Sleep(1);
+            }
+        }
+        ++s.frame;
     }
 };
 struct NativeStereoProbe:Audio::Core::Engine {
@@ -34,7 +49,9 @@ struct NativeStereoProbe:Audio::Core::Engine {
 };
 static void route(){
     using namespace Audio::Core;
-    Source source;Renderer renderer(8);
+    FrameGate gate;Source source;source.gate=&gate;Renderer renderer(8);
+    // Open the gate before renderer teardown on every assertion/timeout path.
+    struct ReleaseGate {FrameGate& gate;~ReleaseGate(){gate.released.store(true);}} releaseGate{gate};
     require(renderer.Init(&source,Source::Begin,nullptr,0,false),"Actual stereo renderer initialization failed");
     // Join the SDL consumer before starting the producer. The test becomes the
     // sole real ring consumer and never races the output Engine for frames.
@@ -57,7 +74,20 @@ static void route(){
             for(U32 i=0;i<uFrameLength;++i){maximumLeft=std::max(maximumLeft,std::abs(interleaved[i*channels]-stereo[i]));maximumRight=std::max(maximumRight,std::abs(interleaved[i*channels+1]-stereo[uFrameLength+i]));for(U32 ch=2;ch<channels;++ch)require(interleaved[i*channels+ch]==0,"Native stereo adapter changed unrelated speaker channels");}
             if(channels==2){if(frame)maximumBoundary=std::max(maximumBoundary,std::abs(interleaved[1]-lastRight));lastRight=interleaved[(uFrameLength-1)*2+1];}
         }
+        if(frame==0){
+            const auto gateDeadline=std::chrono::steady_clock::now()+std::chrono::seconds(3);
+            while(!gate.entered.load()){
+                require(std::chrono::steady_clock::now()<gateDeadline,"Actual producer did not reach the prepublication frame gate");MT::Thread::Sleep(1);
+            }
+            require(!gate.expired.load(),"Actual producer frame gate expired before the starvation check");
+            // Frame 0 has been consumed, but frame 1 is not yet published.
+            // A false read must not erase the producer's live mixed scratch.
+            F32 *pendingLFE=nullptr,*pendingSurround=nullptr,*pendingStereo=nullptr,*pendingMono=nullptr;
+            require(!renderer.GetNextFrame(&pendingLFE,&pendingSurround,&pendingStereo,&pendingMono),"Unpublished producer frame was incorrectly reported ready");
+            gate.released.store(true);
+        }
     }
+    require(!gate.expired.load(),"Actual producer frame gate timed out");
     std::cout<<"Actual Output/Input/Renderer stereo planes: left_error="<<maximumLeft<<" right_error="<<maximumRight<<" max_right_quantum_boundary="<<maximumBoundary<<std::endl;
     require(maximumLeft==0&&maximumRight==0,"Native stereo adapter substituted adjacent left samples for the actual right plane");
     require(maximumBoundary<.04f,"Native stereo adapter introduced a discontinuity at the 128-frame quantum boundary");

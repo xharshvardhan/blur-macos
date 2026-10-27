@@ -630,6 +630,13 @@ if(BLUR_GLSLANG AND BLUR_SPIRV_CROSS AND BLUR_SPIRV_VAL AND BLUR_SHADER_CLANG)
     add_test(NAME mac_application COMMAND ${Python3_EXECUTABLE} ${BLUR_TOP}/tools/macos/test_application.py
         $<TARGET_FILE:blur_mac_application_test> ${_mac_app_shader_dir} ${CMAKE_CURRENT_BINARY_DIR})
     set_tests_properties(mac_application PROPERTIES LABELS "hardware;window" TIMEOUT 45)
+    # [Blur2PC] Real application keeps old frames while async graph resize is deferred.
+    add_executable(blur_mac_application_resize_test ${BLUR_TOP}/tools/macos/application_resize_test.mm)
+    target_compile_options(blur_mac_application_resize_test PRIVATE -fobjc-arc)
+    target_link_libraries(blur_mac_application_resize_test PRIVATE blur_mac_application_host blur_mac_application_shader_blobs)
+    add_test(NAME mac_application_resize COMMAND ${Python3_EXECUTABLE} ${BLUR_TOP}/tools/macos/test_application.py
+        $<TARGET_FILE:blur_mac_application_resize_test> ${_mac_app_shader_dir} ${CMAKE_CURRENT_BINARY_DIR})
+    set_tests_properties(mac_application_resize PROPERTIES LABELS "hardware;window" TIMEOUT 45)
 endif()
 add_executable(blur_mac_camera_test ${BLUR_TOP}/tools/macos/camera_test.cpp)
 target_link_libraries(blur_mac_camera_test PRIVATE "$<LINK_LIBRARY:WHOLE_ARCHIVE,blur_mac_camera2>")
@@ -746,6 +753,12 @@ target_include_directories(blur_mac_worker_stop_ownership_test PRIVATE ${BLUR_MA
 target_link_libraries(blur_mac_worker_stop_ownership_test PRIVATE blur_mac_framework)
 add_test(NAME mac_worker_stop_ownership COMMAND blur_mac_worker_stop_ownership_test)
 set_tests_properties(mac_worker_stop_ownership PROPERTIES TIMEOUT 30)
+# [Blur2PC] Nonblocking async lifecycle/Ready resize lease and failure retirement.
+add_executable(blur_mac_layer_resize_test ${BLUR_TOP}/tools/macos/layer_resize_test.cpp)
+target_include_directories(blur_mac_layer_resize_test PRIVATE ${BLUR_MAC_FRAMEWORK_ROOT})
+target_link_libraries(blur_mac_layer_resize_test PRIVATE blur_mac_framework)
+add_test(NAME mac_layer_resize COMMAND blur_mac_layer_resize_test)
+set_tests_properties(mac_layer_resize PROPERTIES TIMEOUT 30)
 add_executable(blur_mac_framework_test ${BLUR_TOP}/tools/macos/framework_test.cpp)
 target_link_libraries(blur_mac_framework_test PRIVATE "$<LINK_LIBRARY:WHOLE_ARCHIVE,blur_mac_framework>")
 add_executable(blur_mac_loading_integration ${BLUR_TOP}/tools/macos/loading_integration.cpp)

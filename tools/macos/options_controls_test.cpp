@@ -15,7 +15,7 @@
 #include <Game/GameControls/GameControls.h>
 // Cocoa virtual key codes from the public macOS HIToolbox/Events.h.
 // Avoid Carbon umbrella imports: its global Component typedef conflicts with game namespaces.
-enum : U16 { kVK_ANSI_A=0x00,kVK_ANSI_S=0x01,kVK_ANSI_D=0x02,kVK_ANSI_Q=0x0c,kVK_ANSI_W=0x0d,kVK_Space=0x31,kVK_RightControl=0x3e,kVK_LeftArrow=0x7b,kVK_RightArrow=0x7c,kVK_DownArrow=0x7d,kVK_UpArrow=0x7e };
+enum : U16 { kVK_ANSI_A=0x00,kVK_ANSI_S=0x01,kVK_ANSI_D=0x02,kVK_ANSI_Q=0x0c,kVK_ANSI_W=0x0d,kVK_Space=0x31,kVK_Shift=0x38,kVK_Control=0x3b,kVK_RightShift=0x3c,kVK_RightControl=0x3e,kVK_Return=0x24,kVK_Escape=0x35,kVK_ANSI_KeypadPlus=0x45,kVK_ANSI_KeypadMinus=0x4e,kVK_ANSI_Z=0x06,kVK_ANSI_V=0x09,kVK_Tab=0x30,kVK_Help=0x72,kVK_ForwardDelete=0x75,kVK_ANSI_LeftBracket=0x21,kVK_ANSI_RightBracket=0x1e,kVK_PageDown=0x79,kVK_LeftArrow=0x7b,kVK_RightArrow=0x7c,kVK_DownArrow=0x7d,kVK_UpArrow=0x7e };
 #include <cmath>
 #include <iostream>
 #include <memory>
@@ -32,7 +32,7 @@ int main(){try{
     UI::C_ControlConfig config = UI::C_ControlConfig();config.m_GameFunctionRT=Game::E_Button_Throttle;config.m_GameFunctionLT=Game::E_Button_Brake;
     auto events=Input::Mac::GetEvents(manager.get());
     auto sample=[&]{manager->Update();controls.Update();};
-    auto reset=[&]{for(U16 code:{U16(kVK_ANSI_Q),U16(kVK_ANSI_W),U16(kVK_ANSI_A),U16(kVK_ANSI_S),U16(kVK_ANSI_D),U16(kVK_Space),U16(kVK_RightControl),U16(kVK_LeftArrow),U16(kVK_RightArrow),U16(kVK_UpArrow),U16(kVK_DownArrow)})events.key(code,false,0,false);sample();};
+    auto reset=[&]{for(U16 code:{U16(kVK_ANSI_Q),U16(kVK_ANSI_W),U16(kVK_ANSI_A),U16(kVK_ANSI_S),U16(kVK_ANSI_D),U16(kVK_Space),U16(kVK_Control),U16(kVK_RightControl),U16(kVK_Shift),U16(kVK_RightShift),U16(kVK_Return),U16(kVK_Escape),U16(kVK_ANSI_KeypadPlus),U16(kVK_ANSI_KeypadMinus),U16(kVK_ANSI_Z),U16(kVK_ANSI_V),U16(kVK_Tab),U16(kVK_PageDown),U16(kVK_Help),U16(kVK_ForwardDelete),U16(kVK_ANSI_LeftBracket),U16(kVK_ANSI_RightBracket),U16(kVK_LeftArrow),U16(kVK_RightArrow),U16(kVK_UpArrow),U16(kVK_DownArrow)})events.key(code,false,0,false);sample();};
     auto key=[&](U16 code,bool down){events.key(code,down,0,false);sample();};
     for(S32 layout:{0,1}){
         reset();Game::SetupAmaxUserControlsPC(input,pad.get(),keyboard.get(),mouse.get(),layout,false,&config,0);sample();
@@ -67,8 +67,49 @@ int main(){try{
         key(discard,false);require(input->GetButtonReleasedDebounced(Game::E_Button_DiscardPickup),"Pickup discard release lost");
         const U16 handbrake=layout?kVK_Space:kVK_DownArrow;
         key(handbrake,true);require(input->GetButtonPressed(Game::E_Button_Handbrake)&&!input->GetButtonPressed(Game::E_Button_Brake),"Original PC handbrake missing or crossed brake");key(handbrake,false);
-        key(kVK_RightControl,true);require(input->GetButtonPressedDebounced(Game::E_Button_UsePickup),"Original PC neutral pickup-fire binding missing");key(kVK_RightControl,false);
+        constexpr U64 controlMask=1ULL<<18,shiftMask=1ULL<<17;
+        auto modifier=[&](U16 code,U64 flags){events.key(code,false,flags,true);sample();};
+        modifier(kVK_Control,controlMask);
+        require(input->GetButtonPressedDebounced(Game::E_Button_UsePickup)&&input->GetButtonPressedDebounced(Game::E_UiButton_Option2),"Left Control did not reach stock fire and menu Host/Y");
+        require(keyboard->GetButtonValue(Input::C_Keyboard::E_Button_RControl)==0,"Action compatibility rewrote physical right Control");
+        modifier(kVK_RightControl,controlMask);
+        require(input->GetButtonPressed(Game::E_Button_UsePickup)&&!input->GetButtonPressedDebounced(Game::E_Button_UsePickup)&&!input->GetButtonPressedDebounced(Game::E_UiButton_Option2),"Second held Control retriggered fire or Host");
+        modifier(kVK_Control,controlMask);
+        require(input->GetButtonPressed(Game::E_UiButton_Option2)&&!input->GetButtonReleasedDebounced(Game::E_UiButton_Option2),"One Control release dropped the other held Host action");
+        modifier(kVK_RightControl,0);
+        require(input->GetButtonReleasedDebounced(Game::E_Button_UsePickup)&&input->GetButtonReleasedDebounced(Game::E_UiButton_Option2),"Final Control release lost fire/Host release");
+        modifier(kVK_RightControl,controlMask);require(input->GetButtonPressedDebounced(Game::E_Button_UsePickup)&&input->GetButtonPressedDebounced(Game::E_UiButton_Option2),"Original right Control bindings regressed");modifier(kVK_RightControl,0);
+        modifier(kVK_Shift,shiftMask);require(input->GetButtonPressedDebounced(Game::E_UiButton_Option1),"Left Shift did not reach Refresh/X");
+        require(keyboard->GetButtonValue(Input::C_Keyboard::E_Button_RShift)==0,"Menu compatibility rewrote physical right Shift");
+        modifier(kVK_RightShift,shiftMask);require(!input->GetButtonPressedDebounced(Game::E_UiButton_Option1),"Second held Shift retriggered Refresh");
+        modifier(kVK_Shift,shiftMask);require(input->GetButtonPressed(Game::E_UiButton_Option1),"One Shift release dropped the other held Refresh action");
+        modifier(kVK_RightShift,0);require(input->GetButtonReleasedDebounced(Game::E_UiButton_Option1),"Final Shift release lost Refresh release");
+        key(kVK_ANSI_LeftBracket,true);require(input->GetButtonPressedDebounced(Game::E_UiButton_LeftShoulder)&&!input->GetButtonPressed(Game::E_UiButton_RightShoulder),"Primary left bracket did not reach only the left shoulder");
+        key(kVK_Help,true);require(input->GetButtonPressed(Game::E_UiButton_LeftShoulder)&&!input->GetButtonPressedDebounced(Game::E_UiButton_LeftShoulder),"Original Insert/Help retriggered held left shoulder");
+        key(kVK_ANSI_LeftBracket,false);require(input->GetButtonPressed(Game::E_UiButton_LeftShoulder),"Bracket release lost held Insert shoulder");key(kVK_Help,false);require(input->GetButtonReleasedDebounced(Game::E_UiButton_LeftShoulder),"Final Insert/Help release lost shoulder release");
+        key(kVK_ANSI_RightBracket,true);require(input->GetButtonPressedDebounced(Game::E_UiButton_RightShoulder)&&!input->GetButtonPressed(Game::E_UiButton_LeftShoulder)&&!input->GetButtonPressed(Game::E_UiButton_RightThumb),"Primary right bracket crossed shoulder or globally aliased Forward Delete");
+        key(kVK_ForwardDelete,true);require(input->GetButtonPressed(Game::E_UiButton_RightShoulder)&&!input->GetButtonPressedDebounced(Game::E_UiButton_RightShoulder)&&input->GetButtonPressed(Game::E_UiButton_RightThumb),"Original Forward Delete shoulder/thumb contract changed");
+        key(kVK_ANSI_RightBracket,false);require(input->GetButtonPressed(Game::E_UiButton_RightShoulder),"Bracket release lost held Forward Delete shoulder");key(kVK_ForwardDelete,false);require(input->GetButtonReleasedDebounced(Game::E_UiButton_RightShoulder),"Final Forward Delete release lost shoulder release");
+        key(kVK_Return,true);require(input->GetButtonPressedDebounced(Game::E_UiButton_Confirm),"Return lost original menu Select");key(kVK_Return,false);
+        key(kVK_Escape,true);require(input->GetButtonPressedDebounced(Game::E_UiButton_Cancel)&&input->GetButtonPressedDebounced(Game::E_UiButton_Start),"Escape lost original menu Back/pause");key(kVK_Escape,false);
+        const U16 camera=layout?kVK_ANSI_Z:kVK_ANSI_V,rear=layout?kVK_PageDown:kVK_Tab;
+        key(camera,true);require(input->GetButtonPressedDebounced(Game::E_Button_ChangeView),"Profile camera binding changed");key(camera,false);
+        key(rear,true);require(input->GetButtonPressedDebounced(Game::E_Button_RearView),"Profile look-back binding changed");key(rear,false);
+        // Replacing a stock action with an explicit binding must remain exact.
+        input->SetButtonInput(Game::E_Button_UsePickup,new Input::C_ButtonInputFromDevice(keyboard.get(),Input::C_Keyboard::E_Button_RControl));sample();
+        modifier(kVK_Control,controlMask);require(!input->GetButtonPressed(Game::E_Button_UsePickup)&&input->GetButtonPressed(Game::E_UiButton_Option2),"Stock compatibility leaked into an explicit right-only driving binding");modifier(kVK_Control,0);
+        modifier(kVK_RightControl,controlMask);require(input->GetButtonPressed(Game::E_Button_UsePickup),"Explicit right-only driving binding failed");modifier(kVK_RightControl,0);
         if(layout){key(kVK_ANSI_Q,true);require(!input->GetButtonPressed(Game::E_Button_Throttle),"Old layout0 throttle leaked into layout1");key(kVK_ANSI_Q,false);}
     }
+    // Secondary split-screen menus retain their separate keypad actions.
+    reset();Game::SetupAmaxUserControlsPC(input,pad.get(),keyboard.get(),mouse.get(),1,true,&config,1);sample();
+    events.key(kVK_Control,false,1ULL<<18,true);events.key(kVK_Shift,false,1ULL<<17,true);sample();
+    require(!input->GetButtonPressed(Game::E_UiButton_Option1)&&!input->GetButtonPressed(Game::E_UiButton_Option2),"Primary modifier alternatives leaked into secondary menu keys");
+    require(!input->GetButtonPressed(Game::E_Button_Handbrake),"Left Control was globally aliased into split-screen right-Control handbrake");
+    reset();key(kVK_ANSI_LeftBracket,true);key(kVK_ANSI_RightBracket,true);
+    require(!input->GetButtonPressed(Game::E_UiButton_LeftShoulder)&&!input->GetButtonPressed(Game::E_UiButton_RightShoulder),"Primary bracket alternatives leaked into secondary menu keys");
+    reset();key(kVK_Help,true);require(!input->GetButtonPressed(Game::E_UiButton_LeftShoulder),"New physical Insert changed secondary keypad shoulder mapping");key(kVK_Help,false);
+    reset();key(kVK_ANSI_KeypadPlus,true);require(input->GetButtonPressed(Game::E_UiButton_Option2),"Secondary keypad Host/Y changed");key(kVK_ANSI_KeypadPlus,false);
+    key(kVK_ANSI_KeypadMinus,true);require(input->GetButtonPressed(Game::E_UiButton_Option1),"Secondary keypad Refresh/X changed");key(kVK_ANSI_KeypadMinus,false);
     std::cout<<"Native profile/options binding selection: original layout0 Q/A/arrows and layout1 WASD, dedicated fire/switch/discard/handbrake keys, independent arrow menu navigation, pad-remap regression and keyboard ownership PASS\n";return 0;
 }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 1;}}

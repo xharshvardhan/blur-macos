@@ -154,3 +154,68 @@ The user's race-music symptom remains unresolved. All automated testing keeps
 per-stream mute on; normal launches remain audible. See
 [the full investigation](remaining-audio-jitter.md) and
 [decoder observations](audio-decoder-trace.md) for the exact evidence and limits.
+
+
+## Native 0.1.4 integration (MAC312–MAC323)
+
+The user-reported resized startup failure was captured before restart and
+reproduced in `C_Context::Clear` from the full lighting prepass. Async layer
+creation captured old target dimensions before a resize broadcast could reach
+its unpublished world. Native resize now defers/coalesces until that graph is
+published, preserves old-size presentation while waiting, and then resizes all
+owners normally. An ABI-safe original-application-body control fails the real
+GPU resize fixture; the repair passes. Strict viewport validation remains.
+
+Required lighting creation false results now report during resize, before
+rendering can use incomplete owners. Three newly allocated native wrappers stay
+owned until publication; genuine invalid-format failures, cleanup and retry are
+covered through real prepass/deferred owners. World cancellation also releases
+its exact owned resource-loader pause, preserving outer nesting and enabling the
+real worker to join. See [resize](async-window-resize.md),
+[required resources](required-lighting-resize.md) and
+[streamer shutdown](streamer-pause-shutdown.md).
+
+The complete mapping audit adds primary-menu Control/Shift alternatives on both
+sides and [ / ] shoulder actions, plus extended Help/Insert decoding, preserving
+physical identities, saved layouts, custom replacements and secondary bindings.
+See [the full keyboard map and original hosting flow](native-keyboard-hosting.md).
+
+The first optimized integration passed147/148 and exposed an independent native
+audio ownership bug. A failed consumer read could clear scratch0 while the
+producer was mixing its next quantum. The native false path now retains its
+existing wait/drop contract without touching producer PCM. A gated real callback
+fails the unchanged exact signal assertion with the old renderer and passes
+with the repair; Windows/console behavior remains intact. See
+[audio ownership](audio-failed-read-ownership.md). This establishes a corrupted
+quantum repair, not perceptually clean race music.
+
+Final19path coherent source320 passes both complete148-test suites: Debug134.14s
+and optimized81.01s. The focused strict Metal matrix passes8/8, including actual
+Cocoa keyboard events, actual GPU resize/resource failures and the real-renderer
+signal regression. Final source-qualified actual322hosting/323driving acceptance
+and local package delivery are recorded in the subsequent integration ledger.
+Earlier diagnostic stages and failed/incomplete harness runs are retained and
+are not substituted for final build acceptance.
+
+
+Final actual acceptance uses the same signed build320 executable hash in both
+runs. MAC322 original left-Control LAN Host/lobby/leave/desktop exits0/116.661s.
+MAC323 starts the original20car race with human Focus/layout1, accepts W/S/A/D
+and a finite45s W hold, observes654.290m displacement in the moving window, then
+uses original race/frontend/desktop confirmations to exit0/309.113s before the
+480s guard. The90s no-input window and45s moving window have source-qualified
+human bookends and no measurement IPC/profiler/readback. Both isolated tests
+leave accepted source profiles/saves unchanged and remain muted throughout.
+This is controls/driving/exit acceptance; it does not repeat the older complete
+three-lap career race or qualify remote multiplayer or listening quality.
+
+
+Local0.1.4/build320 delivery installs the verified optimized bundle in
+`_work/run/BlurNativeGame.app`, preserving the prior raw Debug bundle privately.
+Strict signature, dependency/notices/SPDX manifest, ZIP extraction and relocation
+checks pass. ZIP SHA256:
+`a44efdfa21f7617f3232dfa98166944334d3091214592382d03ad2c981feaf61`.
+No original game data or profiles are bundled. The manual launcher points to this
+version, retains normal audible playback, and records low-frequency frame/audio
+diagnostics; automated tests continue to use mute1. No automatic foreground game
+is left running after verification.

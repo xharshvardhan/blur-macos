@@ -81,7 +81,8 @@ static S32 keyIndex(U16 code){switch(code){
     KEY(Option,LMenu) KEY(RightOption,RMenu) KEY(CapsLock,Capital)
     KEY(Command,LWin) KEY(RightCommand,RWin)
     KEY(LeftArrow,Left) KEY(RightArrow,Right) KEY(UpArrow,Up) KEY(DownArrow,Down)
-    KEY(Home,Home) KEY(End,End) KEY(PageUp,Prior) KEY(PageDown,Next) KEY(ForwardDelete,Delete)
+    // Extended PC Insert/Help physical position is reported as kVK_Help by Cocoa.
+    KEY(Help,Insert) KEY(Home,Home) KEY(End,End) KEY(PageUp,Prior) KEY(PageDown,Next) KEY(ForwardDelete,Delete)
     KEY(ANSI_Keypad0,NumPad0) KEY(ANSI_Keypad1,NumPad1) KEY(ANSI_Keypad2,NumPad2) KEY(ANSI_Keypad3,NumPad3)
     KEY(ANSI_Keypad4,NumPad4) KEY(ANSI_Keypad5,NumPad5) KEY(ANSI_Keypad6,NumPad6) KEY(ANSI_Keypad7,NumPad7)
     KEY(ANSI_Keypad8,NumPad8) KEY(ANSI_Keypad9,NumPad9) KEY(ANSI_KeypadDecimal,Decimal)

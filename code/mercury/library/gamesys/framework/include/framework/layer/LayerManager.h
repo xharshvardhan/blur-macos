@@ -75,6 +75,22 @@ public:
     void NativeDestroyLayerNow(C_Layer* layer);
     // [Blur2PC] Worker resource/actor failures use the same checked main-thread handoff, without changing layer ownership.
     void NativeReportCreationFailure(const char* message);
+    // A main-thread resize must not block while it already owns Display: an
+    // async creator may hold this transaction while waiting for that device.
+    // Ready objects must first pass the ordinary main-thread Running handoff.
+    class NativeResizeLease {
+    public:
+        enum class Result { Busy, ReadyPending, CreationFailed, Acquired };
+        explicit NativeResizeLease(C_LayerManager& manager);
+        ~NativeResizeLease();
+        NativeResizeLease(const NativeResizeLease&)=delete;
+        NativeResizeLease& operator=(const NativeResizeLease&)=delete;
+        explicit operator bool() const { return m_Manager!=nullptr; }
+        Result GetResult() const { return m_Result; }
+    private:
+        C_LayerManager* m_Manager=nullptr;
+        Result m_Result=Result::Busy;
+    };
 #endif
 
 	//! Inserts a layer into the application.
@@ -150,6 +166,7 @@ private:
 	MT::Lock m_ReadyListLock;
 
 #if defined(PLATFORM_MACOS) // [Blur2PC] Native workers must join before their owner and event members die.
+    MT::Lock m_NativeLifecycleLock; // Create/Destroy ownership, including Ready publication.
     bool m_NativeShutdown = false;
     bool m_NativeCreationQuiesced = false;
     Ut::UtList<C_Layer*> m_NativeFailedLayers;

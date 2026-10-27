@@ -48,6 +48,31 @@ int main(){@autoreleasepool{try{
     input.focus(true);[view keyDown:event];inputManager->Update();actions.Update();require(gameInput->GetButtonPressedDebounced(0),"Actual Cocoa key did not reach original game actions");
     auto release=[NSEvent keyEventWithType:NSEventTypeKeyUp location:NSZeroPoint modifierFlags:0 timestamp:0 windowNumber:native.windowNumber context:nil characters:@"a" charactersIgnoringModifiers:@"a" isARepeat:NO keyCode:0];[view keyUp:release];inputManager->Update();actions.Update();require(gameInput->GetButtonReleasedDebounced(0),"Actual Cocoa key release did not reach game actions");
     require(keys.size()==2&&keys[0].down&&!keys[1].down&&keys[0].text=="a"&&keys[0].modifiers==NSEventModifierFlagShift,"Cocoa keyboard events lost their fields");
+    auto flags=[&](U16 code,NSEventModifierFlags mask){
+        auto change=[NSEvent keyEventWithType:NSEventTypeFlagsChanged location:NSZeroPoint modifierFlags:mask timestamp:0 windowNumber:native.windowNumber context:nil characters:@"" charactersIgnoringModifiers:@"" isARepeat:NO keyCode:code];
+        [view flagsChanged:change];inputManager->Update();actions.Update();
+        require(keys.back().modifiersOnly&&keys.back().code==code&&keys.back().modifiers==mask,"Actual Cocoa flagsChanged lost physical key identity or modifiers");
+    };
+    flags(59,NSEventModifierFlagControl);
+    require(k->GetButtonValue(Input::C_Keyboard::E_Button_LControl)==1&&k->GetButtonValue(Input::C_Keyboard::E_Button_RControl)==0,"Cocoa left Control was not independent");
+    flags(62,NSEventModifierFlagControl);flags(59,NSEventModifierFlagControl);
+    require(k->GetButtonValue(Input::C_Keyboard::E_Button_LControl)==0&&k->GetButtonValue(Input::C_Keyboard::E_Button_RControl)==1,"Cocoa Control sided release lost held right key");
+    flags(62,0);
+    require(k->GetButtonValue(Input::C_Keyboard::E_Button_RControl)==0,"Cocoa Control release stuck");
+    flags(56,NSEventModifierFlagShift);
+    require(k->GetButtonValue(Input::C_Keyboard::E_Button_LShift)==1&&k->GetButtonValue(Input::C_Keyboard::E_Button_RShift)==0,"Cocoa left Shift was not independent");
+    flags(60,NSEventModifierFlagShift);flags(56,NSEventModifierFlagShift);
+    require(k->GetButtonValue(Input::C_Keyboard::E_Button_LShift)==0&&k->GetButtonValue(Input::C_Keyboard::E_Button_RShift)==1,"Cocoa Shift sided release lost held right key");flags(60,0);
+    auto physical=[&](U16 code,NSString* text,bool down){
+        auto keyEvent=[NSEvent keyEventWithType:down?NSEventTypeKeyDown:NSEventTypeKeyUp location:NSZeroPoint modifierFlags:0 timestamp:0 windowNumber:native.windowNumber context:nil characters:text charactersIgnoringModifiers:text isARepeat:NO keyCode:code];
+        if(down)[view keyDown:keyEvent];else[view keyUp:keyEvent];inputManager->Update();actions.Update();
+    };
+    physical(114,@"",true);
+    require(k->GetButtonValue(Input::C_Keyboard::E_Button_Insert)==1&&k->GetButtonValue(Input::C_Keyboard::E_Button_Delete)==0,"Actual Cocoa Help/Insert keyDown lost native mapping");
+    physical(114,@"",false);require(k->GetButtonValue(Input::C_Keyboard::E_Button_Insert)==0,"Actual Cocoa Help/Insert keyUp stuck");
+    physical(33,@"[",true);physical(30,@"]",true);
+    require(k->GetButtonValue(Input::C_Keyboard::E_Button_LBracket)==1&&k->GetButtonValue(Input::C_Keyboard::E_Button_RBracket)==1&&k->GetButtonValue(Input::C_Keyboard::E_Button_Insert)==0&&k->GetButtonValue(Input::C_Keyboard::E_Button_Delete)==0,"Actual Cocoa brackets were globally aliased to shoulder keys");
+    physical(33,@"[",false);physical(30,@"]",false);
     auto click=[NSEvent mouseEventWithType:NSEventTypeLeftMouseDown location:NSMakePoint(10,12) modifierFlags:0 timestamp:0 windowNumber:native.windowNumber context:nil eventNumber:1 clickCount:1 pressure:1];[view mouseDown:click];
     require(mouse.size()==1&&mouse[0].kind==Framework::Mac::MouseEvent::Down&&mouse[0].button==0&&mouse[0].x>=0&&mouse[0].y>=0,"Cocoa mouse event routing failed");
     inputManager->Update();actions.Update();require(gameInput->GetButtonPressedDebounced(1),"Actual Cocoa click did not reach original game actions");

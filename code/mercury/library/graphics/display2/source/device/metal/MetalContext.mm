@@ -558,7 +558,11 @@ void C_Context::SetDepthStencilSurface(const C_Surface* surface){m_Impl->check()
 void C_Context::Clear(U32 flags,U32 colour,F32 depth,U8 stencil){@autoreleasepool{auto& s=*m_Impl;s.check(true);require(!(flags&~7U),"Invalid native clear flags");require(!(flags&E_Clear_Stencil)||s.hasStencil(),"Stencil clear has no stencil attachment");require(std::isfinite(depth)&&depth>=0&&depth<=1,"Invalid clear depth");
     if(!flags)return;require(bool(s.colours[0]),"Clear requires a render target");
     auto vp=s.viewportExplicit?s.viewport:C_Viewport(0,0,s.colours[0]->width,s.colours[0]->height);
-    require(vp.width&&vp.height&&U64(vp.x)+vp.width<=s.colours[0]->width&&U64(vp.y)+vp.height<=s.colours[0]->height,"Clear viewport exceeds render target");
+    // [Blur2PC] Keep invalid regions fail-fast, with the actual dimensions needed
+    // to distinguish a stale resize graph from a caller's invalid viewport.
+    if(!(vp.width&&vp.height&&U64(vp.x)+vp.width<=s.colours[0]->width&&U64(vp.y)+vp.height<=s.colours[0]->height))
+        throw std::logic_error("Clear viewport exceeds render target: viewport="+std::to_string(vp.x)+","+std::to_string(vp.y)+" "+std::to_string(vp.width)+"x"+std::to_string(vp.height)+
+            "; colour0="+std::to_string(s.colours[0]->width)+"x"+std::to_string(s.colours[0]->height)+"; explicit="+std::to_string(s.viewportExplicit));
     const auto clip=s.scissor();const U32 left=std::max<U32>(vp.x,clip.x),top=std::max<U32>(vp.y,clip.y);
     const U32 right=std::min<U32>(vp.x+vp.width,clip.x+clip.width),bottom=std::min<U32>(vp.y+vp.height,clip.y+clip.height);
     if(right<=left||bottom<=top)return;vp=C_Viewport(left,top,right-left,bottom-top);

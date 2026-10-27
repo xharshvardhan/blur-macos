@@ -25,7 +25,7 @@ development port.
 The native Options menu now registers the original PC keyboard callbacks. New
 profiles use the original Layout 2: W/S accelerate/brake, A/D steer, Space
 handbrake, Up/Down fire forward/backward, Left switch power-up, Right discard,
-and Right Control fire the selected power-up. Existing saved choices are
+and either Control key fires the selected power-up. Existing saved choices are
 preserved; select Layout 2 in Options > Keyboard to change them. Arrows still
 navigate menus. Native graphics settings remain unavailable and their menu row
 is omitted until the complete backend exists.
@@ -41,6 +41,22 @@ as the fix for the reported race-music artifact. That symptom remains unresolved
 Both complete Debug and Speed suites pass 146/146. See
 [the audio and jitter investigation](docs/macos/remaining-audio-jitter.md) for
 actual-game results, contrary early-race tail-latency evidence and test limits.
+
+The 0.1.4 native update repairs resizing during asynchronous startup: pending
+window sizes wait for the complete world graph, then resize its render targets
+together. Required lighting-resource failures report before rendering, and
+cancelling a streaming world releases its owned pause before shutdown. Compact
+Mac keyboards now accept either Control for Host/fire, either Shift for
+options/refresh, and [ / ] for menu shoulders. Saved layouts and custom driving
+bindings are preserved. See [the keyboard map and hosting steps](docs/macos/native-keyboard-hosting.md)
+and [the resize investigation](docs/macos/async-window-resize.md). Required
+lighting failures and retry coverage are detailed in
+[the resource check](docs/macos/required-lighting-resize.md). Native failed audio
+reads also preserve producer-owned PCM; a gated old/new renderer comparison
+proves the corrupted-quantum repair
+([audio ownership](docs/macos/audio-failed-read-ownership.md)). A listening check
+is still needed for the reported race-music artifact. Both complete final
+Debug and optimized suites pass148/148.
 
 The public source snapshot lives at
 [xharshvardhan/blur-macos](https://github.com/xharshvardhan/blur-macos).

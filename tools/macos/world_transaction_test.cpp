@@ -9,6 +9,9 @@
 #include <Game/GameWorld/View/Main.h>
 #include <Game/GameWorld/View/Mirror.h>
 #include <Game/GameWorld/View/CubeMap.h>
+#include <Graphics/Lighting/Prepass.h>
+#include <deferred/Manager.h>
+#include <deferred/prepass/DynamicLights.h>
 #include <render/postprocess/Manager.h>
 #include <render/View/View.h>
 #include <render/postprocess/Interface.h>
@@ -30,6 +33,7 @@
 #include <iostream>
 #include <new>
 #include <stdexcept>
+#include <thread>
 namespace Game {extern Debug::Bool g_MainPrepassEnable;}
 namespace {
 void Require(bool v,const char* text){if(!v){std::cerr<<"World fixture failure: "<<text<<std::endl;throw std::runtime_error(text);}}
@@ -81,6 +85,72 @@ void WorkerProof(Resource::C_Manager& manager,Sys::C_FileSystem& fs,const std::f
     Require(static_cast<Payload*>(payload)->IsDataReady()&&workerLoads==before+1,"World rollback left the original resource worker paused or unable to load");
     payload=static_cast<Payload*>(nullptr);manager.PartialUpdate();std::filesystem::remove(path);
 }
+void StreamerPauseProof(Resource::C_Manager& manager,Sys::C_FileSystem& fs,const std::filesystem::path& scratch,bool cancel){
+    Game::C_GameWorld world;
+    struct OuterPause {Resource::C_Manager& manager;bool owned=true;explicit OuterPause(Resource::C_Manager& m):manager(m){Require(manager.PauseLoadingThread(),"Outer resource pause failed");}void Resume(){if(owned){manager.ResumeLoadingThread();owned=false;}}~OuterPause(){Resume();}} outer(manager);
+    // Recovery makes an old-body negative control fail cleanly rather than
+    // joining forever behind the intentionally retained pause. Normal candidate
+    // Destroy already retired it; the second release is then an actual no-op.
+    struct WorldPauseCleanup {Game::C_GameWorld& world;~WorldPauseCleanup(){world.NativeReleaseStreamerPause();}} cleanup{world};
+    world.NativeAcquireStreamerPause();
+    bool duplicateRejected=false;try{world.NativeAcquireStreamerPause();}catch(const std::logic_error&){duplicateRejected=true;}
+    Require(duplicateRejected,"Duplicate streamer ownership consumed another pause depth");
+    std::atomic<bool> foreignRejected{false};
+    std::thread foreign([&]{try{world.NativeReleaseStreamerPause();}catch(const std::logic_error&){foreignRejected=true;}});foreign.join();
+    Require(foreignRejected,"A different thread released the streamer's resource mutex");
+    if(cancel){
+        try{throw std::runtime_error("Authored render failure while streamer loading");}
+        catch(const std::runtime_error&){Require(world.Destroy(),"Cancelled streamer world failed owner cleanup");}
+    }else world.NativeReleaseStreamerPause();
+    Require(world.Destroy()&&world.Destroy(),"Streamer pause retirement was not idempotent");
+    const auto path=scratch/(cancel?"streamer-cancel.bin":"streamer-complete.bin");
+    {std::unique_ptr<Sys::I_File> file(fs.Open(path.c_str(),Sys::E_FileAccess_Write));const U8 byte=0x5a;Require(file&&file->Write(&byte,1)==1,"Streamer worker proof file write failed");}
+    Resource::C_Handle<Payload> payload;const auto before=workerLoads.load();Require(payload.Load(path.c_str()),"Streamer worker proof did not queue");
+    MT::Thread::Sleep(25);
+    Require(workerLoads==before,"World retirement consumed an unrelated caller's outer pause");
+    outer.Resume();
+    const auto deadline=std::chrono::steady_clock::now()+std::chrono::seconds(4);
+    while(!static_cast<Payload*>(payload)->IsDataReady()&&std::chrono::steady_clock::now()<deadline){manager.PartialUpdate();MT::Thread::Sleep(1);}
+    Require(static_cast<Payload*>(payload)->IsDataReady()&&workerLoads==before+1,"World cancellation retained its streamer pause and blocked the actual loader");
+    payload=static_cast<Payload*>(nullptr);manager.PartialUpdate();std::filesystem::remove(path);
+    Require(manager.NativeDrainUnreferencedResources(),"Streamer pause retirement did not permit actual worker join/drain/restart");
+}
+struct PrepassOwners final:C_LightingPrepass {
+    ~PrepassOwners(){Destroy();}
+    void CreateRequiredBases(){Require(m_pDeferredPointLights->Create(),"Actual point-light base creation failed");Require(m_pDeferredManager->Create(),"Actual deferred-manager base creation failed");}
+};
+void LightingResizeProof(Render::C_View& renderView){
+    const auto flags=renderView.m_ViewFlags;const auto viewIndex=renderView.m_ViewIndex;
+    struct RestoreView {Render::C_View& view;U32 flags;S32 index;~RestoreView(){view.m_ViewFlags=flags;view.m_ViewIndex=index;}} restore{renderView,flags,viewIndex};
+    // Original deferred mappings use +index for normals/depth and -index for
+    // lighting. Actual application views use a nonzero index; +0/-0 aliases.
+    renderView.m_ViewIndex=1;
+    renderView.m_ViewFlags|=Render::E_ViewFlag_EnableDeferred;
+    const S32 originalCount=ResourceCount();
+    {
+        PrepassOwners prepass;Require(prepass.Create(),"Actual lighting owner creation failed");
+        bool pointRejected=false;try{prepass.Resize();}catch(const std::runtime_error& error){pointRejected=std::string(error.what())=="Native required deferred point-light volatile resources failed during resize";}
+        Require(pointRejected,"Required point-light base absence silently passed Resize");
+        prepass.CreateRequiredBases();const S32 baseCount=ResourceCount();
+        auto* manager=prepass.GetDeferredManager();
+        auto healthy=[&]{prepass.Resize();Require(manager->Created(Display::E_RendererState_Volatile),"Actual lighting manager did not become volatile-ready");const auto* normal=prepass.GetNormalTexture(renderView.m_ViewIndex);const auto* depth=prepass.GetDepthStencilSurface(renderView.m_ViewIndex);Require(normal&&normal->IsCreated()&&depth&&depth->IsCreated(),"Successful original lighting resize has no real colour/depth owners");};
+        healthy();
+        for(bool rejectDepth:{false,true}){
+            Deferred::C_RenderTargetSetup invalid{};for(auto& f:invalid.eColourFormat)f=Display::E_Format_Unknown;
+            invalid.eColourFormat[0]=rejectDepth?Display::E_Format_A8R8G8B8:Display::E_Format_D24S8;
+            invalid.eColourFormat[1]=Display::E_Format_R32F;
+            invalid.eDepthStencilFormat=rejectDepth?Display::E_Format_A8R8G8B8:Display::E_Format_D24S8;
+            invalid.eMultisample=Display::E_Multisample_None;invalid.iIndex=0;
+            Require(manager->AddRenderTargetSetup(invalid),"Actual invalid target setup was not accepted as metadata");
+            bool rejected=false;try{prepass.Resize();}catch(const std::runtime_error& error){rejected=std::string(error.what())=="Native required deferred lighting render targets failed during resize";}
+            Require(rejected,"Original Prepass Resize hid a real deferred target-creation false result");
+            Require(!manager->Created(Display::E_RendererState_Volatile)&&ResourceCount()==baseCount,"Failed lighting resize retained partial real GPU owners");
+            manager->ClearRenderTargetSetups();prepass.SetupRenderTargets();healthy();
+        }
+        prepass.Destroy();prepass.Destroy();
+    }
+    Require(ResourceCount()==originalCount,"Lighting failure/retry/Destroy retained original GPU resources");
+}
 }
 int main(int argc,char** argv){try {
     Require(argc==4,"Expected original data root, shader resource root and fixture scratch directory");
@@ -107,6 +177,9 @@ int main(int argc,char** argv){try {
         // Nonzero storage proves the full type's owner state does not depend on implicit static zero fill.
         {alignas(Game::C_GameWorld) U8 storage[sizeof(Game::C_GameWorld)];std::memset(storage,0x11,sizeof(storage));auto* world=new(storage)Game::C_GameWorld();Require(!world->GetParticleManager()&&!world->GetDynamicEffectRenderer()&&!world->GetPhysicsScene(),"Never-created world exposed indeterminate owner pointers");Require(world->Destroy()&&world->Destroy(),"Never-created full world could not clean up repeatedly");world->~C_GameWorld();}
         Require(ResourceCount()==baseline,"Never-created full world leaked actual GPU resources");
+        StreamerPauseProof(resources,nativeFs,scratch,false);
+        StreamerPauseProof(resources,nativeFs,scratch,true);
+        LightingResizeProof(renderView);
         for(unsigned mode=0;mode<2;++mode){
             std::cerr<<"World effect failure boundary "<<mode<<std::endl;
             Probe probe{bool(mode)};

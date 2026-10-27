@@ -428,6 +428,10 @@ bool C_LayerManager::DestroyPendingAsyncLayers()
 	{
 		C_Layer* pLayer = *it;
 
+#if defined(PLATFORM_MACOS)
+        // Keep destructor/unregistration in the same transaction as Destroy.
+        MT::AutoLock lifecycle(m_NativeLifecycleLock);
+#endif
 		SendMessageToLayer( pLayer, E_LayerMessage_Destroy );
 
 		layersPendingDestroy.Erase(it);
@@ -541,7 +545,12 @@ bool C_LayerManager::CreatePendingAsyncLayers()
 		layersPendingCreate.Erase(it);
 
 #if defined(PLATFORM_MACOS) // [Blur2PC] Catch and hand off all Create exceptions instead of escaping the worker.
-		NativeCreateLayer(pLayer);
+        {
+            // Includes successful Ready or failed-object publication. A resize
+            // cannot see idle between graph creation and its ownership handoff.
+            MT::AutoLock lifecycle(m_NativeLifecycleLock);
+            NativeCreateLayer(pLayer);
+        }
 #else
 		HRESULT hr = SendMessageToLayer( pLayer, E_LayerMessage_Create );
 		if( FAILED(hr) )
@@ -647,6 +656,22 @@ void C_LayerManager::NativeThrowCreationFailure()
     std::exception_ptr error;
     {MT::AutoLock lock(m_ReadyListLock);error=m_NativeCreationError;}
     if(error)std::rethrow_exception(error);
+}
+
+C_LayerManager::NativeResizeLease::NativeResizeLease(C_LayerManager& manager)
+{
+    if(!manager.m_NativeLifecycleLock.TryEnter())return;
+    {
+        MT::AutoLock ready(manager.m_ReadyListLock);
+        m_Result=manager.m_NativeCreationError?Result::CreationFailed:
+            !manager.m_ReadyLayers.Empty()?Result::ReadyPending:Result::Acquired;
+    }
+    if(m_Result==Result::Acquired)m_Manager=&manager;
+    else manager.m_NativeLifecycleLock.Exit();
+}
+C_LayerManager::NativeResizeLease::~NativeResizeLease()
+{
+    if(m_Manager)m_Manager->m_NativeLifecycleLock.Exit();
 }
 
 bool C_LayerManager::NativeCreateLayer(C_Layer* layer)

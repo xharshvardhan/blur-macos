@@ -22,6 +22,9 @@
 #include <misc_shared\Messaging\MessageMultiHandler.h>
 
 class C_DriverManager;
+#if defined(PLATFORM_MACOS) // [Blur2PC] Borrowed only while the world owns one streamer pause.
+namespace Resource { class C_Manager; }
+#endif
 
 namespace SceneGraph
 {
@@ -368,6 +371,10 @@ public:
 	Sys::I_ContextProvider						*GetContextProvider();
 
 	bool										WaitForStreamer() { return m_waitForStreamer; }
+#if defined(PLATFORM_MACOS) // [Blur2PC] Pair the cross-frame streamer pause, including cancellation.
+	void NativeAcquireStreamerPause();
+	void NativeReleaseStreamerPause();
+#endif
 	S32											GameStep() const { return m_GameStep; }
 	
 	void										Exit();
@@ -427,6 +434,8 @@ private:
 		bool animation=false,animated=false,ai=false,damage=false,paint=false,views=false;
 		bool dynamicXt=false,lightXt=false,particleXt=false,trackXt=false;
 		bool actorForwarder=false,gameForwarder=false,actorUtils=false,perf=false,postUpdate=false;
+		Resource::C_Manager* streamerPauseManager=nullptr;
+		MT::ThreadId streamerPauseThread=0;
 	} m_Native;
 	bool NativeDestroy();
 #endif

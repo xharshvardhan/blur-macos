@@ -5,7 +5,8 @@ MAC243's genuine normal career race, failed-medal results/save and ordinary exit
 0. MAC253 subsequently verified an actual offline local host, a real one-player
 lobby and ordinary lobby leave. It exited 0 through the elapsed-time guard,
 which does **not** prove the desktop-confirmation route. MAC256's fresh
-host/leave/ordinary-desktop repeat is currently in progress.
+host/leave/ordinary-desktop repeat completed with exit0. MAC318 now repeats
+the original route with the repaired left-Control binding in build317.
 
 No four-player join/race or repair of the user's historical three-player limit
 is claimed. This audit's author performs no game launch, Automation dispatch,
@@ -358,3 +359,39 @@ operator both exit 0; strict signature and dependency/notices verification pass
 afterward. Actual entry results are 0/2/4/4 for offline/online/nil/number. See
 [native-network-entry.md](native-network-entry.md) for the correction and bounded
 acceptance. No remote race or clean-Mac claim is added.
+
+
+## MAC318 compact-keyboard actual hosting
+
+The frozen optimized 0.1.4/build317 app accepts ordinary **LCONTROL** in the
+original LAN browser, opens Host/Custom Game and creates the actual lobby.
+Original observations report capacity20, one local roster entry, zero remote
+players and CanStart=false. Escape/Return follows the original lobby leave,
+returns to Start and confirms desktop quit through popup204. Actual process
+exit0 in113.814 seconds precedes the420-second guard; no primary error. All
+testing is muted, uses an isolated accepted profile/save copy, and leaves its
+source state unchanged. No screenshot/readback/profiler/watch was requested.
+
+Private `mac318/combined-proof.json` supplements the preserved initial wrapper
+proof: the initial wrapper missed collecting the final desktop helper status
+when the game exited first. Its typed log does contain the accepted original
+desktop-confirmation key, and the process log/status independently proves exit0.
+This is a wrapper bookkeeping correction, not a network or gameplay bypass.
+The future wrapper now collects a finishing helper after process exit.
+
+This qualifies the left-Control **Host** action, actual local lobby creation,
+ordinary leave and desktop exit. It does not qualify discovery on another Mac,
+remote joining, ready/start with remote players, multiplayer racing, Windows
+interoperability or the historical three-player limit. For player-facing steps
+and the complete key map see [native-keyboard-hosting.md](native-keyboard-hosting.md).
+
+
+Final MAC322 repeats this entire route with frozen0.1.4/build320, including the
+native failed-audio-read ownership repair. The ordinary LCONTROL Host action,
+actual one-local-player lobby/capacity20, leave and desktop confirmations pass.
+Both operators exit0 and the actual process exits0/116.661s, before420s guard;
+no primary error, source save/profile unchanged, all testing mute1. Unlike the
+earlier318 supplemental proof, this final wrapper collects both helper statuses
+normally. Private source/binary hashes and complete proof are
+`mac322/source-proof.json` and `mac322/lan-left-control-proof.json`. Remote join
+and racing remain unverified.

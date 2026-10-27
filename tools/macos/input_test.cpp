@@ -34,6 +34,34 @@ int main(){try{
         events.key(60,false,1ULL<<17,true);sample();require(k->GetButtonValue(C_Keyboard::E_Button_RShift)==1,"Right shift flagsChanged failed");
         events.key(56,false,1ULL<<17,true);sample();require(k->GetButtonValue(C_Keyboard::E_Button_LShift)==0&&k->GetButtonValue(C_Keyboard::E_Button_RShift)==1,"Releasing one shift changed the other");
         events.key(60,false,0,true);sample();require(k->GetButtonValue(C_Keyboard::E_Button_RShift)==0,"Final shift release stuck");
+        // Cocoa flagsChanged carries the changed physical key and the aggregate
+        // modifier mask. Left/right identities must remain distinct; action
+        // compatibility belongs to GameControls, never the physical sampler.
+        constexpr U64 controlMask=1ULL<<18;
+        events.key(59,false,controlMask,true);sample();
+        require(k->GetButtonValue(C_Keyboard::E_Button_LControl)==1&&k->GetButtonValue(C_Keyboard::E_Button_RControl)==0,"Left Control was missing or globally aliased to right Control");
+        events.key(62,false,controlMask,true);sample();
+        require(k->GetButtonValue(C_Keyboard::E_Button_LControl)==1&&k->GetButtonValue(C_Keyboard::E_Button_RControl)==1,"Right Control flagsChanged failed");
+        events.key(59,false,controlMask,true);sample();
+        require(k->GetButtonValue(C_Keyboard::E_Button_LControl)==0&&k->GetButtonValue(C_Keyboard::E_Button_RControl)==1,"Left Control release changed held right Control");
+        events.key(62,false,0,true);sample();
+        require(k->GetButtonValue(C_Keyboard::E_Button_RControl)==0,"Final right Control release stuck");
+        events.key(62,false,controlMask,true);sample();
+        require(k->GetButtonValue(C_Keyboard::E_Button_LControl)==0&&k->GetButtonValue(C_Keyboard::E_Button_RControl)==1,"Right Control was globally aliased to left Control");
+        events.key(59,false,controlMask,true);sample();events.key(62,false,controlMask,true);sample();
+        require(k->GetButtonValue(C_Keyboard::E_Button_LControl)==1&&k->GetButtonValue(C_Keyboard::E_Button_RControl)==0,"Right Control release changed held left Control");
+        events.focus(false);sample();
+        require(k->GetButtonValue(C_Keyboard::E_Button_LControl)==0&&k->GetButtonValue(C_Keyboard::E_Button_RControl)==0,"Focus loss left Control held");events.focus(true);sample();
+        // Extended Help/Insert, Forward Delete and the bracket keys stay
+        // distinct physical inputs; only primary menu actions add alternatives.
+        events.key(114,true,0,false);sample();
+        require(k->GetButtonValue(C_Keyboard::E_Button_Insert)==1&&k->GetButtonValue(C_Keyboard::E_Button_Delete)==0&&k->GetButtonValue(C_Keyboard::E_Button_LBracket)==0,"Native Help did not map independently to Insert");
+        events.key(114,false,0,false);events.key(117,true,0,false);sample();
+        require(k->GetButtonValue(C_Keyboard::E_Button_Insert)==0&&k->GetButtonValue(C_Keyboard::E_Button_Delete)==1&&k->GetButtonValue(C_Keyboard::E_Button_RBracket)==0,"Native Forward Delete was confused with Insert or bracket");
+        events.key(117,false,0,false);events.key(33,true,0,false);sample();
+        require(k->GetButtonValue(C_Keyboard::E_Button_LBracket)==1&&k->GetButtonValue(C_Keyboard::E_Button_Insert)==0,"Left bracket was globally aliased to Insert");
+        events.key(33,false,0,false);events.key(30,true,0,false);sample();
+        require(k->GetButtonValue(C_Keyboard::E_Button_RBracket)==1&&k->GetButtonValue(C_Keyboard::E_Button_Delete)==0,"Right bracket was globally aliased to Forward Delete");events.key(30,false,0,false);sample();
         events.pointer(10,20);events.pointer(17,24);events.button(0,true);events.scroll(2);sample();
         require(game->GetButtonPressedDebounced(1)&&m->GetAxisSignedValue(C_Mouse::E_Axis_DeltaX)>0&&std::abs(m->GetAxisSignedValue(C_Mouse::E_Axis_DeltaX)/m->GetAxisSignedValue(C_Mouse::E_Axis_DeltaY)+1.75f)<0.0001f&&m->GetButtonValue(C_Mouse::E_Button_WheelUp)==1,"Native pointer/button/scroll sample failed");
         sample();require(m->GetAxisSignedValue(C_Mouse::E_Axis_DeltaX)==0&&m->GetButtonValue(C_Mouse::E_Button_WheelUp)==0&&game->GetButtonPressed(1),"Transient mouse state persisted or held button vanished");

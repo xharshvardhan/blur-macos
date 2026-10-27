@@ -164,9 +164,16 @@ void C_LightingPrepass::Resize()
 	m_pDeferredManager->ClearViews();
 	m_pDeferredPointLights->DestroyVolatile();
 	SetupViews();
+#if defined(PLATFORM_MACOS) // [Blur2PC] A required resize must surface either owner's real failure before rendering.
+	if(!m_pDeferredPointLights->CreateVolatile())
+		throw std::runtime_error("Native required deferred point-light volatile resources failed during resize");
+	if(!m_pDeferredManager->CreateVolatile())
+		throw std::runtime_error("Native required deferred lighting render targets failed during resize");
+#else
 	m_pDeferredPointLights->CreateVolatile();
 	
 	m_pDeferredManager->CreateVolatile();
+#endif
 }
 
 void C_LightingPrepass::Begin() const

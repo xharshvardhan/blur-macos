@@ -4,6 +4,7 @@
 #endif
 #include "Deferred/Manager.h"
 #if defined(PLATFORM_MACOS)
+#include <memory> // [Blur2PC] Failed native creation must retain unpublished wrapper ownership.
 // [Blur2PC] Preserve diagnostics through the actual native engine logger.
 #define DEFERRED_PLATFORM_LOG(...) LOGINFO(Display::g_Log,__VA_ARGS__)
 #else
@@ -781,7 +782,12 @@ bool C_Manager::CreateRenderTargets()
 			view.renderTextures[i] = 0;
 			if (setup.eColourFormat[i] != Display::E_Format_Unknown)
 			{
+#if defined(PLATFORM_MACOS) // [Blur2PC] Publish only after the required native creation succeeds.
+				std::unique_ptr<Display::C_RenderTexture2D> ownedRenderTexture(new Display::C_RenderTexture2D);
+				auto* pRenderTexture=ownedRenderTexture.get();
+#else
 				Display::C_RenderTexture2D* pRenderTexture = new Display::C_RenderTexture2D;	
+#endif
   
 				if (!Display::Device()->CreateRenderTexture2D(view.iWidth, view.iHeight, 1, Display::E_Usage_Colour, setup.eColourFormat[i], setup.eMultisample, 0, pRenderTexture))
 				{
@@ -791,6 +797,9 @@ bool C_Manager::CreateRenderTargets()
 				}
 
 				view.renderTextures[i] = pRenderTexture;
+#if defined(PLATFORM_MACOS)
+				ownedRenderTexture.release();
+#endif
 
 				#if TRACK_DISPLAY2_RESOURCES
 				Display2::Device()->SetRenderTexture2DName(pRenderTexture, "_DeferredRT");
@@ -803,7 +812,12 @@ bool C_Manager::CreateRenderTargets()
 		view.pDepthStencilTexture = 0;
 		if (setup.eDepthStencilFormat != Display::E_Format_Unknown)
 		{
+#if defined(PLATFORM_MACOS) // [Blur2PC] Publish only after the required native creation succeeds.
+			std::unique_ptr<Display::C_Surface> ownedDepthSurface(new Display::C_Surface);
+			auto* pSurface=ownedDepthSurface.get();
+#else
 			Display::C_Surface* pSurface = new Display::C_Surface;
+#endif
 			if (!Display::Device()->CreateDepthStencilSurface(view.iWidth, view.iHeight, Display::E_Usage_DepthStencil | Display::E_Usage_Indirect, setup.eDepthStencilFormat, setup.eMultisample, 0, pSurface))
 			{
 				DEFERRED_PLATFORM_LOG("DX11 Deferred depth surface failed view=%d format=%d", view.iIndex, setup.eDepthStencilFormat);
@@ -811,12 +825,20 @@ bool C_Manager::CreateRenderTargets()
 				return false;
 			}
 			view.pDepthStencilSurface = pSurface;
+#if defined(PLATFORM_MACOS)
+			ownedDepthSurface.release();
+#endif
 
 			#if TRACK_DISPLAY2_RESOURCES
 			Display2::Device()->SetSurfaceName(pSurface, "_DeferredDS");
 			#endif
 
+#if defined(PLATFORM_MACOS) // [Blur2PC] Publish only after the required native creation succeeds.
+			std::unique_ptr<Display::C_Texture2D> ownedDepthTexture(new Display::C_Texture2D);
+			auto* pTexture2D=ownedDepthTexture.get();
+#else
 			Display::C_Texture2D* pTexture2D = new Display::C_Texture2D;
+#endif
 			if (!Display::Device()->CreateTexture2D(view.iWidth, view.iHeight, 1, Display::E_Usage_Video, setup.eDepthStencilFormat, pTexture2D))
 			{
 				DEFERRED_PLATFORM_LOG("DX11 Deferred depth texture failed view=%d format=%d", view.iIndex, setup.eDepthStencilFormat);
@@ -824,6 +846,9 @@ bool C_Manager::CreateRenderTargets()
 				return false;
 			}
 			view.pDepthStencilTexture = pTexture2D;
+#if defined(PLATFORM_MACOS)
+			ownedDepthTexture.release();
+#endif
 
 			#if TRACK_DISPLAY2_RESOURCES
 			Display2::Device()->SetTextureName(pTexture2D, "_DeferredDepthStencil");

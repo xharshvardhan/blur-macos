@@ -490,3 +490,26 @@ The inherited `tools/agent_context.py context` was attempted and rejects this ne
 | MAC308 | Final coherent audio/frame diagnostics integration | Codex /root | accepted; both146/146 suites and actual306/308/310 exits PASS | frozen27 production/fixture paths; ignored signedstage/package | Race-music symptom and occasional tail spikes remain unresolved; no speculative playback or simulation change |
 
 | MAC311 | Remaining perceptual race audio and long frame outliers | unassigned | open investigation; no proven causal repair | actual source/DSP/device signal and update/render worker path, to be scoped from reproduction | Muted source/device traces do not prove listening quality; early full-trace max289ms remains unexplained; retain contrary evidence |
+
+| MAC312 | Foreground manual launch clear-viewport failure | Codex /root | captured/reproduced; native resize repair integrated, final acceptance tracked317/320 | Metal clear/viewport and Cocoa resize/startup integration; focused regression; actual visible run | Preserve live failure logs/stacks before restart; reproduce foreground dimensions; tests mute1 |
+
+| MAC313 | Teardown after native render initialization exception | Codex /root/physics_port | diagnosis complete; owner-pause repair below | native framework teardown/audio lifetimes, to scope from captured stack | Same manual88590 throws before layer destruction then blocks; do not mask viewport failure |
+
+| MAC313 | Cancel owned streamer resource pause before shutdown | Codex /root/physics_port | accepted; coherent full-world/real-worker cases and both final148 suites PASS | GameWorld.cpp/h native ownership + world_transaction fixture; streamer-pause-shutdown.md | Actual main joined loader behind its own pause after render failure; release only this owner's same-thread depth on completion/cancel, preserving outer nesting |
+
+| MAC316 | Native keyboard actions and LAN Host prompts | Codex /root/metal_occlusion | accepted; input/options/Cocoa and both148 suites PASS; actual322 LCONTROL Host/leave/exit0 | GameControls.cpp stock/action alternatives, NativeInput Help; input/options/window fixtures; native-keyboard-hosting.md | Raw sides, layouts, custom replacements, split keypad and serialized IDs preserved; no runtime success claimed |
+
+| MAC317 | Resize/input/teardown coherent integration and development delivery | Codex /root | integrated19-path final320 source; first317 Speed audio regression led to320 repair; accepted; both148 suites, final322/323 exits, signed0.1.4/build320 standard app and ZIP checks PASS | root cmake/docs/ignored stage and acceptance tools | Current source/public c3a82b61 baseline; no game data or profiles in publication; all tests mute1 |
+
+| MAC318 | Actual left-Control LAN Host acceptance | Codex /root | accepted317 actual LCONTROL Host/leave/desktop; final320 repeat tracked322 | ignored lan_host_operator + owned runtime harness | Original menus/finite LCONTROL only; actual host roster/leave/desktop; no remote-join claim |
+
+| MAC312 | Async-creation-safe native window resize | Codex /root/controls_options | integrated; strict GPU resize PASS and ABI-safe old-body negative; both complete final320 suites148/148 PASS | LayerManager.h/cpp;ApplicationMac.cpp;layer_resize_test.cpp;application_resize_test.mm;async-window-resize.md | Try-enter lifecycle through async Create+Ready publication/Destroy+delete; defer/coalesce until Ready→Running; preserve committed drawable/presents; full owner Resize, no viewport clipping |
+
+| MAC312 follow-up | Required lighting resize failures | Codex /root/physics_port | integrated; corrected nonzero-view strict GPU failure/retry PASS; both complete final320 suites148/148 PASS | Prepass.cpp native checks; Deferred/Manager.cpp unpublished wrappers; world_transaction fixture; required-lighting-resize.md | Surface real point-light/deferred-manager false results before rendering; preserve Windows path and real failure/retry ownership; existing exception-scope limits documented |
+
+| MAC320 | Native audio failed-read ownership | Codex /root/physics_port | accepted source/runtime; deterministic old-body fails/current passes, both final148 suites PASS | core/renderer.cpp native guard; audio_stereo_planes_test.cpp callback gate | False read waits without mutating producer staging or unpublished slots; preserve original Windows/console body and all 64 signal assertions |
+
+
+| MAC322 | Final320 actual left-Control hosting | Codex /root | accepted; original Host/CustomGame/lobby/leave/desktop, helpers0/0 and process0/116.661s | ignored source-qualified runtime/proof | Muted; capacity20/one local/zero remote; no multi-machine claim |
+
+| MAC323 | Final320 actual WASD and original race exit | Codex /root | accepted; actual WASD,90s/45s qualified windows,654.29m moving displacement, original exit0/309.113s | ignored source-qualified quiet operator/proof | No setters, captures/readback/profiler or measurement IPC; source285 state isolated |
