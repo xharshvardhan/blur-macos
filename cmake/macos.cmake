@@ -65,10 +65,18 @@ if(NOT _mac_generation EQUAL 0)
     message(FATAL_ERROR "macOS Jam source extraction failed")
 endif()
 include(${CMAKE_CURRENT_BINARY_DIR}/generated/mac_sources.cmake)
+add_subdirectory(${BLUR_TOP}/code/mercury/library/gamesys/framework/native_host
+    ${CMAKE_CURRENT_BINARY_DIR}/native-host)
 add_library(blur_mac_window STATIC ${BLUR_MAC_FRAMEWORK_NATIVE_SOURCES})
 target_include_directories(blur_mac_window PUBLIC ${BLUR_TOP}/code/mercury/library/gamesys/framework/include ${_mac_core})
 target_compile_options(blur_mac_window PRIVATE -fobjc-arc -Wall -Wextra)
-target_link_libraries(blur_mac_window PUBLIC blur_mac_core_runtime ${BLUR_COCOA} ${BLUR_QUARTZCORE})
+target_link_libraries(blur_mac_window PUBLIC NativeHost::Window blur_mac_core_runtime ${BLUR_COCOA} ${BLUR_QUARTZCORE})
+# [Blur2PC] Build/install/relocate independently, then consume only the SDK export.
+add_test(NAME mac_native_host_package COMMAND ${Python3_EXECUTABLE}
+    ${BLUR_TOP}/tools/macos/test_native_host_package.py
+    --package ${BLUR_TOP}/code/mercury/library/gamesys/framework/native_host
+    --work-root ${CMAKE_CURRENT_BINARY_DIR}/native-host-package-tests)
+set_tests_properties(mac_native_host_package PROPERTIES LABELS "hardware;window" TIMEOUT 120)
 include(${BLUR_TOP}/cmake/macos_legacy_shaders.cmake)
 add_library(blur_mac_display2_metal STATIC ${BLUR_MAC_DISPLAY2_METAL_SOURCES})
 target_link_libraries(blur_mac_display2_metal PRIVATE blur_mojoshader)
@@ -91,6 +99,17 @@ add_executable(blur_mac_pipeline_cache_test ${BLUR_TOP}/tools/macos/pipeline_cac
 target_link_libraries(blur_mac_pipeline_cache_test PRIVATE blur_mac_display2_metal)
 add_test(NAME mac_pipeline_cache COMMAND blur_mac_pipeline_cache_test)
 set_tests_properties(mac_pipeline_cache PROPERTIES LABELS "hardware" TIMEOUT 40)
+add_executable(blur_mac_depth_state_cache_test ${BLUR_TOP}/tools/macos/depth_state_cache_test.mm)
+target_compile_options(blur_mac_depth_state_cache_test PRIVATE -fobjc-arc)
+target_link_libraries(blur_mac_depth_state_cache_test PRIVATE blur_mac_display2_metal)
+add_test(NAME mac_depth_state_cache COMMAND blur_mac_depth_state_cache_test)
+set_tests_properties(mac_depth_state_cache PROPERTIES LABELS "hardware" TIMEOUT 90)
+# [Blur2PC] Actual critical filesystem, validator, mip upload and GPU bytes.
+add_executable(blur_mac_dds_single_read_test ${BLUR_TOP}/tools/macos/dds_single_read_test.cpp)
+target_link_libraries(blur_mac_dds_single_read_test PRIVATE blur_mac_display2_metal)
+target_link_options(blur_mac_dds_single_read_test PRIVATE "LINKER:-dead_strip")
+add_test(NAME mac_dds_single_read COMMAND blur_mac_dds_single_read_test)
+set_tests_properties(mac_dds_single_read PROPERTIES LABELS "hardware" TIMEOUT 45)
 add_executable(blur_mac_metal_trace_test ${BLUR_TOP}/tools/macos/metal_trace_test.cpp)
 target_link_libraries(blur_mac_metal_trace_test PRIVATE blur_mac_display2_metal)
 add_test(NAME mac_metal_trace COMMAND blur_mac_metal_trace_test)
@@ -245,6 +264,13 @@ foreach(_module xtgame logicalfs resource framework input display camera2 render
     # Module PCH must precede transitive headers (UI Jam also includes Amax/game).
     target_include_directories(blur_mac_${_module} BEFORE PRIVATE ${BLUR_MAC_${_module_upper}_ROOT})
     target_include_directories(blur_mac_${_module} PUBLIC ${BLUR_MAC_${_module_upper}_INCLUDE_DIRS})
+    # [Blur2PC] Original Jam header closures may expose ApplicationMac without
+    # linking the host. Keep its adapter's public SDK header in those closures.
+    set(_mac_module_includes ${BLUR_MAC_${_module_upper}_INCLUDE_DIRS})
+    if("${BLUR_TOP}/code/mercury/library/gamesys/framework/include" IN_LIST _mac_module_includes)
+        target_include_directories(blur_mac_${_module} PUBLIC
+            $<TARGET_PROPERTY:NativeHost::Window,INTERFACE_INCLUDE_DIRECTORIES>)
+    endif()
     target_include_directories(blur_mac_${_module} BEFORE PUBLIC ${BLUR_NATIVE_TOMCRYPT_INCLUDE} ${BLUR_NATIVE_TOMMATH_INCLUDE})
     target_compile_definitions(blur_mac_${_module} PRIVATE ${BLUR_MAC_${_module_upper}_DEFINES})
     target_link_libraries(blur_mac_${_module} PUBLIC blur_mac_engine_system)

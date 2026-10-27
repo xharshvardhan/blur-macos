@@ -58,6 +58,21 @@ proves the corrupted-quantum repair
 is still needed for the reported race-music artifact. Both complete final
 Debug and optimized suites pass148/148.
 
+The 0.1.5 update reuses immutable Metal depth/stencil states and uploads native
+DDS 2D images from one validated file read. Resolution, effects, formats and
+simulation are preserved. Both complete Debug and optimized suites pass 151/151;
+focused Metal-validation and lower-renderer UBSan checks also pass. The
+[acceptance report](docs/macos/optimization-host-acceptance.md) records resource
+counts, mixed CPU and actual-race timings, remaining hitches and validation
+limits. A repeatable FPS increase has not been established.
+
+The independently installable
+[NativeHost package and demo](code/mercury/library/gamesys/framework/native_host/README.md)
+provide Cocoa windows, raw events and CAMetalLayer surfaces with a scoped MIT
+license. A separate client consumes its relocated CMake installation without
+engine headers or assets. Blur consumes the same implementation. Other engines
+still require their renderer, data formats, game logic and service adapters.
+
 The public source snapshot lives at
 [xharshvardhan/blur-macos](https://github.com/xharshvardhan/blur-macos).
 It credits the upstream source and preserves inherited notices without assigning

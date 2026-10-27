@@ -4603,3 +4603,83 @@ Next implementation milestone: add bounded counters and qualify immutable
 Metal depth/stencil reuse, then investigate the DDS single-read path with exact
 pixels, authentication, row-pitch and peak-memory checks. SDK extraction design
 remains proposed; no additional permission question blocks the completed audit.
+
+## 2026-10-28 — MAC326 native DDS 2D retained single-read transaction
+
+Native DDS 2D now retains one validated original file buffer through exact mip
+row/block uploads, preserving the existing shared DDS validation, L8 stale-pitch
+exception, critical/default filesystem policy and secure PAK read implementation.
+Generic images, volume/cube and Windows/console paths stay unchanged. Read errors
+have file/byte RAII; creation/map/upload failures retire this transaction's new
+texture. This trades one file buffer overlapping GPU staging for avoiding the
+second open/full payload read; it is not an RSS or actual FPS claim.
+
+Two production TUs plus authored fixture compiled in all four configurations
+(12/12), with four later Utils probes retaining the original uninitialized array
+allocation. Root's initial real GPU fixture passed; final count-output refinement
+and coherent tests/control are pending root. No device/runtime/shared build by
+this agent. Detailed rules, limitations and pinned old-body private builder are
+in `dds-single-read.md`; the builder performs CPU compile/link only, no execution.
+
+MAC326 final reader allocation refinement and representative count-output fixture
+are frozen, with four Utils and four fixture follow-up probes PASS. The private
+CPU-only control builder waits for parent coherent archives; no shared archive
+was copied or linked while those builds were active.
+
+## 2026-10-28 — MAC326 DDS-only actual-performance ablation preparation
+
+Following combined-candidate actual regression, read-only comparison found no DDS
+flags/mips/publication difference or retained file buffer after return. Indirect
+allocator/GPU staging history remains possible, not asserted causal. Private
+MAC336 raw full app now replaces only the two pinned pre326 DDS objects in the
+current final334 lower archive; all other lower members, full shared link inputs,
+NativeHost and 693 resources are hash-checked unchanged. Link only, no Ninja
+post-build/shared mutation, signing or execution by this agent. Parent stages
+and runs the matched experiment. Metadata-only original PAK DDS size inventory
+is private alongside the link manifest; no payload extraction/authentication
+claim, and no production/instrumentation changes.
+
+
+## MAC330/334 — Coherent optimization and independent host acceptance (2026-10-28)
+
+Root integrated the three disjoint implementations: exact context-owned native
+depth/stencil reuse, validated one-read DDS2D upload, and the independently
+installed NativeHost/second-client package. Added three root CTest gates and
+the authored scoped license to bundle notices. Final production/fixture freeze
+covers 40 paths, including 17 unchanged previously accepted paths.
+
+Complete Debug and Speed builds pass 151/151 each; both new lower fixtures pass
+both UBSan configurations and seven focused Metal-validation tests pass. GPU
+pixels and no-reuse/old-DDS negative controls establish exact state and file
+work removal. Copied/installed/relocated host clients and packaged silent Metal
+demo pass. Final muted actual MAC334 drives the original20-car race using
+ordinary keyboard input and leaves through original menus/desktop (0,306.023s),
+source save unchanged. Intentional parked-HUD MAC335 diagnostic exits normally
+(0,181.900s),7,597,565 requests/28 creations/zero failures.
+
+The first candidate was held after slower timing. Original320 repetition and
+exact pre-cache ablation, followed by final last-entry Bind implementation,
+retain all contrary rates. Final334 still has worse no-input rate/max interval;
+no repeatable FPS or peak-memory improvement is claimed. A DDS-only object
+ablation336 completes the investigation before final local replacement.
+See optimization-host-acceptance.md for figures, limits and final delivery.
+
+
+MAC336 completed both quiet windows and normal exit0/312.278s; source save
+unchanged, muted1, human driving displacement722.511m. Exact old DDS objects
+produced48.560/35.883 submissions/s no-input/driving, maxima1018.776/152.932ms.
+Opposing average results and long tails do not identify a reliable DDS FPS
+effect or prove no regression. Accepted scope stays exact work removal and
+independent host packaging, not whole-game speed/memory improvement.
+
+
+Final 0.1.5/build334 ZIP extraction/relocation, strict signatures, four native
+notices and dependency hashes PASS. Delivered frozen Speed executable
+5a311dc7d787f37a56560718771ad9410467ac8c1a99cded7723ae18e61bb7e5
+to the standard _work/run app and updated the manual launcher to the immutable
+0.1.5 distribution; no game auto-launch. Previous immutable0.1.4 remains intact.
+The independent NativeHost0.1.0 arm64 SDK/source/demo ZIP is also prepared and
+tested. Curated personal source publication preserves frozen code, redacted
+profile data and default index; no game assets, profiles or build outputs.
+Next separate performance work needs reproducible scene/GPU timing and hitch
+attribution; wider SDK scope needs a second actual engine adapter.

@@ -1,5 +1,6 @@
 // [Blur2PC][macOS] Actual engine draw entry points, pipeline state and command ownership.
 #include "MetalNative.h"
+#include "MetalDepthStencilCache.h"
 #include <limits>
 #include <algorithm>
 #include <cmath>
@@ -79,7 +80,8 @@ struct C_Context::Impl {
     // each inserted map key still owns an independent copy.
     std::string pipelineKeyScratch;
     std::unordered_map<std::string,id<MTLRenderPipelineState>> clearPipelines;
-    explicit Impl(C_MetalDevice::State* state):device(state){}
+    Metal::DepthStencilCache depthStencilStates;
+    explicit Impl(C_MetalDevice::State* state):device(state),depthStencilStates(state->device){}
     void check(bool active=false)const {
         require(!active||bool(command),"Draw operation requires BeginScene");
         require(!command||owner==std::this_thread::get_id(),"Render context belongs to another thread during its scene");
@@ -204,9 +206,9 @@ struct C_Context::Impl {
         [encoder setViewport:MTLViewport{0,0,double(colours[0]->width),double(colours[0]->height),0,1}];
         [encoder setScissorRect:MTLScissorRect{viewport.x,viewport.y,viewport.width,viewport.height}];
         [encoder setCullMode:MTLCullModeNone];
-        auto state=[MTLDepthStencilDescriptor new];state.depthCompareFunction=MTLCompareFunctionAlways;state.depthWriteEnabled=flags&E_Clear_Depth;
-        if(flags&E_Clear_Stencil){auto value=[MTLStencilDescriptor new];value.stencilCompareFunction=MTLCompareFunctionAlways;value.stencilFailureOperation=MTLStencilOperationReplace;value.depthFailureOperation=MTLStencilOperationReplace;value.depthStencilPassOperation=MTLStencilOperationReplace;value.readMask=0xff;value.writeMask=0xff;state.frontFaceStencil=value;state.backFaceStencil=value;[encoder setStencilReferenceValue:stencil];}
-        [encoder setDepthStencilState:[device->device newDepthStencilStateWithDescriptor:state]];
+        Metal::DepthStencilKey state;state.depthAttached=bool(depth);state.stencilAttached=hasStencil();state.write=flags&E_Clear_Depth;
+        if(flags&E_Clear_Stencil){auto& face=state.front;face.enabled=true;face.compare=MTLCompareFunctionAlways;face.fail=face.depthFail=face.pass=MTLStencilOperationReplace;face.readMask=face.writeMask=0xff;state.back=face;[encoder setStencilReferenceValue:stencil];}
+        depthStencilStates.Bind(encoder,state,true);
         [encoder setFragmentBytes:&data length:sizeof(data) atIndex:0];[encoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:3];
         endEncoder(); // [Blur2PC] Resume query counting only for subsequent engine draws.
     }
@@ -424,10 +426,11 @@ struct C_Context::Impl {
             [encoder setRenderPipelineState:renderPipeline.native];[encoder setViewport:MTLViewport{double(vp.x),double(vp.y),double(vp.width),double(vp.height),vp.minZ,vp.maxZ}];
             [encoder setScissorRect:clip];[encoder setTriangleFillMode:fillState.m_FillMode==E_FillMode_Wireframe?MTLTriangleFillModeLines:MTLTriangleFillModeFill];
             [encoder setFrontFacingWinding:MTLWindingClockwise];[encoder setCullMode:cullState.m_CullMode==E_CullMode_None?MTLCullModeNone:cullState.m_CullMode==E_CullMode_Cw?MTLCullModeFront:MTLCullModeBack];
-            auto nativeDepth=[MTLDepthStencilDescriptor new];nativeDepth.depthCompareFunction=effectiveDepth?MTLCompareFunction(depthState.m_DepthFunc-1):MTLCompareFunctionAlways;
-            nativeDepth.depthWriteEnabled=effectiveDepth&&depthState.m_DepthWriteEnable;
-            if(effectiveStencil){auto stencil=[MTLStencilDescriptor new];stencil.stencilCompareFunction=MTLCompareFunction(stencilState.m_StencilFunc-1);stencil.stencilFailureOperation=MTLStencilOperation(stencilState.m_StencilFail-1);stencil.depthFailureOperation=MTLStencilOperation(stencilState.m_StencilDepthFail-1);stencil.depthStencilPassOperation=MTLStencilOperation(stencilState.m_StencilDepthPass-1);stencil.readMask=stencilState.m_StencilMask;stencil.writeMask=stencilState.m_StencilWriteMask;nativeDepth.frontFaceStencil=stencil;nativeDepth.backFaceStencil=stencil;[encoder setStencilReferenceValue:stencilState.m_StencilRef];}
-            [encoder setDepthStencilState:[device->device newDepthStencilStateWithDescriptor:nativeDepth]];
+            Metal::DepthStencilKey nativeDepth;nativeDepth.depthAttached=bool(depth);nativeDepth.stencilAttached=hasStencil();
+            nativeDepth.compare=effectiveDepth?MTLCompareFunction(depthState.m_DepthFunc-1):MTLCompareFunctionAlways;
+            nativeDepth.write=effectiveDepth&&depthState.m_DepthWriteEnable;
+            if(effectiveStencil){auto& stencil=nativeDepth.front;stencil.enabled=true;stencil.compare=MTLCompareFunction(stencilState.m_StencilFunc-1);stencil.fail=MTLStencilOperation(stencilState.m_StencilFail-1);stencil.depthFail=MTLStencilOperation(stencilState.m_StencilDepthFail-1);stencil.pass=MTLStencilOperation(stencilState.m_StencilDepthPass-1);stencil.readMask=stencilState.m_StencilMask;stencil.writeMask=stencilState.m_StencilWriteMask;nativeDepth.back=stencil;[encoder setStencilReferenceValue:stencilState.m_StencilRef];}
+            depthStencilStates.Bind(encoder,nativeDepth,false);
             [encoder setDepthBias:depth?F32(constantBias):0 slopeScale:depth?depthState.m_SlopeScaledBias:0 clamp:0];
             alpha.function=alphaState.m_AlphaTestCmpFunc;alpha.reference=F32(alphaState.m_AlphaTestRef)/255.0f;
             alpha.format=colours[0]->format==E_SurfaceFormat_A16B16G16R16F?1:

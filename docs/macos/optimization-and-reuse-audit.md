@@ -173,3 +173,17 @@ Practical extraction sequence:
 Immediate recommended implementation milestone: instrument and qualify exact
 depth/stencil-state reuse, then the DDS single-read path. In parallel, specify
 and validate one independent host-package client before starting a wider SDK.
+
+
+## Implemented milestone (MAC330/334)
+
+The user approved both bounded optimizations and the independent host client.
+They are now implemented and qualified in complete Debug/Speed 151-test suites,
+GPU differential/read-count controls and muted actual-game driving/normal exit.
+NativeHost installs/relocates independently; its separate find_package Metal
+demo runs without engine headers or game assets. This establishes the host
+package milestone, not a second full-engine adaptation. Actual timing evidence
+is mixed and does not support a repeatable FPS-gain claim. See
+[the acceptance report](optimization-host-acceptance.md) for all results and
+[the authored SDK](../../code/mercury/library/gamesys/framework/native_host/README.md)
+for the scoped API, license and integration boundary.

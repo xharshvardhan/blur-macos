@@ -10,6 +10,7 @@ import shutil
 import subprocess
 
 NATIVE = ('SDL3.txt', 'SoundTouch.txt', 'MojoShader.txt')
+HOST_LICENSE = Path(__file__).resolve().parents[2] / 'code/mercury/library/gamesys/framework/native_host/LICENSE'
 MANIFEST = Path('Contents/Resources/ThirdParty/manifest.json')
 
 
@@ -31,6 +32,7 @@ def validate_source(app, licenses):
     require(not (app / 'Contents/Frameworks').exists(), 'Use the raw build app; already bundled dependencies have different provenance')
     for name in NATIVE:
         require((licenses / name).is_file(), 'Missing adjacent native notice: ' + name)
+    require(HOST_LICENSE.is_file(), 'Missing authored NativeHost license')
     forbidden = {'.pak', '.bik', '.bank', '.level', '.levelphysics', '.levelrender', '.levelstream', '.pdb', '.o', '.a', '.save'}
     for path in app.rglob('*'):
         relative = path.relative_to(app)
@@ -79,10 +81,10 @@ def collect(source_app, app, licenses, dependency_file):
     manifest = {'schema': 1, 'purpose': 'Native development bundle provenance; individual notices retain their terms',
                 'original_executable_sha256': sha(source_app / 'Contents/MacOS/BlurNativeGame'),
                 'native_notices': [], 'packages': [], 'dependencies': []}
-    for name in NATIVE:
+    for name, notice in [(name, licenses / name) for name in NATIVE] + [('NativeHost.txt', HOST_LICENSE)]:
         target = third / 'Native' / name
         target.parent.mkdir(exist_ok=True)
-        shutil.copyfile(licenses / name, target)
+        shutil.copyfile(notice, target)
         manifest['native_notices'].append({'path': str(target.relative_to(third)), 'sha256': sha(target)})
     packages = {}
     for line in dependency_file.read_text().splitlines():

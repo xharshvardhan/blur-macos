@@ -68,3 +68,25 @@ local-only publication state in earlier D03/D05 is historical. This records that
 explicit user steering and source-only publication; it assigns no blanket new
 license to inherited engine code. No standalone toolkit repository or API has
 been published by the audit.
+
+
+## MAC-D08 — Two bounded optimizations and independent host (accepted by user, 2026-10-28)
+
+Implement exact immutable Metal depth/stencil-state reuse and one-read native
+DDS2D upload without changing shaders, effects, formats, resolution, simulation
+or synchronization. Validate through the real loader/effect graph, GPU output
+and muted original frontend/race/normal exit. Preserve contrary performance
+results; fewer native factory calls and repeated reads do not imply a measured
+FPS or resident-memory improvement.
+
+Extract only the authored Cocoa window/event/CAMetalLayer host as a scoped MIT
+CMake package with a separately installed/relocated second client. Blur consumes
+the same implementation through compatibility names. Keep inherited renderer,
+asset and gameplay adapters outside that license/scope. The independent host
+package/client milestone from D07 is now implemented; a second real engine and
+arbitrary Windows binary conversion are not established.
+
+User authorized subagents, unchanged quality, sound-off actual-game tests and
+completion without repeated small-step confirmations. Personal source-only
+publication authorization remains in force. See
+[qualification](optimization-host-acceptance.md).

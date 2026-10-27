@@ -6,6 +6,7 @@
 #include "../device/metal/MetalImageLoading.h"
 #include <cassert>
 #include <stdexcept>
+#include <memory>
 #else
 #include "StdAfx.h"
 #endif
@@ -97,6 +98,24 @@ U64 GetFileTime(const Util::C_String& fileName)
 		return 0;
 	}
 }
+
+#if DEVICE_METAL
+// [Blur2PC] DDS2D retains one complete original read with exception-safe owners.
+// Same filesystem selection/default critical Open; no second open or upload read.
+bool Metal::ReadDDS2DFileData(const Util::C_String& fileName,U32& fileSize,U8** ppFileData)
+{
+    fileSize=0;if(!ppFileData)return false;*ppFileData=nullptr;
+    Sys::I_FileSystem* fileSystem=Sys::GetDefaultFileSystem();
+    if(IsNativeShaderResourcePath(fileName))fileSystem=&Sys::C_FileSystem::Instance();
+    std::unique_ptr<Sys::I_File> file(fileSystem->Open(fileName));
+    if(!file)return false;
+    const auto length=file->Length();
+    if(length<128||length>0xffffffffULL)return false;
+    const U32 size=static_cast<U32>(length);std::unique_ptr<U8[]> bytes(new U8[size]);
+    if(!file->Read(bytes.get(),size))return false; // Read's bool facade requires all bytes.
+    fileSize=size;*ppFileData=bytes.release();return true;
+}
+#endif
 
 bool GetFileData(const Util::C_String& fileName, U32& fileSize, U8** ppFileData)
 {
@@ -837,8 +856,17 @@ bool CreateTexture2DFromFile(const Util::C_String& fileName, C_Texture* pTexture
 	
 	if(fileName.Length() > 3 && fileName[fileName.Length() - 3] == 'd' && fileName[fileName.Length() - 2] == 'd' && fileName[fileName.Length() - 1] == 's')
 	{
+#if DEVICE_METAL // [Blur2PC] Do not validate/discard then reopen the original DDS payload.
+        if(!Metal::CreateDDS2D(fileName,pTexture))return false;
+#if TRACK_DISPLAY2_RESOURCES
+        C_ResourceInfo* info=Device()->GetTextureResourceInfo(pTexture);
+        info->m_Name=fileName;info->m_Time=Time::GetCurrentTime();
+#endif
+        return true;
+#else
 		if(!LoadDDSTextureFromFile(fileName, &params))
 			return false;
+#endif
 	}
 	else
 	if(fileName.Length() > 3 && fileName[fileName.Length() - 3] == 'b' && fileName[fileName.Length() - 2] == 'm' && fileName[fileName.Length() - 1] == 'p')

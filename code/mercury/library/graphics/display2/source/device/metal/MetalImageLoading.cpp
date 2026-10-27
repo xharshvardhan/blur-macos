@@ -1,6 +1,7 @@
 // [Blur2PC][macOS] PC DDS, uncompressed 32-bit TGA and 24-bit BI_RGB BMP.
 #include "MetalImageLoading.h"
 #include <display2/utils/Utils.h>
+#include <display2/device/Device.h>
 #include <algorithm>
 #include <cstring>
 #include <memory>
@@ -17,8 +18,8 @@ bool LoadDDS(const Util::C_String& file,C_TextureParams* params){
     // Original DDS helpers return validated metadata and stream tight mip rows from the file.
     delete[] next.m_pFileData;next.m_pFileData=nullptr;*params=next;return true;
 }
-bool LoadDDS(const Util::C_String& file,C_TextureParams* params,U32 textureType){
-    if(!params)return false;U32 size=0;auto bytes=read(file,size);if(!bytes||size<128||std::memcmp(bytes.get(),"DDS ",4)||dword(bytes.get()+4)!=124||dword(bytes.get()+76)!=32)return false;
+static bool validateDDS(std::unique_ptr<U8[]> bytes,U32 size,C_TextureParams* params,U32 textureType){
+    if(!params)return false;if(!bytes||size<128||std::memcmp(bytes.get(),"DDS ",4)||dword(bytes.get()+4)!=124||dword(bytes.get()+76)!=32)return false;
     const auto* p=bytes.get();const U32 w=dword(p+16),h=dword(p+12),depth=dword(p+24),levels=std::max(1U,dword(p+28));
     const U32 caps=dword(p+112);const bool volume=textureType==4,cube=textureType==5;
     if(!dimensions(w,h)||(textureType!=3&&!volume&&!cube))return false;
@@ -48,6 +49,38 @@ bool LoadDDS(const Util::C_String& file,C_TextureParams* params,U32 textureType)
     if(payload+128>size)return false;
     C_TextureParams next;next.m_Width=w;next.m_Height=h;next.m_Depth=volume?depth:1;next.m_Levels=levels;next.m_Format=format;next.m_Flags=E_Flags_Linear;
     next.m_MipOffset=128;next.m_MipEnd=levels-1;next.m_FileSize=size;next.m_pFileData=bytes.release();*params=next;return true;
+}
+bool LoadDDS(const Util::C_String& file,C_TextureParams* params,U32 textureType){
+    if(!params)return false;U32 size=0;auto bytes=read(file,size);
+    return validateDDS(std::move(bytes),size,params,textureType);
+}
+bool CreateDDS2D(const Util::C_String& file,C_Texture* texture){
+    // [Blur2PC] Validate one original file buffer, retain it through every GPU
+    // upload, and retire partial texture ownership on a real map/upload failure.
+    if(!texture||texture->IsCreated())return false;
+    U32 fileSize=0;U8* fileData=nullptr;if(!ReadDDS2DFileData(file,fileSize,&fileData))return false;
+    C_TextureParams params;if(!validateDDS(std::unique_ptr<U8[]>(fileData),fileSize,&params,3))return false;
+    std::unique_ptr<U8[]> bytes(params.m_pFileData);
+    // The destination was empty on entry: any publication before a thrown
+    // native create/track operation belongs to this transaction too.
+    auto retire=[&]{if(texture->IsCreated())Device()->Destroy(texture);};
+    try{
+        if(!Device()->CreateTexture2D(params.m_Width,params.m_Height,params.m_Levels,params.m_Flags,params.m_Format,texture)){retire();return false;}
+        U32 width=params.m_Width,height=params.m_Height;U64 offset=params.m_MipOffset;
+        for(U32 level=0;level<params.m_Levels;++level){
+            const U32 row=GetTexturePitchFromWidth(width,params.m_Flags,params.m_Format);
+            const U32 size=GetTexture2DSize(width,height,params.m_Flags,params.m_Format);
+            if(!row||size%row||offset+size>params.m_FileSize){retire();return false;}
+            auto locked=texture->LockRect2D(level);
+            if(!locked.GetBits()){retire();return false;}
+            if(locked.GetPitch()<S32(row)){texture->UnlockRect2D(level);retire();return false;}
+            const U32 rows=size/row;
+            for(U32 y=0;y<rows;++y)std::memcpy(locked.GetBits()+U64(y)*locked.GetPitch(),bytes.get()+offset+U64(y)*row,row);
+            texture->UnlockRect2D(level);
+            offset+=size;width=std::max(1U,width>>1);height=std::max(1U,height>>1);
+        }
+        return true;
+    }catch(...){retire();throw;}
 }
 bool LoadTGA(const Util::C_String& file,C_TextureParams* params){
     if(!params)return false;U32 size=0;auto bytes=read(file,size);if(!bytes||size<18)return false;const auto* p=bytes.get();

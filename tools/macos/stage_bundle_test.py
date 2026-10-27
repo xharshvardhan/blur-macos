@@ -129,7 +129,9 @@ def main():
     require(info['CFBundleIdentifier'].endswith('.packaging-test') and info['CFBundleDisplayName'] == 'Blur Native Packaging Test', 'Metadata override missing')
     require(info['CFBundleVersion'] == '247' and info['CFBundleShortVersionString'] == '0.1.247', 'Version override missing')
     require(info['LSMinimumSystemVersion'] == minimum, 'Minimum OS is not derived')
-    require(len(manifest['native_notices']) == 3 and manifest['packages'] and manifest['dependencies'], 'Notice/provenance inventory missing')
+    require({Path(n['path']).name for n in manifest['native_notices']} ==
+            set(helper.NATIVE) | {'NativeHost.txt'} and manifest['packages'] and manifest['dependencies'],
+            'Notice/provenance inventory missing')
     require('/Users/' not in (app / helper.MANIFEST).read_text(), 'Personal source path leaked into manifest')
     subprocess.run(['/usr/bin/codesign', '--verify', '--deep', '--strict', str(app)], check=True)
     relocated = verify_relocated_copy(app, stage / 'relocated' / source.name)
@@ -137,7 +139,7 @@ def main():
     require(repeat.returncode != 0 and 'new destination directory' in repeat.stderr, 'Existing destination was overwritten')
     require(tree_digest(source) == before, 'Source app was modified')
     result = {'source_tree_sha256_before_and_after': before, 'staged_app': str(app),
-              'minimum_macos': minimum, 'native_notices': 3, 'dependency_records': len(manifest['dependencies']),
+              'minimum_macos': minimum, 'native_notices': len(manifest['native_notices']), 'dependency_records': len(manifest['dependencies']),
               'packages_with_notices_and_spdx': len(manifest['packages']), 'strict_signature': 'PASS',
               'relocated_copy': relocated,
               'new_destination_and_missing_provenance_checks': 'PASS', 'runtime_launched': False,

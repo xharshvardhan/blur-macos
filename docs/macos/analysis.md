@@ -1830,3 +1830,34 @@ maintained libraries, build/diagnostic tools and conformance fixtures; arbitrary
 Windows executable conversion is not implemented. All 19 production/fixture
 hashes from the delivered freeze remain unchanged; this audit adds no measured
 performance gain or new game build.
+
+
+## MAC330/334 — Bounded work removal and independent host qualification
+
+Exact context-owned Metal state reuse preserves effective front/back stencil,
+depth attachment behavior and dynamic reference. The final last-entry fast path
+avoids hashing repeated adjacent state, while the owning map preserves other
+entries across growth. An actual 20-car game diagnostic counted 7,597,565 draw
+requests but only 28 factory calls, with zero failures. The GPU pixel/partial-clear
+oracle verifies 680 draws + 63 clears with 64 creations; the no-reuse count
+control passes pixels before its expected count assertion fails.
+
+Native DDS2D now retains one validated original read through exact GPU mip/row
+upload. The representative real-filesystem GPU fixture reads a 200-byte file
+once instead of the pinned original's two opens/six backend reads/272 bytes.
+Formats, L8 ghost-mask compatibility, filesystem authentication, resource flags
+and other texture types stay unchanged. One temporary file owner overlaps
+upload; neither peak-memory nor repeatable FPS savings are established.
+
+The authored Cocoa host is an independently installed/relocated NativeHost::Window
+CMake package with a separate find_package client. Blur compatibility names
+alias the same implementation. A finite Metal triangle demo and window/event/
+resize conformance run without engine headers/assets. The scoped MIT license
+covers only this authored package. A general executable converter, renderer/
+asset adapter for another engine and another clean Mac remain unverified.
+
+Both complete final Debug and Speed suites pass 151/151; lower new fixtures
+also pass both UBSan builds and seven focused Metal-validation tests. Muted
+actual-game driving/normal exit passes. Sequential race timings are mixed,
+including worse no-input rates and remaining hitches; do not advertise a
+repeatable FPS increase. See [the full evidence and ablations](optimization-host-acceptance.md).

@@ -67,3 +67,12 @@ portability. These alternatives are not newly integrated and are not measured
 performance improvements. Preserve the working direct Metal path while testing
 bounded changes; generic platform/rendering libraries do not remove engine or
 asset-schema adaptation.
+
+The authored [NativeHost package](../../code/mercury/library/gamesys/framework/native_host/README.md)
+now isolates the Cocoa window/event/CAMetalLayer implementation. Its directory
+has a scoped MIT license; it does not change inherited engine/source terms.
+Blur uses that same implementation through compatibility names. A separate
+installed-package consumer exercises a Metal scene without engine headers or
+assets. This is a source-port building block; rendering, game logic, data
+formats, input mappings, audio and network policy remain the consumer's work.
+Its license is included in staged game notices as `NativeHost.txt`.
