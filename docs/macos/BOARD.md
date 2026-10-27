@@ -425,3 +425,13 @@ The inherited `tools/agent_context.py context` was attempted and rejects this ne
 | MAC255 | Publish verified career cycle and development staging | Codex /root | PASS curated source/tools/acceptance docs verified; personal public snapshot | README/README.macos/PLAYABLE_SLICE/publication/quit/menu docs +newcareeracceptance;separateindex |243physical3lap+nonmedalresults/save/exit,251signedrelocatedreload,247staging/254ZIP; LAN253stillseparate |
 
 | MAC256 | Fresh actual LAN host, leave and desktop exit | Codex /root | PASS original host/leave/desktop, exit 0 / 120.24s, strict signature/manifest | ignored unique256app/input/log/proof; same genuine profile | Actual offline router, capacity20/local1/remote0/noStart; original20key LAN +3key desktop flow; no multiplayer race claim |
+
+| MAC261 | Native offline/online entry prerequisite classification | Codex /root/dynamic_port | PASS narrow guard, both coherent builds and actual266 classification/host/exit | lua_NetServices.cpp CheckEntryRequirements branch; native-network-entry.md; BOARD/LEDGER | Share original PC offline ret0 and online-only credential check; preserve actual native NoServiceProvider/identity/router and LAN wire paths; root owns build/runtime |
+
+| MAC262 | Coherent native network prerequisite integration | Codex /root | PASS Debug/Speed builds +2 checks each; actual264queries and266full host/exit | standard apps/build logs, ignored264 app; no other engine edits | Native offline classification0 and online no-account2; preserve router/auth/transport, no remote-race claim |
+
+| MAC263 | Independent native network prerequisite review | Codex /root/metal_occlusion | PASS bounded source review; actual offline0 proves debug overrides off | read-only exact function/callers/profile/router/persistence | No authentication/provider success introduced; invalid4/debug precedence preserved |
+
+| MAC265 | Local 0.1.1 signed development app and ZIP | Codex /root/physics_port | PASS relocated-copy/ZIP/extract signatures, manifest, all7aliases; actual266 also PASS | ignored dist0.1.1, delivery proof; no game data | Original stage and0.1.0 preserved; macOS26+ arm64/ad-hoc, no clean-Mac/notarization claim |
+
+| MAC266 | Fresh corrected native entry and ordinary LAN lifecycle | Codex /root | PASS actual0/2/4/4 +host/leave/desktop exit0/147.65s +signature/manifest | ignored unique266app/input/proof; unchanged262 engine | Real local1/remote0/capacity20/startfalse,20LAN+3desktop keys;264query-reader failure baseline preserved |

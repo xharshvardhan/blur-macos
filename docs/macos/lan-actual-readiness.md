@@ -43,13 +43,14 @@ non-loopback IPv4** interfaces with getifaddrs. An actual Wi-Fi/Ethernet IPv4
 address is required by this gate; loopback availability alone is not proof. This
 is the original IP LAN transport, not a new Bluetooth pairing transport.
 
-`CheckEntryRequirements(false)` at lua_NetServices.cpp:536–577 still selects its
-unknown-platform branch on macOS and returns 4. The PC credential-check branch
-is not widened to native. MpMain's LAN callback only special-cases 1, so 4
-currently continues to the offline task. This is a concrete
-status-classification gap to record during a smoke, not a successful
-requirements result or an established runtime blocker. No speculative source
-correction is made here.
+At the MAC250 audit, `CheckEntryRequirements(false)` at
+lua_NetServices.cpp:536–577 selected its unknown-platform branch on macOS and
+returned 4. MpMain's LAN callback only special-cases 1, so that value continued
+to the offline task. Actual MAC253/256 hosting established that this was a
+classification gap rather than a LAN blocker. MAC261 later applies the existing
+PC prerequisite branch to macOS; actual MAC266 reports offline 0 and online 2.
+See [native-network-entry.md](native-network-entry.md). Eligibility and actual
+router completion remain separate observations.
 
 The original RouterPC.PlatformConnect at lines 119–170 does not require
 username/password when onlineMode=false. Its offline StartConnect at line 487+
@@ -328,6 +329,32 @@ the earlier single MAC253 still remains the menu reference.
 This supersedes MAC253's incomplete desktop-route verification. It establishes
 ordinary single-host lifecycle cleanup, while remote joins, replicated racing,
 four-player acceptance and the historical three-player problem remain unverified.
-The native entry status 4 gap remains recorded separately from actual offline
-router completion. No authentication, peer, progress or single-racer override
+The native entry status 4 gap at this stage was recorded separately from actual
+offline router completion; the later MAC261/266 correction is documented below. No authentication, peer, progress or single-racer override
 was introduced.
+
+## Native classification and passive popup-reader follow-up
+
+The later MAC261 change corrects the macOS platform classification by reusing
+the original PC prerequisite branch. Actual MAC264 returns offline 0, online 2
+and invalid arguments 4, without credential or provider changes; see
+[native-network-entry.md](native-network-entry.md). Its original host smoke
+also passes. During leave, the private reader observed a popup retiring between
+queries and indexed a nil CurrentData. It stopped before further input. That
+run ended with the elapsed guard, exit 0 after 422.55 seconds; it is retained as
+a failed helper baseline, not ordinary desktop-exit evidence.
+
+The private snapshot reader now guards each popup-data access and checks data
+identity, type, status and selection fences. A retired/replaced popup causes a
+fresh passive observation. It does not retry a key or turn an unknown state into
+success. Early and late retirement regressions, refusal cases and the original
+127-byte command builders pass. Fresh MAC266 repeats the complete original
+route with the corrected reader; it does not change the game engine or UI.
+
+MAC266 now passes that fresh route: actual offline/router/local-host proof,
+normal session/menu leave and desktop confirmation, exit 0 / 147.65 seconds
+with no primary failure, before the 420-second guard. Its helper and desktop
+operator both exit 0; strict signature and dependency/notices verification pass
+afterward. Actual entry results are 0/2/4/4 for offline/online/nil/number. See
+[native-network-entry.md](native-network-entry.md) for the correction and bounded
+acceptance. No remote race or clean-Mac claim is added.

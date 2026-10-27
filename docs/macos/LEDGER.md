@@ -3778,3 +3778,47 @@ still unverified. No game data, apps, saves or ignored verification outputs
 enter the public source. Independent packaging/docs review257 found no further
 blocking defect after two stale claims were corrected. Personal author/account
 verified; credential-redacted profile mirror and empty default index preserved.
+
+
+MAC260/261 — Audited all three original CheckEntryRequirements callers and
+confirmed the prechange function exactly matches pristine1965fac source. Native
+unknown-platform ret4 was nonblocking for actual253/256 LAN;256 normal host/
+leave/desktop exited0 in120.24s. Narrow native guard now shares the original PC
+branch: offlinefalse leaves0, onlinetrue still requires credential pointers and
+returns2 on native's actual null getters. No credentials/account/router/provider
+identity/transport/player-limit changes. Existing hosted NoServiceProvider and
+OnlineConnectionPossiblefalse stay intact. Valid online caller outcomes mapped
+in native-network-entry.md, including dormant invite ret4-to-popup-1 gap; no
+invites/provider success fabricated. Exact guard removal restores pristine
+function bytes; scoped diff check PASS, original source encoding/LF preserved.
+Production frozen; root owns coherent Debug/Speed build and actual registered
+Lua offline0/online2 + ordinary LAN host/leave/desktop integration. No build,
+archive/GPU/IPC/runtime by author; no four-peer or connectivity repair claim.
+
+### MAC262/263/265/266 — Native entry integration and local delivery
+
+Both coherent Debug/Speed apps build with261; native profile and actual
+game-entrypoint checks pass2/2 each. Independent263 review confirms the original
+PC offline/online distinction and unchanged invalid-input/debug/provider paths.
+Actual264 returns0/2/4/4 and hosts, but its private popup reader indexed retired
+CurrentData during leave, stopped before further input, then game elapsedguard
+exits0/422.55s/no primary. This is a retained failed-helper baseline, not desktop
+acceptance. Guarded reads and identity/type/status/selection fences now retry
+only passive observations; early/late-retirement/refusal/127-byte tests pass.
+
+Fresh266 repeats actual0/2/4/4, offline routerComplete3/error0, original
+SystemLink CustomRace host capacity20/local1/remote0/both-startfalse, ordinary
+20-key leave to Start2 and separate3-key desktop204 confirmation. Actual
+exit0/147.65s/no primary before420guard, helper0/quit0, signature/manifest pass
+afterexit. False→0 proves allthree debug entry overridesfalse atthatcall; source
+defaults alone would not prove it because startup XML can load values. No
+credential/provider/identity/session/player/progress setter or bypass.
+
+MAC265 stages 0.1.1/build262 through unchanged BundleUtilities tooling and
+verifies copied/ZIP-extracted app signatures, dependency/notice hashes and all7
+aliases. No original game/profile data, re-sign repair or previous0.1.0 mutation.
+Proofs: ignored mac262-integration-proof.json, mac264-entry-proof.json,
+mac266-lan-proof.json, mac265-delivery-proof.json. Four removed upstream login
+literals remain absent from the native executable. Personal public follow-up
+preserves curated source-only history/redacted profile/empty default index.
+Remote joins/races, >3-player behavior, clean-Mac and notarization remain open.

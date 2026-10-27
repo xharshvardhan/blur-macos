@@ -558,7 +558,8 @@ namespace Game
 						ret = 2;
 				}
 
-#elif defined ( PLATFORM_PC )
+#elif defined ( PLATFORM_PC ) || defined ( PLATFORM_MACOS )
+				// [Blur2PC] Native LAN shares PC offline prerequisites; credentials apply only online.
 				
 				if (online)
 				{

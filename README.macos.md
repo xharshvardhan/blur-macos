@@ -34,6 +34,11 @@ desktop confirmations with exit 0. The observed capacity is 20, with one local
 player; remote joining and multiplayer racing remain unverified
 ([LAN evidence](docs/macos/lan-actual-readiness.md)).
 
+Native network prerequisites now use the original PC distinction between
+offline eligibility and unavailable online accounts. The actual game reports
+offline 0 and online 2; router connection and LAN session creation remain
+separate checks ([entry contract](docs/macos/native-network-entry.md)).
+
 ## Build and run
 
 Requirements: Apple Silicon Mac, Xcode Command Line Tools, CMake 3.25+, Ninja,
