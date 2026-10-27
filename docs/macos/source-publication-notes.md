@@ -8,8 +8,11 @@ The snapshot has its own initial commit, so excluded upstream payloads and crede
 
 The native game builds its runtime dependencies from pinned source or the host packages described in [dependencies.md](dependencies.md). This source snapshot does not provide an installer, game data or the upstream prebuilt Windows toolchain. Supply your own complete original PC data separately when running the native application.
 
-Validation distinguishes source checks from game proof. The current native Debug and optimized builds pass 19 affected checks. An original Brighton/BMW keyboard race completed its natural checkpoint/lap sequence and exited 0. A populated normal Debug frontend has also created/reloaded a career profile, played its tutorial movies, reached the owned-car garage and shut down with exit 0. Normal career race/results progression, real LAN play, portable packaging and the desktop quit-confirmation route remain separate verification work.
+Validation distinguishes source checks from game proof. The current native Debug and optimized builds pass 19 affected checks. An original Brighton/BMW keyboard race completed its natural checkpoint/lap sequence and exited 0. A populated normal Debug frontend has also created/reloaded a career profile, played its tutorial movies, reached the owned-car garage and shut down with exit 0. Normal career race/results progression, real LAN play, portable packaging and SP exit confirmation after populated play remain separate verification work. A separate StartScreen run verified ordinary desktop confirmation and actual exit 0.
 
 The next normal career event reached its race introduction but stopped on a
-missing stencil attachment. This remains a known development blocker; the
-completed Brighton slice does not establish normal career race support.
+missing stencil attachment. The PC borrowed-depth pass contract is now
+restored and both coherent builds pass 14 affected renderer checks. The actual
+normal-career rerun reaches HUD/Racing with 20 cars and ordinary keyboard motion,
+but returns 245 during shutdown. Its cause is under debugger investigation;
+normal career completion/results are not established.

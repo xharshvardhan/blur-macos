@@ -3038,3 +3038,123 @@ Actual201 normal career event reached IntroVista, then failed strictly on
 "Stencil clear has no stencil attachment" and exited1 with clean cleanup.
 MAC208 audits pass-depth inheritance; MAC209 captures its exact before-unwind
 caller. Actual183 and198 acceptance claims remain scoped as described above.
+
+
+## 2026-10-27 — MAC209 actual pre-unwind stencil-clear proof
+
+FreshhashcheckedDebug197/realMaster189data+profile+save, CompleteCareer0 /
+ObserveOnly1; ordinaryStartScreen-gatedhelper navigatesactual unlocked event /
+ownedallowedcar. Exactfiltered__cxa_throw at167.18s: RenderStencilBox→spotlight
+volume→LightingPrepass→MainView Prepass1; actualClearflags4(stencilonly),
+actualdepthSurfacepointer+controlblockNULL, colour0A8R8G8B8/2560x1440/sample1,
+command+encodernonnull. PureSB JSONerrors[]. Supports208nativeBegin owner-policy
+candidate, notwrongdepthformat orlegitimateignoredclear. No source/guardrepairby209.
+ExplicitLLDBprocesskill owned26484(status9)+quit, wrapperdiagnostic0,
+qualified_game_exitfalse/slotreleased, exactprivateprocessleftoversnone. Operator
+stoppedonownedexit. Harnessprimarynullbecausebeforeapplicationcatch; exactthrow
+capturedinignoredmac209/stencil-proof.json/log. stencil-clear-runtime-proof.md
+recordsfields/caller/limits. No screenshot, sharedbuild/archivewrites, progression
+mutations ornaturalrace/normalgameexitclaim.208repair/integrationisnextrootstep.
+
+
+2026-10-27 MAC211 /root/dynamic_port: source-audited normal desktopquit after
+198exit0proved elapsedguard cleanup, notpopupconfirmation. Repaired ONLYignored
+quit_master_frontend.py: CustomPopup/PopupGUI/SCUI_Popup observedthroughMain0,
+underlyingSpMain/StartScreen remainsGetCurrentScreen; noseparatepopupctxsearch.
+OriginalExitApplication1 options/default/selectedYes verified, Kill204nooptions
+onStartScreen, originalmodecameraBackguard; freshcontext/type/selectionfence.
+FiniteordinaryESC/ENTERnativeTap only, uniqueACK, 16key/180sbound, exact127byte
+maxcommand at mffff, no blindrepeat/directquit/profile/progress/selectionsetter.
+After204ACK log/statusonly(no teardownIPC), exit0+noprimary requiredbyhelper.
+Puredecisions/builders/selftest+py_compilePASS; no game/client/runtime/shared
+build/archive/GPU/prodsourceactions. Sourceauditnormal-desktop-quit.md records
+nonatomicsnapshot/concurrentoperatorlimits; actualrootUIquitverificationpending.
+
+
+## MAC214 actual ordinary StartScreen desktop confirmation PASS
+
+Fresh unique frozenDebug197 app, real Master189 data/profile/save roots and
+explicit CompleteCareer0. The211 observer waited for actual StartScreen before
+IPC, read original Main0 CustomPopup204/no-options/unfinished state, and sent
+only finite ordinary ESC then ENTER. Both actual key acknowledgements were true.
+After204 acceptance no further IPC was sent during teardown. The actual process
+exited0 after79.09s with primary null, before elapsed180 application guard; no
+external kill or timeout. Slot released, operator exit0. This verifies the
+StartScreen desktop route; SP ExitApplication1 confirmation after populated
+career play and full career results are separate. Actual198 already proved
+populated Master shutdown via the elapsed application guard.
+Private evidence verification/mac214-game.log, mac214-probe-status.json and
+mac214-quit-operator.jsonl; no screenshot was required for the exit contract.
+
+
+## 2026-10-27 — MAC212 independent deferred-depth review
+
+Read-only210Manager Begin/current deferred_depth_test review complete; no blocking
+issue identified. Sole actual manager producer LightingPrepass pairs same-extent
+None-sample normal D24S8 + R32F and lighting Unknown-depth; actual normal-to-light
+pass sequence retains owned D24S8 while separately detached R32F is sampled.
+Native MRT retirement and requested depth-disable policy remain; strict lower
+clear/format/extent/samples/feedback guards unchanged. Actual209 stencil-box
+caller supports owner-policy restoration. Fixture source exercises original
+manager/light mask/depth pixels, detach, invalid extent/samples, current-binding
+replacement and two resource-baseline cycles. It restores default before manager
+Destroy, so live-bound Resize/Destroy is not proven. deferred-depth-review.md
+records source authority and limits. No production/fixture/CMake edits, builds,
+runs or sharedarchive reads. Root integration/actual career retry next.
+
+## MAC210 actual normal-career large-light stencil owner contract
+
+209 before-unwind confirms201 primary: stencil-only clear4, null bound depth,
+RenderStencilBox→RenderSpotlightVolume→LightingPrepass RenderLights1. Original
+PC Manager::Begin replaces only a supplied owned depth target; native's explicit
+null bind had dropped the prior normal-pass D24S8 that large lights borrow.
+Native Begin now retains actual existing depth when this view owns none, while
+retiring stale MRT slots and preserving requested depth-disable state. No new
+surface, forced-simple-light policy, clear flag filtering or lower guard change.
+Sole production setup client is Prepass: normal+lighting ±view pairs have same
+extent/sample count; light shaders sample retired R32F MRT1, not borrowed D24S8.
+Eight four-config private source/fixture objects PASS. Identical final Debug
+fixture with197 manager exits1 at exact stencil-clear guard; corrected Debug and
+Speed strictMetal GPU runs exit0 after2 lifecycles, actual volume-light stencil
+mask520/1024, preserved depth, explicit detach rejection, owned rebind, allowed
+larger depth and rejected smaller/mismatched samples, no extra resource owner.
+New mac_deferred_depth CTest leaf registered (fullGame/non-UBSan hardware45s).
+Private source/link/runtime evidence occlusion-agent-deferred-depth; scope and
+live-bound-destruction limit in deferred-depth-ownership.md. Coherent actual
+normal-career rerun remains required; fixture is not race proof.
+
+
+## MAC213 coherent PC borrowed depth/stencil integration PASS
+
+Full standard Debug and Speed native game builds succeeded with210 Manager
+retention and the actual deferred_depth leaf. Both coherent configurations pass
+14/14 affected manager/renderer/FX/resource/entrypoint checks under strict Metal
+validation, serialized through run_exclusive. Native MRT retirement remains;
+original PC absent-owned-depth retention is restored, not a lower guard bypass.
+Agent controlled baseline reproduces exact missing-stencil failure; corrected
+Debug/Speed actual manager/large-volume-light regressions each pass two full
+lifecycles with520/1024 stencil-constrained GPU pixels, preserved depth, explicit
+detach failure and extent/sample rejection. Actual normal-career run215 follows;
+fixtures do not establish gameplay completion. Logs mac213-build/tests.log in
+each build dir; binary hashes recorded in ignored mac213-integration-proof.json.
+
+
+## MAC215 actual20-car normal career: startup/movement PASS, shutdown FAIL
+
+Coherent Debug213, genuine Master189 profile/save/PC data, CompleteCareer0 and
+ordinary menu/event/owned-car keys. Actual game progressed Loading20 → IntroRace
+Starting20 → HUD Racing20. Original RaceLoaded and RaceStarted notifications
+observed; completed native GPU frame captured once. Primary human controlType0,
+configuredAI/aiToggle/automatedHuman false; 92 Racing telemetry records,
+91 with accepted finite ordinary keyboard actions and 137.91m observed
+travel. Real car331339493, genuine event configured3 laps; no checkpoint/lap/AI/
+pose/event setup/progress writes. Menu observer retired onceRacing to reduce IPC
+peer pressure; no gameplay/driver/process termination requested externally.
+
+Elapsed300 application guard requested normal exit; actual process returned245
+after302.76s, no textual primary error, last layer transitions RaceLogicLayer4
+then0. This is a shutdown failure, not a clean gameplay pass or race completion.
+No natural lap/finish/results verified. Before-unwind diagnostic216 and source
+class audit217 own the unknown shutdown cause. Exact ignored proof/log/PNG
+mac215-career-smoke-proof.json, mac215-game.log, mac215-keyboard-drive.jsonl and
+mac215-game-frame.png.

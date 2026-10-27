@@ -329,3 +329,21 @@ The inherited `tools/agent_context.py context` was attempted and rejects this ne
 | MAC197 | Coherent native stream/graph/file/mixer owner integration | Codex /root | Debug+Speed app/fixtures build PASS;19/19 affected checks each PASS | CMake new audio_stream_retirement leaf;195 source including ObjectManager static owner reset;191 failure diagnostics | Actual198 full Master renderer/menu clean exit required; fixtures not game proof |
 
 | MAC198 | Actual Debug Master/menu/garage and normal shutdown | Codex /root | actual Debug full menu/garage +application shutdown PASS exit0/605.95s; desktopquitUI separate | same genuine189profile/save root, fresh197 appcopy;199ordinarykeyhelper | Original tutorial movie/save/owned-allowedGarage, actual successful shutdown required |
+
+| MAC209 | Before-unwind actual normal-career stencil-clear proof | Codex /root/physics_port | complete; exact stencil-box clear4 with null depth, SB errors[]; owned inferior killed/slotfree | stencil-clear-runtime-proof.md; ignored mac209 SB/log; BOARD/LEDGER | Ordinary Master/event/car flow, Debug197; diagnostic0 is not gameplay/normalexit proof;208 owns repair |
+
+| MAC210 | Original-PC deferred pass borrowed depth/stencil retention | Codex /root/metal_occlusion | source/fixture frozen;8/8 four-config object probes; baseline exact guard fails; fixed Debug+Speed strictGPU exit0 | Deferred Manager.cpp; deferred_depth_test.cpp +CMake leaf; deferred-depth-ownership.md | Actual209 confirms null target/large-volume stencil clear; borrowed depth/mask GPU coverage520/1024, detach/rebind/size/sample/owner cases PASS; coherent actual-career rerun pending |
+
+| MAC211 | Ordinary desktop quit popup observer/operator | Codex /root/dynamic_port | private helper frozen;pure self-test+py_compile PASS | ignored quit_master_frontend.py;normal-desktop-quit.md;BOARD/LEDGER | Main0 actual popup1/204/options+127-byte finite keys;actual desktop UI quit root runtime pending |
+
+| MAC206 | Personal public source snapshot | Codex /root | PASS public main7db1231; personal attribution verified; source-only full configure PASS | README/source-publication notes; separate publication index/curation; no active branch/index/history reset | xharshvardhan/blur-macos; no retail assets/prebuilt payloads/upstream credential literals/history; no blanket license |
+
+| MAC213 | Coherent original-PC borrowed-depth pass integration | Codex /root | PASS Debug/Speed app builds +14/14 affected renderer checks each | full Debug/Speed game +14 renderer/depth checks; root sole shared builder | Preserve strict missing-depth/feedback guards; actual Master career startup215 follows focused baseline/control proof |
+
+| MAC214 | Actual ordinary desktop quit-confirmation route | Codex /root | PASS actualStartScreen ESC/ENTER204 +process0/79.09s; frozenDebug197 | unique214app; same real189profile/save/data; private runtime/operator logs | No career start, no direct quit setters; require actual204 confirmation and realprocess0 before elapsed180 guard |
+
+| MAC212 | Independent deferred borrowed-depth class review | Codex /root/physics_port | complete; no blocking issue found, source/fixture review only | deferred-depth-review.md; BOARD/LEDGER only | Verify actual caller extents/samples, sampled R32F versus attached D24S8, retention lifetime and strict lower validation; no builds/runs/production writes |
+
+| MAC215 | Actual normal career after PC borrowed-depth repair | Codex /root | actual20carRacing/GPU/humanmovement PASS; elapsedshutdown245 FAIL;216diagnostic | unique215app; genuine189Master/profile/save; no debug event/config/progress writes | Real20carHUD +humanfinitekeys; no racefinish/results or clean exit claim; actual302.76s/245 needs216stack |
+
+| MAC216 | Actual populated career shutdown debugger diagnosis | Codex /root/physics_port | running fresh Debug213 private copy; pure SB before-unwind capture | ignored mac216 scripts/log/JSON; diagnostic doc +BOARD/LEDGER only | Ordinary Master189 menu/event/car; elapsed240 normal shutdown, no production/build/progress writes; kill only owned inferior and release slot |

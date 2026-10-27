@@ -21,8 +21,11 @@ release.** The current build still needs developer tools and native dependencies
   exercised with original game data.
 - A populated normal Debug frontend reached the owned-car garage and completed
   full application shutdown with exit code 0.
-- A normal career event currently stops during its race introduction on a
-  missing stencil attachment; that render-pass transition is being repaired.
+- The repaired normal career lighting pass reaches the HUD with 20 cars and
+  responds to keyboard throttle and steering. Debug and optimized builds pass
+  14 affected renderer checks. That 20-car run currently fails during shutdown;
+  normal career completion/results remain unverified.
+- The start-screen desktop quit confirmation exits normally using ordinary keys.
 - Complete normal career race/results/save progression, full content coverage,
   real LAN/multiplayer play and portable distribution remain in progress.
   The verified one-track race is a narrower milestone than a complete port.

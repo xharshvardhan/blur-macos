@@ -497,10 +497,13 @@ void C_Manager::Begin(const S32 iIndex)
 	const C_View& view = m_Views[m_iActiveIndex];
 
 #if defined(PLATFORM_MACOS)
-    // [Blur2PC] Retire every previous MRT/depth binding when the pass changes.
+    // [Blur2PC] Retire stale MRT slots, but preserve the original PC borrowed
+    // depth contract: a view without an owned depth target keeps the currently
+    // bound one. Lighting's large-volume pass clears/tests normal-pass stencil.
     for(U32 slot=0;slot<4;++slot)
         Display::Device()->SetColourSurface(slot,view.renderTextures[slot]?&view.renderTextures[slot]->GetSurface():nullptr);
-    Display::Device()->SetDepthStencilSurface(view.pDepthStencilSurface);
+    if(view.pDepthStencilSurface)
+        Display::Device()->SetDepthStencilSurface(view.pDepthStencilSurface);
 #else
 	if (view.renderTextures[0])
 		Display::Device()->SetColourSurface(0, &view.renderTextures[0]->GetSurface());

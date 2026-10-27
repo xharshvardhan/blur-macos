@@ -12,8 +12,11 @@ have created and reloaded a career save, completed tutorial movies/autosave,
 and reached the real event garage with an owned/allowed car. Debug197 completed
 that populated frontend's full application shutdown with exit0 (MAC198).
 The final shutdown in that run was requested by the elapsed-time application
-guard; the desktop quit-confirmation route remains separate. Normal career
-race/results progression, real LAN play and portable distribution are still
+guard; a separate StartScreen run confirms ordinary Escape/Enter desktop quit
+with actual exit 0 (MAC214). SP exit confirmation after populated play remains
+separate. A normal career event now reaches HUD/Racing with 20 cars and keyboard motion;
+its populated race shutdown currently fails and is under investigation. Career
+completion/results progression, real LAN play and portable distribution are still
 being validated. This remains a development port.
 
 The public source snapshot lives at
@@ -119,8 +122,13 @@ The original Brighton/BMW keyboard slice completed its natural checkpoint,
 lap and race-finish sequence and exited0. The assert-enabled normal frontend
 created/reloaded a career profile, reached the owned-car garage and completed
 full shutdown with exit0. A subsequent normal career event reached its race
-introduction, then stopped on a missing stencil attachment; that pass transition
-is under investigation. Normal career results, desktop quit confirmation,
+introduction, then stopped on a missing stencil attachment. The original PC
+borrowed-depth pass contract is now restored, with Debug/Speed 14 affected
+renderer checks passing. Actual215 reaches the normal 20-car HUD/Racing, renders
+a completed GPU frame and accepts keyboard motion, but its elapsed300 shutdown
+returns245 and is under debugger investigation. Ordinary
+StartScreen desktop confirmation also exits 0. Normal career results, SP exit
+confirmation after populated play,
 multiplayer and portable distribution remain unverified. See
 [PLAYABLE_SLICE.md](docs/macos/PLAYABLE_SLICE.md) and
 [BOARD.md](docs/macos/BOARD.md) for the acceptance criteria and current evidence.

@@ -889,7 +889,7 @@ if(BLUR_MAC_BUILD_GAME)
         target_link_options(blur_mac_replay_lifecycle_test PRIVATE "LINKER:-dead_strip")
         add_test(NAME mac_replay_lifecycle COMMAND blur_mac_replay_lifecycle_test)
         set_tests_properties(mac_replay_lifecycle PROPERTIES TIMEOUT 30)
-        foreach(_mac_fixture global_resource_cleanup postprocess_game_graph ui_gpu_ownership world_transaction vehicle_damage simple2d_transaction ui_required_resources view_policy air_startup_failure particle_worker particle_trail worker_storage game_render_ownership startup_completion blob_shadows view_slots subscription_owner audio_subsystem_ownership deferred_ui_messages xt_owner_lifecycle ui_world_borrowers particle_geometry racebook_owner camera_ownership ui_movie profile_save_owner)
+        foreach(_mac_fixture global_resource_cleanup postprocess_game_graph ui_gpu_ownership world_transaction vehicle_damage simple2d_transaction ui_required_resources view_policy deferred_depth air_startup_failure particle_worker particle_trail worker_storage game_render_ownership startup_completion blob_shadows view_slots subscription_owner audio_subsystem_ownership deferred_ui_messages xt_owner_lifecycle ui_world_borrowers particle_geometry racebook_owner camera_ownership ui_movie profile_save_owner)
             add_executable(blur_mac_${_mac_fixture}_test ${BLUR_TOP}/tools/macos/${_mac_fixture}_test.cpp ${_mac_lua_blob})
             target_include_directories(blur_mac_${_mac_fixture}_test PRIVATE $<TARGET_PROPERTY:blur_mac_amax,INCLUDE_DIRECTORIES>)
             target_link_libraries(blur_mac_${_mac_fixture}_test PRIVATE ${_mac_game_link_closure})
@@ -940,6 +940,9 @@ if(BLUR_MAC_BUILD_GAME)
 
         add_test(NAME mac_view_policy COMMAND blur_mac_view_policy_test)
         set_tests_properties(mac_view_policy PROPERTIES LABELS "hardware" TIMEOUT 45)
+        add_test(NAME mac_deferred_depth COMMAND blur_mac_deferred_depth_test
+            ${CMAKE_CURRENT_BINARY_DIR}/authored-shaders)
+        set_tests_properties(mac_deferred_depth PROPERTIES LABELS "hardware" TIMEOUT 45)
         add_test(NAME mac_simple2d_transaction COMMAND blur_mac_simple2d_transaction_test)
         set_tests_properties(mac_simple2d_transaction PROPERTIES LABELS "hardware" TIMEOUT 45)
         add_test(NAME mac_ui_required_resources COMMAND blur_mac_ui_required_resources_test
