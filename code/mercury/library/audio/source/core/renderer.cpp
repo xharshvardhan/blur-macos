@@ -7,6 +7,7 @@
 #include <system/Perf/PerfEvent.h>
 #if defined(PLATFORM_MACOS) // [Blur2PC] Native PCM ownership is retired before renderer buffers.
 #include "macos/Engine.h"
+#include "macos/DecoderTrace.h"
 extern Audio::Core::Renderer* g_pRenderer; // [Blur2PC] Retire the original factory owner on native destruction.
 #endif
 
@@ -239,6 +240,9 @@ Audio::Core::Renderer::~Renderer()
 	sys_ppu_thread_join(m_hAudioThread, &exitStatus);
 #endif
 	WaitUntilTerminated();
+#if defined(PLATFORM_MACOS) // [Blur2PC] Producer callback and its flushed jobs can no longer write decoder events.
+    Audio::Mac::EndDecoderTrace(this);
+#endif
 #if defined(PLATFORM_MACOS) // [Blur2PC] Placement-created bus objects and the batch queue have explicit owners.
     auto retire=[](Input*& input){if(input){input->~Input();delete[] reinterpret_cast<U8*>(input);input=nullptr;}};
     retire(m_pMonoInput);retire(m_pStereoInput);retire(m_pSurroundInput);retire(m_pSurroundLFEInput);
@@ -426,7 +430,10 @@ bool Audio::Core::Renderer::Init(void* pContext, RenderCallback cbFrameStart, Re
 
 #if defined(PLATFORM_MACOS) // [Blur2PC] Publish a fully initialized renderer to SDL's writer.
     m_bInited=true;
-    return Audio::Core::Engine::Instance().Init(this);
+    if(!Audio::Core::Engine::Instance().Init(this))return false;
+    // [Blur2PC] The producer has not started yet; failed diagnostics retire the writer.
+    if(!Audio::Mac::BeginDecoderTrace(this)){Audio::Core::Engine::Instance().Shutdown(this);return false;}
+    return true;
 #else
     return true;
 #endif

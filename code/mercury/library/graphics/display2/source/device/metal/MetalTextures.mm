@@ -79,7 +79,11 @@ bool C_MetalDevice::CreateTextureNative(U32 width,U32 height,U32 depth,U32 level
             const U64 row=U64((s->width+f.block-1)/f.block)*f.bytes;s->pitch=U32((row+255)&~U64(255));
             s->texture=[storage newTextureViewWithPixelFormat:f.linear textureType:type==E_TextureType_3D?MTLTextureType3D:MTLTextureType2D levels:NSMakeRange(level,1) slices:NSMakeRange(face,1)];
             if(!s->texture)return false;
-            s->queue=m_State->queue;s->format=E_SurfaceFormat(U32(format));native->surfaces.push_back(std::move(s));
+            s->queue=m_State->queue;s->format=E_SurfaceFormat(U32(format));
+            // [Blur2PC] Preserve plain-lock CPU contents for repeatedly updated
+            // textures without retaining a duplicate of static retail assets.
+            s->cpuMirror=(flags&E_Flags_Dynamic)&&!depthFormat&&!(descriptor.usage&MTLTextureUsageRenderTarget);
+            native->surfaces.push_back(std::move(s));
         }
         native->size=U32(total);texture->m_Texture=std::move(native);texture->m_Flags=flags;return true;
     }
@@ -111,7 +115,9 @@ bool C_MetalDevice::CopyTexture(C_Texture* destination,const C_Texture* source,b
     auto command=[m_State->queue commandBuffer];auto blit=[command blitCommandEncoder];if(!command||!blit)return false;
     for(const auto& copy:copies){const auto& from=copy.first;const auto& to=copy.second;
         [blit copyFromTexture:from->texture sourceSlice:0 sourceLevel:0 sourceOrigin:MTLOriginMake(0,0,0)
-                   sourceSize:MTLSizeMake(from->width,from->height,from->depth) toTexture:to->texture destinationSlice:0 destinationLevel:0 destinationOrigin:MTLOriginMake(0,0,0)];}
+                   sourceSize:MTLSizeMake(from->width,from->height,from->depth) toTexture:to->texture destinationSlice:0 destinationLevel:0 destinationOrigin:MTLOriginMake(0,0,0)];
+        to->cpuMirrorValid=false; // [Blur2PC] GPU copy changes the destination, including common mip tails.
+    }
     [blit endEncoding];[command commit];for(auto& s:surfaces)s->pending=command;m_State->last=command;return true;
 }}
 bool C_MetalDevice::GetTextureSurface(const C_Texture* t,U32 face,U32 level,C_Surface* s){

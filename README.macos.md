@@ -32,6 +32,16 @@ is omitted until the complete backend exists.
 See [player-feedback acceptance](docs/macos/player-feedback-acceptance.md) for
 the actual UI/save/reload route, measured rendering results and remaining limits.
 
+The 0.1.3 development update preserves CPU-authored texture staging and allows
+bounded same-queue presentation overlap. Longer muted 20-car driving windows
+improved from about 48 to 65–66 submissions per second, while early-race frame
+spikes remain. A separate channel-signal test proves a native stereo-plane
+correction; that bus was inactive in the observed races, so it is not claimed
+as the fix for the reported race-music artifact. That symptom remains unresolved.
+Both complete Debug and Speed suites pass 146/146. See
+[the audio and jitter investigation](docs/macos/remaining-audio-jitter.md) for
+actual-game results, contrary early-race tail-latency evidence and test limits.
+
 The public source snapshot lives at
 [xharshvardhan/blur-macos](https://github.com/xharshvardhan/blur-macos).
 It credits the upstream source and preserves inherited notices without assigning
@@ -70,7 +80,12 @@ reports device-period buffering statistics at shutdown. Optional
 presents in five-second windows. Those are submission measurements, not proof
 of compositor/displayed FPS; the inherited simulation FPS counter cannot measure
 unlocked rendering. See [the renderer audit](docs/macos/renderer-performance-audit.md)
-and [the audio buffer repair](docs/macos/audio-device-period.md).
+and [the audio buffer repair](docs/macos/audio-device-period.md). Bounded,
+default-off `BLUR_MAC_FRAME_TRACE_FILE`, `BLUR_MAC_METAL_TRACE_FILE`,
+`BLUR_MAC_AUDIO_TRACE_FILE`, `BLUR_MAC_AUDIO_PCM_STATS_FILE` and
+`BLUR_MAC_AUDIO_DECODER_TRACE_FILE` accept absolute output paths for deeper
+investigation. They emit completed observations at shutdown; sparse samples,
+intentional retention and overflow metadata must accompany any interpretation.
 
 The build script builds the actual game, runs the component tests, then checks
 the separate diagnostic bootstrap. These checks do not establish gameplay

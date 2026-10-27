@@ -15,8 +15,13 @@ struct PlaybackDiagnostics {
 struct PlaybackQueueStatus {
     U64 queuedInputFrames=0,availableOutputFrames=0,periodOutputFrames=0,paddingInputFrames=0;
     U32 targetInputFrames=0;
+    U64 periodNanoseconds=0;
     bool periodReady=false;
 };
+// [Blur2PC] Sparse trace uses the same absolute steady-clock nanoseconds as frame diagnostics.
+// Values are observational; callback snapshots of writer fields are approximate.
+enum class ProducerPhase : U32 { Idle, QueueQuery, AcquireFrame, Mix, Submit, BackpressureSleep, ProducerSleep, Stopped };
+enum class ProducerEvent : U32 { None, Start, FirstSubmission, SubmissionGap, ProducerStarved, ProducerRecovered, Stop, Primed };
 class Playback {
 public:
     Playback();~Playback();
@@ -30,6 +35,9 @@ public:
     bool GetQueueStatus(U32 cadenceFrames,PlaybackQueueStatus& status)const;
     std::string Backend()const;std::string Error()const;
     PlaybackDiagnostics Diagnostics()const;
+    // One application writer; lock-free publication only when trace is opted in.
+    void ObserveProducer(ProducerPhase phase,const PlaybackQueueStatus* queue,U64 submitted,U64 notReady,U64 backpressure,ProducerEvent event=ProducerEvent::None,U64 detailNanoseconds=0);
+    bool TraceEnabled()const;
 private:
     struct State;std::unique_ptr<State> m_State;
 };

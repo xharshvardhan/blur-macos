@@ -56,10 +56,27 @@ static void frameDiagnostics(){
     bool invalid=false;try{TickRunDiagnostics(-1);}catch(const std::invalid_argument&){invalid=true;}require(invalid,"Enabled diagnostic negative elapsed time was accepted");invalid=false;try{TickRunDiagnostics(std::numeric_limits<double>::quiet_NaN());}catch(const std::invalid_argument&){invalid=true;}require(invalid,"Enabled diagnostic NaN elapsed time was accepted");
     unsetenv("BLUR_MAC_FRAME_DIAGNOSTICS");ConfigureRunDiagnostics("",-1,-1);
 }
+// [Blur2PC] Verify that collection is bounded, ordered and silent until Run ends.
+static void frameTrace(const std::filesystem::path& output){
+    using namespace Framework::Mac;
+    struct RestoreTrace {bool present=std::getenv("BLUR_MAC_FRAME_TRACE_FILE")!=nullptr;std::string value=present?std::getenv("BLUR_MAC_FRAME_TRACE_FILE"):"";~RestoreTrace(){if(present)setenv("BLUR_MAC_FRAME_TRACE_FILE",value.c_str(),1);else unsetenv("BLUR_MAC_FRAME_TRACE_FILE");}} restore;
+    std::filesystem::remove(output);unsetenv("BLUR_MAC_FRAME_TRACE_FILE");ConfigureRunDiagnostics("",-1,-1);
+    require(!NativeFrameTraceEnabled(),"Default frame trace was enabled");RecordNativeFrameTiming({5,4,3,2,1,99});FinishRunDiagnostics();require(!std::filesystem::exists(output),"Disabled frame trace wrote a file");
+    setenv("BLUR_MAC_FRAME_TRACE_FILE","relative-frame.jsonl",1);bool rejected=false;try{ConfigureRunDiagnostics("",-1,-1);}catch(const std::invalid_argument&){rejected=true;}require(rejected,"Relative frame trace destination was accepted");
+    setenv("BLUR_MAC_FRAME_TRACE_FILE",output.c_str(),1);ConfigureRunDiagnostics("",-1,-1);require(NativeFrameTraceEnabled()&&NativeFrameClockNS()>0,"Configured monotonic frame trace is unavailable");
+    for(std::uint64_t i=0;i<65537;++i){const auto t=1000+i*100;RecordNativeFrameTiming({t,t+10,t+20,t+60,t+80,std::uint32_t(i%5)});}
+    require(!std::filesystem::exists(output),"Frame trace performed file I/O during collection");
+    rejected=false;try{RecordNativeFrameTiming({1,2,3,4,5,0});}catch(const std::invalid_argument&){rejected=true;}require(rejected,"Frame trace accepted clock reversal");
+    rejected=false;try{RecordNativeFrameTiming({9000000,9000001,9000003,9000002,9000004,0});}catch(const std::invalid_argument&){rejected=true;}require(rejected,"Frame trace accepted unordered update/render phases");
+    FinishRunDiagnostics();require(!NativeFrameTraceEnabled(),"Finished trace remained active");const auto encoded=bytes(output);const std::string text(encoded.begin(),encoded.end());
+    require(text.find("\"clock\":\"std::chrono::steady_clock_ns\"")!=std::string::npos&&text.find("\"steady_ns\":1000,\"poll_end_ns\":1010,\"update_end_ns\":1020,\"render_end_ns\":1060,\"diagnostics_end_ns\":1080,\"simulation_ticks\":0")!=std::string::npos,"Frame trace lost original clock/phase values");
+    require(text.find("\"written\":65536,\"dropped\":1,\"complete\":true")!=std::string::npos,"Frame trace saturation was not explicit or overwrote retained records");FinishRunDiagnostics();require(bytes(output)==encoded,"Trace flushed twice");
+    unsetenv("BLUR_MAC_FRAME_TRACE_FILE");ConfigureRunDiagnostics("",-1,-1);
+}
 class Application:public Framework::C_Application{public:bool Quitting()const{return m_RunState==Framework::E_RunState_Quit;}};
 int main(int argc,char** argv){@autoreleasepool{try{
-    EnvironmentRestore environment;frameDiagnostics();
-    require(argc==2,"Expected private PNG output path");const auto path=std::filesystem::absolute(argv[1]);std::filesystem::remove(path);using namespace Framework::Mac;
+    EnvironmentRestore environment;
+    require(argc==2,"Expected private PNG output path");const auto path=std::filesystem::absolute(argv[1]);std::filesystem::remove(path);using namespace Framework::Mac;frameDiagnostics();frameTrace(path.string()+".frames.jsonl");
     TickRunDiagnostics(0);require(!std::filesystem::exists(path),"Disabled diagnostics created an output file");
     bool invalid=false;try{ConfigureRunDiagnostics(path.string(),std::numeric_limits<double>::quiet_NaN(),-1);}catch(const std::invalid_argument&){invalid=true;}require(invalid,"Invalid diagnostic time was accepted");
     ConfigureRunDiagnostics(path.string(),2,-1);TickRunDiagnostics(1.99);require(!std::filesystem::exists(path),"Capture happened before its elapsed-time deadline");

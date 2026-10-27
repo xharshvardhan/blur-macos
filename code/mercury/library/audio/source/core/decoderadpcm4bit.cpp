@@ -1,5 +1,8 @@
 #include "AudioPch.h"
 #include "coreheaders.h"
+#if defined(PLATFORM_MACOS) // [Blur2PC] Observe original streamed silence decisions without changing them.
+#include "macos/DecoderTrace.h"
+#endif
 #ifdef PLATFORM_SPU
 #include "SystemHeadersSPU.h"
 #else
@@ -631,6 +634,9 @@ bool Audio::Core::MonoADPCM4bitDecoder::FillBuffer(F32* afData, const ProcessInf
 	AUDIO_PERF_MICRO_EVENT("Audio.Generate.MonoADPCM4bitDecoder.FillBuffer");
 
 	bool bActive = true;
+#if defined(PLATFORM_MACOS) // [Blur2PC] Usage distinguishes an inactive decoder path from a healthy stream.
+    if(Audio::Mac::DecoderTraceEnabled())Audio::Mac::CountDecoderAttempt(1,m_waveData.hWaveServerIndex.IsValid());
+#endif
 
 	//  get subframe pitch
     F32 fPitch = ADPCM4bitDecoder::GetSubFramePitch(info);
@@ -659,7 +665,8 @@ bool Audio::Core::MonoADPCM4bitDecoder::FillBuffer(F32* afData, const ProcessInf
 				uBytesRequired = nrBytesToEnd;
 			}
 
-			if (!IsDataInAvailable(info.decoderDataInfo)) zeroAndReturn = true;
+			const bool dataAvailable=IsDataInAvailable(info.decoderDataInfo);
+			if (!dataAvailable) zeroAndReturn = true;
 			else if (nrBytesAvailable < uBytesRequired)
 			{
 				{
@@ -669,6 +676,18 @@ bool Audio::Core::MonoADPCM4bitDecoder::FillBuffer(F32* afData, const ProcessInf
 		
 			if (zeroAndReturn)
 			{
+#if defined(PLATFORM_MACOS) // [Blur2PC] Only observation; keep silence, playhead and source accounting original.
+                if(Audio::Mac::DecoderTraceEnabled()){
+                    U32 reason=0;if(!pWaveStreamData->IsPrimed())reason|=Audio::Mac::DecoderUnprimed;
+                    if(!dataAvailable)reason|=Audio::Mac::DecoderNoData;
+                    if(nrBytesAvailable<uBytesRequired)reason|=Audio::Mac::DecoderInsufficientBytes;
+                    Audio::Mac::RecordDecoderZeroFill({1,(U32)m_waveData.hWaveServerIndex,
+                        pWaveStreamData->hWaveData.GetValue(),m_baseState.uSampleCounter,m_baseState.uSampleIndex,m_waveData.uPCMLoopPosEnd,
+                        pWaveStreamData->u32SourceDataPosition,pWaveStreamData->u32BytesConsumed,nrBytesAvailable,
+                        uSamplesRequired,uBytesRequired,reason,fPitch,pWaveStreamData->IsPrimed(),
+                        pWaveStreamData->IsPlaying(),pWaveStreamData->IsFinished(),m_baseState.bLoop});
+                }
+#endif
 				for (U32 i = 0; i < uFrameLength; i++)
 					afData[i] = 0.f;
 				return true;
@@ -715,6 +734,10 @@ bool Audio::Core::MonoADPCM4bitDecoder::FillBuffer(F32* afData, const ProcessInf
 #endif	
 		Resample(fPitch, uSamplesRequired, afShiftBufferL, afData );
 		
+#if defined(PLATFORM_MACOS) // [Blur2PC] Completed original decode and resample; not a claim of nonzero audio.
+        if(Audio::Mac::DecoderTraceEnabled())Audio::Mac::CountDecoderSuccess(1);
+#endif
+
 		if (m_baseState.uSampleCounter >= m_waveData.uPCMLoopPosEnd)
 		{
 			if (!m_baseState.bLoop)
@@ -849,6 +872,9 @@ bool Audio::Core::StereoADPCM4bitDecoder::FillBuffer(F32* afData, const ProcessI
 	AUDIO_PERF_MICRO_EVENT("Audio.Generate.StereoADPCM4bitDecoder.FillBuffer");
 
 	bool bActive = true;
+#if defined(PLATFORM_MACOS) // [Blur2PC] Usage distinguishes an inactive decoder path from a healthy stream.
+    if(Audio::Mac::DecoderTraceEnabled())Audio::Mac::CountDecoderAttempt(2,m_waveData.hWaveServerIndex.IsValid());
+#endif
 	
 	//  get subframe pitch
     F32 fPitch = ADPCM4bitDecoder::GetSubFramePitch(info);
@@ -877,7 +903,8 @@ bool Audio::Core::StereoADPCM4bitDecoder::FillBuffer(F32* afData, const ProcessI
 				uBytesRequired = nrBytesToEnd;
 			}
 
-			if (!IsDataInAvailable(info.decoderDataInfo)) zeroAndReturn = true;
+			const bool dataAvailable=IsDataInAvailable(info.decoderDataInfo);
+			if (!dataAvailable) zeroAndReturn = true;
 			else if (nrBytesAvailable < uBytesRequired)
 			{
 				{
@@ -887,6 +914,18 @@ bool Audio::Core::StereoADPCM4bitDecoder::FillBuffer(F32* afData, const ProcessI
 			
 			if (zeroAndReturn)
 			{
+#if defined(PLATFORM_MACOS) // [Blur2PC] Only observation; keep silence, playhead and source accounting original.
+                if(Audio::Mac::DecoderTraceEnabled()){
+                    U32 reason=0;if(!pWaveStreamData->IsPrimed())reason|=Audio::Mac::DecoderUnprimed;
+                    if(!dataAvailable)reason|=Audio::Mac::DecoderNoData;
+                    if(nrBytesAvailable<uBytesRequired)reason|=Audio::Mac::DecoderInsufficientBytes;
+                    Audio::Mac::RecordDecoderZeroFill({2,(U32)m_waveData.hWaveServerIndex,
+                        pWaveStreamData->hWaveData.GetValue(),m_baseState.uSampleCounter,m_baseState.uSampleIndex,m_waveData.uPCMLoopPosEnd,
+                        pWaveStreamData->u32SourceDataPosition,pWaveStreamData->u32BytesConsumed,nrBytesAvailable,
+                        uSamplesRequired,uBytesRequired,reason,fPitch,pWaveStreamData->IsPrimed(),
+                        pWaveStreamData->IsPlaying(),pWaveStreamData->IsFinished(),m_baseState.bLoop});
+                }
+#endif
 				for (U32 i = 0; i < uFrameLength * 2; i++)
 					afData[i] = 0.f;
 				return true;
@@ -938,6 +977,10 @@ bool Audio::Core::StereoADPCM4bitDecoder::FillBuffer(F32* afData, const ProcessI
 
 		Resample(fPitch, uSamplesRequired, afShiftBufferL, afShiftBufferR, afData, afData+ uFrameLength);
 		
+#if defined(PLATFORM_MACOS) // [Blur2PC] Completed original decode and resample; not a claim of nonzero audio.
+        if(Audio::Mac::DecoderTraceEnabled())Audio::Mac::CountDecoderSuccess(2);
+#endif
+
 		if (m_baseState.uSampleCounter >= m_waveData.uPCMLoopPosEnd)
 		{
 			if (!m_baseState.bLoop)

@@ -64,15 +64,22 @@ C_LockedRect C_Surface::LockRect(U32 flags) {
         auto& s=*(m_Surface->resolve?m_Surface->resolve:m_Surface);std::lock_guard<std::mutex> guard(s.mutex);
         if(s.locked||s.recording||!s.wait())return {};
         const U64 imageBytes=U64(s.pitch)*((s.height+s.block-1)/s.block);
-        s.staging=[s.texture.device newBufferWithLength:imageBytes*s.depth options:MTLResourceStorageModeShared];
-        if(!s.staging)return {};
-        auto command=[s.queue commandBuffer];auto blit=[command blitCommandEncoder];
-        if(!command||!blit){s.staging=nil;return {};}
-        [blit copyFromTexture:s.texture sourceSlice:0 sourceLevel:0 sourceOrigin:MTLOriginMake(0,0,0)
-                   sourceSize:MTLSizeMake(s.width,s.height,s.depth) toBuffer:s.staging destinationOffset:0
-          destinationBytesPerRow:s.pitch destinationBytesPerImage:imageBytes];
-        [blit endEncoding];[command commit];[command waitUntilCompleted];
-        if(command.status!=MTLCommandBufferStatusCompleted){s.staging=nil;return {};}
+        // [Blur2PC] The preceding resource wait is deliberately unchanged: a
+        // pending upload may still read these staging bytes, even on another queue.
+        // Only a valid CPU-authored mirror avoids a redundant GPU readback.
+        if(!s.cpuMirror||!s.cpuMirrorValid||!s.staging){
+            s.cpuMirrorValid=false;
+            s.staging=[s.texture.device newBufferWithLength:imageBytes*s.depth options:MTLResourceStorageModeShared];
+            if(!s.staging)return {};
+            auto command=[s.queue commandBuffer];auto blit=[command blitCommandEncoder];
+            if(!command||!blit){s.staging=nil;return {};}
+            [blit copyFromTexture:s.texture sourceSlice:0 sourceLevel:0 sourceOrigin:MTLOriginMake(0,0,0)
+                       sourceSize:MTLSizeMake(s.width,s.height,s.depth) toBuffer:s.staging destinationOffset:0
+              destinationBytesPerRow:s.pitch destinationBytesPerImage:imageBytes];
+            [blit endEncoding];[command commit];Metal::TraceCommandWait(command,Metal::Trace::Phase::DownloadWait,&s);
+            if(command.status!=MTLCommandBufferStatusCompleted){s.staging=nil;return {};}
+            s.cpuMirrorValid=s.cpuMirror;
+        }
         s.locked=true;s.readOnly=flags&16U;s.owner=std::this_thread::get_id();
         return {static_cast<U8*>(s.staging.contents),s.pitch};
     }
@@ -89,7 +96,7 @@ void C_Surface::UnlockRect() {
                        sourceSize:MTLSizeMake(s.width,s.height,s.depth) toTexture:s.texture destinationSlice:0 destinationLevel:0 destinationOrigin:MTLOriginMake(0,0,0)];
             [blit endEncoding];[command commit];s.pending=command;
         }
-        s.locked=false;s.owner={};s.staging=nil;
+        s.locked=false;s.owner={};if(!s.cpuMirror)s.staging=nil;
     }
 }
 }

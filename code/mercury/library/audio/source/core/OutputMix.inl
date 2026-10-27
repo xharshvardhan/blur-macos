@@ -38,7 +38,12 @@ void Audio::Core::Engine::MixStereo(const F32* pfIn, F32* pfOut, U32 uChannels)
 		for (U32 j = 0; j < uFrameLength; j++)
 		{
 			pfOut[j * uChannels] += pfIn[j];
+#if defined(PLATFORM_MACOS) // [Blur2PC] Original Output/Input/Renderer buses contain independent 128-sample channel planes.
+            pfOut[j * uChannels + 1] += pfIn[j + uFrameLength];
+#else
+            // [Blur2PC] Preserve the recovered Windows adjacent-sample behavior.
 			pfOut[j * uChannels + 1] += pfIn[j + 1];
+#endif
 		}
 	}
 }

@@ -59,7 +59,7 @@ static void algorithms(){
         std::fill(result.begin(),result.end(),0.f);mix.MixMono(a.data(),result.data(),channels);
         for(U32 i=0;i<uFrameLength;++i)require(channels==2?(result[i*channels]==a[i]&&result[i*channels+1]==a[i]):result[i*channels+2]==a[i],"Original mono output routing changed");
         std::fill(result.begin(),result.end(),0.f);mix.MixStereo(stereo.data(),result.data(),channels);
-        for(U32 i=0;i<uFrameLength;++i)require(result[i*channels]==stereo[i]&&result[i*channels+1]==stereo[i+1],"Original PC adjacent-sample stereo convention changed");
+        for(U32 i=0;i<uFrameLength;++i)require(result[i*channels]==stereo[i]&&result[i*channels+1]==stereo[i+uFrameLength],"Native original-renderer stereo plane routing changed");
     }
 }
 struct RenderFixture {

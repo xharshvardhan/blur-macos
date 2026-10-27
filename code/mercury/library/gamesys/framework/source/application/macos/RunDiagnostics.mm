@@ -13,6 +13,8 @@
 #include <filesystem>
 #include <stdexcept>
 #include <vector>
+#include <chrono>
+#include <fstream>
 namespace Framework::Mac {
 namespace {
 struct Diagnostics {
@@ -23,7 +25,13 @@ struct Diagnostics {
     double windowStart=0,lastFrame=0,maxInterval=0;
     U64 callbacks=0,basePresents=0,lastPresents=0;
     const Display::C_Device* counterOwner=nullptr;
+    // [Blur2PC] Reserve before Run; never allocate or write files in a frame.
+    std::string tracePath;
+    std::vector<NativeFrameTiming> trace;
+    std::uint64_t traceDropped=0,traceLastEnd=0;
+    bool traceFinished=false;
 } diagnostics;
+constexpr std::size_t FrameTraceCapacity=65536;
 // Tick is invoked once after actual OnRender/endRender. This wall-clock
 // observation is independent of the fixed simulation-tick timer. The native
 // counter measures submitted presents, not compositor/displayed GPU frames.
@@ -89,6 +97,33 @@ void ConfigureRunDiagnostics(const std::string& pngPath,double captureAfterSecon
     diagnostics={pngPath,captureAfterSeconds,quitAfterSeconds,false,false};
     const char* frames=std::getenv("BLUR_MAC_FRAME_DIAGNOSTICS");
     diagnostics.framesEnabled=frames&&std::strcmp(frames,"1")==0;
+    const char* trace=std::getenv("BLUR_MAC_FRAME_TRACE_FILE");
+    if(trace&&*trace){
+        if(!std::filesystem::path(trace).is_absolute())throw std::invalid_argument("Native frame trace requires an absolute output path");
+        diagnostics.tracePath=trace;diagnostics.trace.reserve(FrameTraceCapacity);
+    }
+}
+bool NativeFrameTraceEnabled(){return !diagnostics.tracePath.empty()&&!diagnostics.traceFinished;}
+std::uint64_t NativeFrameClockNS(){return std::uint64_t(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count());}
+void RecordNativeFrameTiming(const NativeFrameTiming& timing){
+    if(!NativeFrameTraceEnabled())return;
+    if(!(timing.beginNS>=diagnostics.traceLastEnd&&timing.pollEndNS>=timing.beginNS&&timing.updateEndNS>=timing.pollEndNS&&timing.renderEndNS>=timing.updateEndNS&&timing.diagnosticsEndNS>=timing.renderEndNS&&timing.simulationTicks<=4))
+        throw std::invalid_argument("Native frame trace has unordered phases or invalid simulation ticks");
+    diagnostics.traceLastEnd=timing.diagnosticsEndNS;
+    if(diagnostics.trace.size()<FrameTraceCapacity)diagnostics.trace.push_back(timing);
+    else ++diagnostics.traceDropped;
+}
+void FinishRunDiagnostics(){
+    if(!NativeFrameTraceEnabled())return;
+    std::ofstream output(diagnostics.tracePath,std::ios::binary|std::ios::trunc);
+    if(!output)throw std::runtime_error("Native frame trace output could not be opened");
+    output<<"{\"kind\":\"header\",\"version\":1,\"clock\":\"std::chrono::steady_clock_ns\",\"capacity\":"<<FrameTraceCapacity<<"}\n";
+    for(const auto& frame:diagnostics.trace)
+        output<<"{\"kind\":\"frame\",\"steady_ns\":"<<frame.beginNS<<",\"poll_end_ns\":"<<frame.pollEndNS<<",\"update_end_ns\":"<<frame.updateEndNS<<",\"render_end_ns\":"<<frame.renderEndNS<<",\"diagnostics_end_ns\":"<<frame.diagnosticsEndNS<<",\"simulation_ticks\":"<<frame.simulationTicks<<"}\n";
+    output<<"{\"kind\":\"summary\",\"written\":"<<diagnostics.trace.size()<<",\"dropped\":"<<diagnostics.traceDropped<<",\"complete\":true}\n";
+    output.close();
+    if(!output)throw std::runtime_error("Native frame trace output write failed");
+    diagnostics.traceFinished=true;
 }
 void TickRunDiagnostics(double elapsedSeconds){
     const bool capture=!diagnostics.captureAttempted&&!diagnostics.pngPath.empty()&&diagnostics.captureAfter>=0;

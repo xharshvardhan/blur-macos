@@ -211,6 +211,7 @@ struct C_Context::Impl {
         endEncoder(); // [Blur2PC] Resume query counting only for subsequent engine draws.
     }
     const Pipeline& pipeline() {
+        Metal::Trace::EncodingScope trace(Metal::Trace::Encoding::Pipeline);
         require(vertex&&pixel&&declaration,"Draw requires shaders and a vertex declaration");
         require(!vertex->unsupportedImages&&!pixel->unsupportedImages,"Shader uses an unsupported image binding type");
         require(vertex->library.device==device->device&&pixel->library.device==device->device,"Shader belongs to another GPU");
@@ -280,6 +281,7 @@ struct C_Context::Impl {
         return pipelines.emplace(key,std::move(compiled)).first->second;
     }
     void constants(const std::shared_ptr<Metal::Shader>& shader,bool vertexStage,const std::array<U32,16>& requiredBytes) {
+        Metal::Trace::EncodingScope trace(Metal::Trace::Encoding::Constants);
         auto& bank=vertexStage?vertexConstants:pixelConstants;
         std::array<F32,32> lodState{};
         auto& textureState=vertexStage?vertexTextures:pixelTextures;
@@ -332,6 +334,7 @@ struct C_Context::Impl {
         auto result=[device->device newSamplerStateWithDescriptor:d];require(bool(result),"Native sampler creation failed");samplers.emplace(std::move(key),result);return result;
     }
     void textures(const std::shared_ptr<Metal::Shader>& shader,bool vertexStage){
+        Metal::Trace::EncodingScope trace(Metal::Trace::Encoding::Textures);
         auto& slots=vertexStage?vertexTextures:pixelTextures;
         for(const auto& binding:shader->textures){
             const auto& state=slots[binding.slot];
@@ -362,6 +365,7 @@ struct C_Context::Impl {
         }
     }
     void draw(E_PrimitiveType type,U32 start,U32 count,bool indexed,S32 base,U32 minIndex,U32 vertexCount) {
+        Metal::Trace::EncodingScope trace(Metal::Trace::Encoding::Draw);
         @autoreleasepool {
             check(true);auto primitive=primitiveType(type);if(!count||(type==E_PrimitiveType_TriangleFan&&count<3))return;
             require(colours[0]&&vertex&&pixel&&declaration,"Incomplete draw state");
@@ -545,6 +549,7 @@ void C_Context::CopySurfaceRegion(const C_Surface* destination,const C_Surface* 
     auto blit=[state.command blitCommandEncoder];require(bool(blit),"Native surface copy encoder failed");
     [blit copyFromTexture:from->texture sourceSlice:0 sourceLevel:0 sourceOrigin:MTLOriginMake(sourceX,sourceY,0) sourceSize:MTLSizeMake(width,height,1)
                 toTexture:to->texture destinationSlice:0 destinationLevel:0 destinationOrigin:MTLOriginMake(destinationX,destinationY,0)];[blit endEncoding];
+    {std::lock_guard<std::mutex> guard(to->mutex);to->cpuMirrorValid=false;} // [Blur2PC] Partial GPU writes invalidate the entire canonical CPU mirror.
 }}
 void C_Context::SetViewport(const C_Viewport& viewport){m_Impl->check();require(std::isfinite(viewport.minZ)&&std::isfinite(viewport.maxZ)&&viewport.minZ>=0&&viewport.maxZ<=1&&viewport.minZ<=viewport.maxZ,"Invalid depth viewport");m_Impl->viewport=viewport;m_Impl->viewportExplicit=true;}
 void C_Context::SetColourSurface(U32 index,const C_Surface* surface){m_Impl->check();require(index<4,"Render target index exceeds engine limit");require(!surface||(surface->m_Surface&&surface->m_Surface->texture.device==m_Impl->device->device),"Colour attachment must be created on this GPU");m_Impl->endEncoder();m_Impl->colours[index]=surface?surface->m_Surface:nullptr;

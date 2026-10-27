@@ -47,26 +47,49 @@ U64 C_MetalDevice::GetSubmittedPresentCount()const{if(!m_State)return 0;std::loc
 bool C_MetalDevice::PresentSurface(const C_Surface* surface){
     @autoreleasepool {
         if(!m_State||!surface||!surface->m_Surface)return false;
+        Metal::Trace::Span presentTrace(Metal::Trace::Phase::Present,surface);
         auto resource=surface->m_Surface;
         if(resource->samples>1){if(!resource->resolve)return false;resource=resource->resolve;}
         std::scoped_lock guard(m_State->mutex,resource->mutex);
         auto layer=m_State->layer;
         if(!layer||resource->locked||resource->recording||resource->texture.device!=m_State->device||
            resource->texture.pixelFormat!=MTLPixelFormatBGRA8Unorm||resource->depth!=1||
-           resource->width!=layer.drawableSize.width||resource->height!=layer.drawableSize.height||!resource->wait())return false;
-        auto drawable=[layer nextDrawable];if(!drawable)return false;
+           resource->width!=layer.drawableSize.width||resource->height!=layer.drawableSize.height)return false;
+        id<MTLCommandBuffer> producer;
+        {Metal::Trace::Span trace(Metal::Trace::Phase::PresentResourceWait,resource.get());
+            // Cap outstanding presentations at one. This preserves predecessor
+            // errors and permits the next CPU update to overlap this frame's
+            // rendering without retaining an unbounded chain of commands.
+            if(!m_State->presentation.Retire(Metal::Trace::Phase::PresentResourceWait,resource.get()))return false;
+            if(!resource->waitPresentation()){m_State->presentation.failed=true;return false;}
+            if(resource->pending&&resource->pending.status<MTLCommandBufferStatusCommitted)return false;
+            if(resource->texture.hazardTrackingMode==MTLHazardTrackingModeTracked&&
+               Metal::PresentDependency::CanOverlap(resource->pending,m_State->queue))producer=resource->pending;
+            else if(!resource->wait()){m_State->presentation.failed=true;return false;}
+        }
+        id<CAMetalDrawable> drawable;
+        {Metal::Trace::Span trace(Metal::Trace::Phase::NextDrawable,resource.get());drawable=[layer nextDrawable];}
+        if(!drawable)return false;
         auto destination=drawable.texture;
         if(destination.pixelFormat!=resource->texture.pixelFormat||destination.width!=resource->width||destination.height!=resource->height)return false;
-        auto command=[m_State->queue commandBuffer];auto blit=[command blitCommandEncoder];if(!command||!blit)return false;
+        auto command=[m_State->queue commandBuffer];if(!command||!command.retainedReferences)return false;
+        auto blit=[command blitCommandEncoder];if(!blit)return false;
         [blit copyFromTexture:resource->texture sourceSlice:0 sourceLevel:0 sourceOrigin:MTLOriginMake(0,0,0)
                    sourceSize:MTLSizeMake(resource->width,resource->height,1) toTexture:destination destinationSlice:0 destinationLevel:0 destinationOrigin:MTLOriginMake(0,0,0)];
         [blit endEncoding];
+        // Allocate the only dependency record before GPU submission. Both Metal
+        // command buffers retain their resources; this record owns no Surface
+        // or device and installs no asynchronous C++ completion callbacks.
+        auto dependency=std::make_shared<Metal::PresentDependency>(producer,command);
         // Apple's drawable scheduler keeps the prior image visible for the
         // requested refresh interval without changing simulation/update time.
         if(m_State->minimumPresentDuration>0)[command presentDrawable:drawable afterMinimumDuration:m_State->minimumPresentDuration];
         else [command presentDrawable:drawable];
-        [command commit];
-        resource->pending=command;m_State->last=command;++m_State->presents;return true;
+        {Metal::Trace::Span trace(Metal::Trace::Phase::PresentSubmit,resource.get(),(__bridge const void*)command);[command commit];}
+        resource->presentation=dependency;m_State->presentation.outstanding=std::move(dependency);
+        resource->pending=command;m_State->last=command;++m_State->presents;
+        if(Metal::Trace::enabled.load(std::memory_order_relaxed))Metal::Trace::PresentEncodingSummary(m_State->presents);
+        return true;
     }
 }
 }

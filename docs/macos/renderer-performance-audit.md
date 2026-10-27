@@ -115,3 +115,45 @@ The diagnostics fixture passes in both standard configurations. Its initially
 incorrect sscanf conversion count and Darwin stdio cached-offset capture were
 fixture defects; descriptor reads now preserve actual captured reports across
 repeated reads. The production frame observer was unchanged by those repairs.
+
+### MAC293: correlate remaining CPU waits with actual frame/audio timestamps
+
+The accepted289 quiet paused scene is a throughput result, not proof that all
+moving-race hitches or audio starvation are resolved. Its separate CPU sample
+contains2889 main-thread observations:1072 in `waitUntilCompleted` (37.1%).
+The sampled wait owners are Present724, surface CPU LockRect320,
+useSurface25 and other3. These are sampled CPU stacks, not GPU execution times.
+The LockRect route is actual `BeginCarEffectTasks -> LockTextureRectCube`, not
+PNG capture. `nextDrawable` has only5 observations in this sample. Removing
+synchronization or reducing image quality based on these totals is not justified.
+
+`BLUR_MAC_METAL_TRACE_FILE=/absolute/path.jsonl` enables a bounded CPU-only trace.
+It uses exactly `duration_cast<nanoseconds>(steady_clock::now().time_since_epoch())`
+and the common `steady_ns` key used by the frame/audio traces. On this Darwin host
+Python's `clock_gettime_ns(CLOCK_MONOTONIC_RAW)` is the matching observational
+clock; `monotonic_ns()` is suitable for deadlines but has a different epoch here.
+No clock offset is silently estimated in the engine.
+
+The262144 preallocated POD records are written without per-event allocation or
+logging. Already completed command waits still execute unchanged but are omitted
+from the trace. Pending/error command waits record begin/end, command status and
+numeric resource/command/thread identities. Additional spans cover Present,
+its resource wait, nextDrawable, submit, downloads and device idle. A successful
+Present records draw/pipeline/constants/textures CPU totals and call counts from
+that render owner since its prior Present. Draw contains the other encoding
+categories; Present/resource-wait/surface-wait may also overlap. These are inclusive
+measurements and must not be added as exclusive costs. A dropped-record count
+qualifies any exhausted trace; it does not silently overwrite history.
+
+The default is disabled. No synchronization, command ownership, presentation,
+resolution, simulation step or resource policy changes. Output occurs only after
+the last participating device's existing WaitIdle/destruction and diagnostic
+writers finish. It contains CPU timestamps, not GPU command start/end or displayed
+frame times. The exact accepted289 optimized lower archive is preserved privately,
+SHA256 `2ac5fe3e47978e7f49adbea46da0e4efb7b48400207b252f0ed06dace2204b3e`.
+
+The CPU-only `metal_trace_test` exercises default-off/relative-path rejection,
+shared session lifetime, exception span completion, concurrent writer/flush
+exclusion, status/identity fields, monotonic begin/end and restart/reset. Actual
+moving-race causal attribution remains pending the coherent frame/audio/backend
+trace run; these diagnostics alone do not establish a repair.

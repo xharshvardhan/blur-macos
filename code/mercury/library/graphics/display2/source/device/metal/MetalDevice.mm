@@ -5,6 +5,99 @@
 #include <mutex>
 #include <stdexcept>
 #include <thread>
+#include <chrono>
+#include <algorithm>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <limits.h>
+#include <pthread.h>
+#include "MetalTrace.h"
+
+
+// [Blur2PC] Preallocated numeric trace: no allocation/logging on encoding or wait paths.
+// A span includes begin/end steady-clock timestamps, not Metal GPU start/end times.
+namespace Display2::Metal::Trace {
+namespace {
+constexpr unsigned capacity=262144;
+struct Record {
+    std::uint64_t start,end,thread,resource,command;
+    std::uint64_t totals[4],counts[4];
+    unsigned phase; int before,after;
+};
+Record records[capacity];
+std::atomic<unsigned> next{0},active{0};
+std::atomic_flag sessionLock=ATOMIC_FLAG_INIT;
+unsigned owners=0;
+char output[PATH_MAX]{};
+thread_local std::uint64_t encodingTotals[4]{},encodingCounts[4]{};
+std::atomic<unsigned> generation{0};
+thread_local unsigned encodingGeneration=0;
+struct Lock { Lock(){while(sessionLock.test_and_set(std::memory_order_acquire))std::this_thread::yield();}
+    ~Lock(){sessionLock.clear(std::memory_order_release);} };
+std::uint64_t Thread(){ std::uint64_t id=0;pthread_threadid_np(nullptr,&id);return id; }
+const char* names[]={"buffer_wait","buffer_retire_wait","surface_wait","surface_retire_wait",
+    "download_wait","device_idle_wait","present_resource_wait","next_drawable","present_submit","present","encoding"};
+}
+std::uint64_t Now() noexcept {
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+}
+void BeginSession() noexcept {
+    Lock lock;
+    if(owners++){return;}
+    next.store(0,std::memory_order_relaxed);output[0]=0;
+    auto path=std::getenv("BLUR_MAC_METAL_TRACE_FILE");
+    if(!path||path[0]!='/'||std::strlen(path)>=sizeof(output))return;
+    std::strcpy(output,path);generation.fetch_add(1,std::memory_order_relaxed);enabled.store(true);
+}
+void EndSession() noexcept {
+    Lock lock;
+    if(!owners||--owners)return;
+    enabled.store(false);
+    // Only diagnostic writers are joined here, after the device's existing WaitIdle.
+    // No GPU completion callback uses the trace or any engine-owned allocation.
+    while(active.load())std::this_thread::yield();
+    if(!output[0])return;
+    auto file=std::fopen(output,"w");
+    if(!file){std::fprintf(stderr,"Native Metal trace output could not be opened\n");return;}
+    unsigned total=next.load();unsigned written=std::min(total,capacity);
+    std::fprintf(file,"{\"type\":\"metal_trace\",\"version\":1,\"clock\":\"steady_clock_ns\",\"capacity\":%u,\"events\":%u,\"dropped\":%u}\n",capacity,written,total-written);
+    for(unsigned i=0;i<written;++i){const auto& r=records[i];
+        std::fprintf(file,"{\"type\":\"%s\",\"steady_ns\":%llu,\"end_ns\":%llu,\"duration_ns\":%llu,\"thread\":%llu,\"resource\":%llu,\"command\":%llu,\"status_before\":%d,\"status_after\":%d",names[r.phase],r.start,r.end,r.end-r.start,r.thread,r.resource,r.command,r.before,r.after);
+        if(r.phase==unsigned(Phase::Encoding))std::fprintf(file,",\"draw_ns\":%llu,\"pipeline_ns\":%llu,\"constants_ns\":%llu,\"textures_ns\":%llu,\"draw_count\":%llu,\"pipeline_count\":%llu,\"constants_count\":%llu,\"textures_count\":%llu",r.totals[0],r.totals[1],r.totals[2],r.totals[3],r.counts[0],r.counts[1],r.counts[2],r.counts[3]);
+        std::fputs("}\n",file);
+    }
+    std::fclose(file);output[0]=0;
+}
+Span::Span(Phase phase,const void* resource,const void* command,int status) noexcept {
+    if(!enabled.load(std::memory_order_relaxed))return;
+    active.fetch_add(1);
+    if(!enabled.load()){active.fetch_sub(1);return;}
+    m_Index=next.fetch_add(1,std::memory_order_relaxed);
+    m_Status=status;
+    if(m_Index<capacity){auto& r=records[m_Index];r={};r.start=Now();r.phase=unsigned(phase);r.resource=reinterpret_cast<std::uintptr_t>(resource);r.command=reinterpret_cast<std::uintptr_t>(command);r.thread=Thread();r.before=status;}
+}
+Span::~Span(){
+    if(m_Index==~0u)return;
+    if(m_Index<capacity){records[m_Index].end=Now();records[m_Index].after=m_Status;}
+    active.fetch_sub(1);
+}
+EncodingScope::~EncodingScope(){if(m_Start){
+    const unsigned current=generation.load(std::memory_order_relaxed);
+    if(encodingGeneration!=current){for(unsigned i=0;i<4;++i){encodingTotals[i]=0;encodingCounts[i]=0;}encodingGeneration=current;}
+    unsigned k=unsigned(m_Kind);encodingTotals[k]+=Now()-m_Start;++encodingCounts[k];}}
+void PresentEncodingSummary(std::uint64_t present) noexcept {
+    if(!enabled.load(std::memory_order_relaxed))return;
+    const unsigned current=generation.load(std::memory_order_relaxed);
+    if(encodingGeneration!=current){for(unsigned i=0;i<4;++i){encodingTotals[i]=0;encodingCounts[i]=0;}encodingGeneration=current;}
+    Span span(Phase::Encoding,reinterpret_cast<const void*>(std::uintptr_t(present)));
+    // Present and draw encoding run on the same original render owner. These are
+    // inclusive CPU totals since its prior Present; draw contains the other fields.
+    // Never sum them as mutually exclusive costs or call them GPU durations.
+    if(span.m_Index<capacity){auto& r=records[span.m_Index];for(unsigned i=0;i<4;++i){r.totals[i]=encodingTotals[i];r.counts[i]=encodingCounts[i];}}
+    for(unsigned i=0;i<4;++i){encodingTotals[i]=0;encodingCounts[i]=0;}
+}
+}
 
 namespace Display2 {
 
@@ -23,10 +116,11 @@ bool C_MetalDevice::CreateNative(void* selected) {
         m_State->context=std::shared_ptr<C_Context>(new C_Context(*this));
         m_State->noCheckNoTrack=C_ContextNoCheckNoTrack(m_State->context);
         m_State->noCheck=C_ContextNoCheck(m_State->context);
+        Metal::Trace::BeginSession();m_State->traceSession=true;
         return true;
     }
 }
-void C_MetalDevice::Destroy() { if(m_State)m_State->context.reset(); WaitIdle(); m_State.reset(); }
+void C_MetalDevice::Destroy() { const bool traced=m_State&&m_State->traceSession;if(m_State)m_State->context.reset(); WaitIdle(); m_State.reset();if(traced)Metal::Trace::EndSession(); }
 C_Context& C_MetalDevice::GetContext() {
     if(!m_State)throw std::logic_error("Metal device is not created");
     if(!m_State->context)m_State->context=std::shared_ptr<C_Context>(new C_Context(*this));
@@ -47,14 +141,16 @@ bool C_MetalDevice::WaitIdle() {
     @autoreleasepool {
     if (!m_State) return true;
     std::lock_guard<std::mutex> guard(m_State->mutex);
+    const bool presentationOK=m_State->presentation.Retire(Metal::Trace::Phase::DeviceIdleWait,m_State.get());
     // Include surface staging uploads, which use the same native queue but
     // are not submitted through the context's last-draw field.
     auto barrier=[m_State->queue commandBuffer];
     if(!barrier)return false;
-    [barrier commit];[barrier waitUntilCompleted];
+    [barrier commit];Metal::TraceCommandWait(barrier,Metal::Trace::Phase::DeviceIdleWait,m_State.get());
     const bool ok=barrier.status==MTLCommandBufferStatusCompleted&&
         (!m_State->last||m_State->last.status!=MTLCommandBufferStatusError);
-    m_State->last=nil;return ok;
+    if(!ok)m_State->presentation.failed=true;
+    m_State->last=nil;return presentationOK&&ok;
     }
 }
 bool C_MetalDevice::CreateVertexBuffer(U32 size, U32 flags, C_VertexBuffer* buffer, void* memory) {

@@ -81,11 +81,16 @@ HRESULT C_Application::Run(){
     // Exact existing PC cadence: accumulate real time, consume at most four
     // whole 1/60-second ticks in one update, drop excess hitch debt, render independently.
     F64 accumulated=1.;auto last=Time::GetPerformanceCounter();const auto runStart=last;constexpr F64 tick=1./60.;
+    const bool traceFrames=Mac::NativeFrameTraceEnabled();
     try{while(m_RunState==E_RunState_Run){
+        Mac::NativeFrameTiming timing;
+        if(traceFrames){timing.beginNS=Mac::NativeFrameClockNS();timing.simulationTicks=0;}
         m_Window.PollEvents();PollPlatformCallbacks();if(m_Window.CloseRequested())RequestShutdown();if(m_RunState!=E_RunState_Run)break;
+        if(traceFrames)timing.pollEndNS=Mac::NativeFrameClockNS();
         const auto now=Time::GetPerformanceCounter();accumulated+=F64(now-last)/F64(Time::GetPerformanceFrequency());last=now;
-        if(accumulated>=tick){const U32 ticks=accumulated>=4*tick?4:U32(accumulated/tick);accumulated-=ticks*tick;if(accumulated>=tick)accumulated=0.;g_Blur2PCForcedFrameTime=F32(ticks*tick);if(m_Interpolation.tick){m_Interpolation.tick();m_Interpolation.tickSeconds(g_Blur2PCForcedFrameTime);}Cam2::I_Feed::Blur2PCAdvanceTick();OnUpdate();}
+        if(accumulated>=tick){const U32 ticks=accumulated>=4*tick?4:U32(accumulated/tick);accumulated-=ticks*tick;if(accumulated>=tick)accumulated=0.;g_Blur2PCForcedFrameTime=F32(ticks*tick);if(m_Interpolation.tick){m_Interpolation.tick();m_Interpolation.tickSeconds(g_Blur2PCForcedFrameTime);}Cam2::I_Feed::Blur2PCAdvanceTick();if(traceFrames)timing.simulationTicks=ticks;OnUpdate();}
         if(m_RunState!=E_RunState_Run)break;
+        if(traceFrames)timing.updateEndNS=Mac::NativeFrameClockNS();
         const F32 alpha=F32(std::min(1.,std::max(0.,accumulated/tick)));Cam2::I_Feed::SetRenderOffset(alpha-1);
         if(m_Interpolation.beginRender)m_Interpolation.beginRender(alpha);
         try{
@@ -93,9 +98,12 @@ HRESULT C_Application::Run(){
             try{OnRender();}catch(...){m_pDisplayDevice->ReleaseThreadOwnership();throw;}m_pDisplayDevice->ReleaseThreadOwnership();
         }catch(...){Cam2::I_Feed::SetRenderOffset(0);if(m_Interpolation.endRender)m_Interpolation.endRender();throw;}
         Cam2::I_Feed::SetRenderOffset(0);if(m_Interpolation.endRender)m_Interpolation.endRender();
+        if(traceFrames)timing.renderEndNS=Mac::NativeFrameClockNS();
         Mac::TickRunDiagnostics(F64(Time::GetPerformanceCounter()-runStart)/F64(Time::GetPerformanceFrequency()));
+        if(traceFrames){timing.diagnosticsEndNS=Mac::NativeFrameClockNS();Mac::RecordNativeFrameTiming(timing);}
     }}catch(const std::exception& error){m_NativeError=error.what();m_RunState=E_RunState_QuitForced;result=E_FAIL;}
     catch(...){m_NativeError="Native application callback raised a non-standard exception";m_RunState=E_RunState_QuitForced;result=E_FAIL;}
+    try{Mac::FinishRunDiagnostics();}catch(const std::exception& error){if(!m_NativeError.empty())m_NativeError+="; ";m_NativeError+=error.what();result=E_FAIL;}
     Cam2::I_Feed::SetRenderOffset(0);g_Blur2PCForcedFrameTime=-1;m_Running=false;
     if(FAILED(result)&&m_pDisplayDevice&&m_pDisplayDevice->InScene()){try{if(m_pDisplayDevice->BeginVerticesLocked())m_pDisplayDevice->FakeEndVertices();m_pDisplayDevice->EndScene();}catch(const std::exception& error){m_NativeError+="; scene cleanup: ";m_NativeError+=error.what();}}
     if(m_ShutdownPending)Shutdown(m_RunState==E_RunState_QuitForced);return result;

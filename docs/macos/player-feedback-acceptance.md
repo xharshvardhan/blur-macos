@@ -128,3 +128,29 @@ caching cannot hide a report after repeated reads.
 The final actual MAC289 process exits with code 0 in 241.73 seconds after its
 240-second diagnostic guard, with no primary failure. This is a guarded benchmark
 exit; the independent MAC285 and MAC283 checks establish ordinary desktop exit.
+
+## Subsequent audio and jitter work: 0.1.3
+
+The follow-up preserves coherent CPU-authored dynamic texture mirrors and
+bounds overlap between retained same-queue presentation and the next CPU
+update. Independent GPU byte/ordering/lifetime/error checks cover the changes.
+Native stereo extraction now reads the right channel from the correct separate
+plane, proven with independent continuous channels through the actual renderer.
+Both final complete suites pass 146/146 (Debug 159.28 s; Speed 100.40 s).
+
+Muted actual 20-car runs complete original menus, finite keyboard driving and
+ordinary race/desktop exits. Longer windows improve measured driving throughput
+from 48.35 to 65.09–66.03 submissions/s; one fully traced window improves p99
+from 30.381 to 21.763 ms. These are render submissions, not displayed FPS.
+An earlier race window has a worse 63.415 ms p99 and 288.956 ms maximum, so
+remaining frame spikes are explicit and universal jitter elimination is not
+claimed. AI/contact states are not deterministic across these races.
+
+Active game audio reaches the SurroundLFE bus, leaving the corrected Stereo bus
+unused in these observations. Menu and race device buffering show no positive
+additional demand, and retained initial ADPCM delays map primarily to environment
+sounds. This does not establish music-only continuity or subjective sound quality.
+The user's race-music symptom remains unresolved. All automated testing keeps
+per-stream mute on; normal launches remain audible. See
+[the full investigation](remaining-audio-jitter.md) and
+[decoder observations](audio-decoder-trace.md) for the exact evidence and limits.

@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
+#include <fstream>
+#include <unistd.h>
 
 void XtLibrary_Application(){}
 static void require(bool value,const char* reason){if(!value)throw std::runtime_error(reason);}
@@ -101,10 +103,50 @@ static void resampledPlayback(){
     std::cout<<"44.1k SDL input/device conversion: device_rate="<<device.deviceRate<<" period="<<device.devicePeriodFrames<<" input_period_ceil="<<expected<<" stable_callbacks="<<after.callbacks-before.callbacks<<" approximate_demand_shortfalls="<<after.demandShortfallCallbacks-before.demandShortfallCallbacks<<'\n';
     require(output.Pause(),"44.1k SDL pause failed");output.Close();output.Close();
 }
+
+// [Blur2PC] Exercise actual callback/writer trace publication, joined flush and
+// bounded overflow; no injected callback, audible PCM or scheduling repair.
+struct TraceFile {
+    std::string path,previous;bool hadPrevious=false;
+    TraceFile(){
+        if(const char* old=std::getenv("BLUR_MAC_AUDIO_TRACE_FILE")){hadPrevious=true;previous=old;}
+        char name[]="/tmp/blur-audio-trace-XXXXXX";const int fd=mkstemp(name);require(fd>=0,"Trace fixture temporary file failed");::close(fd);path=name;
+        require(setenv("BLUR_MAC_AUDIO_TRACE_FILE",path.c_str(),1)==0,"Trace fixture opt-in failed");
+    }
+    ~TraceFile(){if(hadPrevious)setenv("BLUR_MAC_AUDIO_TRACE_FILE",previous.c_str(),1);else unsetenv("BLUR_MAC_AUDIO_TRACE_FILE");::unlink(path.c_str());}
+    static U64 Field(const std::string& line,const std::string& key){const auto p=line.find("\""+key+"\":");require(p!=std::string::npos,"Trace numeric field missing");return std::stoull(line.substr(p+key.size()+3));}
+    void ValidateStall(){
+        std::ifstream file(path);require(bool(file),"Actual trace was not flushed after close");std::string line;bool kinds[24]={};bool demand=false,gap=false;U64 sessions=0,events=0;
+        while(std::getline(file,line)){
+            require(!line.empty()&&line.front()=='{'&&line.back()=='}',"Trace line was truncated");
+            if(line.find("audio_trace_session")!=std::string::npos){++sessions;require(Field(line,"overflow")==0,"Sparse actual trace unexpectedly overflowed");continue;}
+            ++events;const auto kind=Field(line,"kind");require(kind<24,"Trace event kind changed");kinds[kind]=true;
+            const auto now=Field(line,"steady_ns");require(now>0,"Trace lacks absolute common-clock timestamp");
+            require(Field(line,"phase_ns")<=now&&Field(line,"queue_sample_ns")<=now,"Trace snapshot appears newer than recording");
+            if(kind==3||kind==4)demand|=Field(line,"additional_bytes")>0;
+            if(kind==19)gap|=Field(line,"detail_ns")>=50000000;
+        }
+        require(sessions==1&&events>0&&kinds[1]&&kinds[2]&&kinds[3]&&kinds[17]&&kinds[18]&&kinds[19]&&kinds[20]&&kinds[21]&&kinds[22]&&kinds[23]&&demand&&gap,"Actual startup/stall/recovery trace contract missing");
+    }
+};
+static void traceOverflow(){
+    TraceFile trace;Audio::Mac::Playback output;require(output.Open(48000,2)&&output.TraceEnabled(),"Paused trace overflow owner did not open");
+    // Both use the same lock-free reservation path as callback + writer; fields
+    // are explicitly approximate, while every committed slot must be unique.
+    auto publish=[&]{for(U32 i=0;i<5000;++i)output.ObserveProducer(Audio::Mac::ProducerPhase::Idle,nullptr,i,0,0,Audio::Mac::ProducerEvent::Start);};
+    std::thread first(publish),second(publish);first.join();second.join();output.Close();
+    std::ifstream file(trace.path);std::string line;U64 count=0,capacity=0,overflow=0,reserved=0;
+    while(std::getline(file,line)){
+        if(line.find("audio_trace_session")!=std::string::npos){capacity=TraceFile::Field(line,"capacity");overflow=TraceFile::Field(line,"overflow");reserved=TraceFile::Field(line,"reserved");}
+        else{require(TraceFile::Field(line,"sequence")==count,"Trace reservation lost/duplicated a committed slot");++count;}
+    }
+    require(count==capacity&&reserved==10001&&overflow==reserved-capacity,"Trace overflow did not preserve bounded immutable storage");
+}
+
 int main(){
     try{
         SchedulerOwner scheduler;
-        run(false);run(true,24000);run(true,36000);run(true,48000,true);run(false);resampledPlayback();unsetenv("BLUR_MAC_AUDIO_DIAGNOSTICS");
-        std::cout<<"Actual silent SDL/renderer diagnostics opt-in, producer starvation/recovery, approximate demand, format/period and joined restart PASS; no game-music quality claim\n";return 0;
+        run(false);run(true,24000);run(true,36000);{TraceFile trace;run(true,48000,true);trace.ValidateStall();}run(false);resampledPlayback();traceOverflow();unsetenv("BLUR_MAC_AUDIO_DIAGNOSTICS");
+        std::cout<<"Actual silent SDL/renderer diagnostics opt-in, producer starvation/recovery, approximate demand, format/period, bounded timestamp trace and joined restart PASS; no game-music quality claim\n";return 0;
     }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 1;}
 }

@@ -9,6 +9,8 @@
 #include <unordered_map>
 #include <array>
 #include "MetalVertexData.h"
+#include "MetalTrace.h"
+#include "MetalPresentDependency.h"
 namespace Display2 {
 namespace Metal {
 struct Adapter {id<MTLDevice> device;};
@@ -21,11 +23,11 @@ struct Buffer {
     bool dynamic = false;
     std::vector<std::pair<U64,U64>> ranges;
     std::thread::id owner;
-    ~Buffer() { @autoreleasepool { if (pending) [pending waitUntilCompleted]; } }
+    ~Buffer() { @autoreleasepool { if (pending) TraceCommandWait(pending,Trace::Phase::BufferRetireWait,this); } }
     bool wait() {
         @autoreleasepool {
         if (!pending) return true;
-        [pending waitUntilCompleted];
+        TraceCommandWait(pending,Trace::Phase::BufferWait,this);
         const bool ok = pending.status == MTLCommandBufferStatusCompleted;
         pending = nil;
         ranges.clear();
@@ -84,9 +86,13 @@ struct Surface {
     id<MTLCommandQueue> queue;
     id<MTLCommandBuffer> pending;
     id<MTLBuffer> staging;
+    std::shared_ptr<PresentDependency> presentation;
     std::mutex mutex;
     const void* recording = nullptr;
     bool locked = false, readOnly = false;
+    // [Blur2PC] Dynamic CPU-authored, non-renderable subresources may retain their
+    // plain-lock contents. GPU destination copies invalidate these canonical bytes.
+    bool cpuMirror = false, cpuMirrorValid = false;
     std::thread::id owner;
     U32 width=0, height=0, depth=1, pitch=0, bytes=0, block=1;
     E_SurfaceFormat format=E_SurfaceFormat_Unknown;
@@ -94,9 +100,14 @@ struct Surface {
         // Ordinary Metal commands retain the actual texture/staging resources
         // until GPU completion. They do not use this CPU ownership wrapper.
         // An explicitly unretained command still needs the old lifetime barrier.
-        if(pending&&!pending.retainedReferences) [pending waitUntilCompleted];
+        if(pending&&!pending.retainedReferences) TraceCommandWait(pending,Trace::Phase::SurfaceRetireWait,this);
     } }
-    bool wait() { if(!pending)return true; [pending waitUntilCompleted]; bool ok=pending.status==MTLCommandBufferStatusCompleted; pending=nil; return ok; }
+    bool waitPresentation() {
+        if(!presentation)return true;
+        if(!presentation->Wait(Trace::Phase::SurfaceWait,this))return false;
+        presentation.reset();return true;
+    }
+    bool wait() { if(!waitPresentation())return false; if(!pending)return true; TraceCommandWait(pending,Trace::Phase::SurfaceWait,this); bool ok=pending.status==MTLCommandBufferStatusCompleted; pending=nil; return ok; }
 };
 struct Texture {
     id<MTLTexture> linear,srgb;
@@ -121,6 +132,8 @@ struct C_MetalDevice::State {
     id<MTLCommandBuffer> last;
     CAMetalLayer* layer;
     U64 presents=0;
+    Metal::PresentRetirement presentation;
+    bool traceSession=false;
     CFTimeInterval minimumPresentDuration=0;
     std::mutex mutex;
     std::vector<std::unique_ptr<C_VertexDeclaration>> declarations;

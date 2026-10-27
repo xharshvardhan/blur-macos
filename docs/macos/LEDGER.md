@@ -4021,3 +4021,274 @@ bundled. This is localdevelopment packaging, not clean-Mac/notarized/publicbinar
 release evidence. Finalaudio summary19/11261 approximate-demand shortfalls with
 startup/loading/capture included; PCM finite/unclipped. Source-only publication
 uses personal login and separateindex, preserving redacted profile mirror.
+
+## 2026-10-27 — MAC292 timed audio diagnostic baseline
+
+Remaining MAC289 actual totals (19/11,261 approximate demand reports,223.456ms
+max submission gap) do not establish steady starvation. An early frame interval
+223.727ms is suggestive but not causal proof. Approved diagnostics-only source
+adds BLUR_MAC_AUDIO_TRACE_FILE absolute JSONL, common steady_ns clock,8,192
+preallocated immutable slots with atomic reservation/release publication, explicit
+overflow. Callback records first demand/positive additional demand only with
+approximate atomic phase/queue/progress snapshots; no allocation/log/lock or
+queue queries. Writer records actual-period-sized gaps and extended unavailable
+original-frame episodes/recovery. Start/resume/firstsubmission/firstprimed/stop
+markers distinguish startup and retirement from post-prime operation. Original
+queue target, renderer/mix/decoder,priority and sleeps are unchanged.
+
+Writer joins, public SDL callback-detach waits for in-flight callback, stream
+destroys, then append-only trace formatting/writes occur. Multiple raw/movie
+streams have separate session IDs; raw owners have no Engine firstprimed marker.
+Per-stream automated mute beforeResume remains active; system volume unchanged.
+Only SDLPlayback.h/cpp and Engine.cpp production files changed; Engine.h unchanged.
+
+All12 source+fixture TU probes and private links pass across Debug/Speed and both
+UBSan configurations. Muted actual SDL fixture matrix passes4/4 under one exclusive
+60s lease: stable12-callback windows24/36/48k +44.1-to-48 conversion add zero demand
+shortfalls; original120ms producer stall reaches timed gap/demand/starvation and
+recovers; trace lifecycle/flush assertions and concurrent8,192-slot saturation
+with exact overflow pass. Private copied archives only; lease released. Source
+frozen. Proofs _work/build/macos/audio-trace-agent; parent coherent moving-game
+trace correlation remains required before any repair or music-quality claim.
+
+## MAC293 — bounded backend CPU-wait/frame correlation diagnostics
+
+Owner `/root/metal_occlusion`. Actual289 sampled main thread has1072/2889 wait
+observations, chiefly Present724 and actual car-effect cube LockRect320. This
+supports instrumenting both presentation and map/download boundaries, not
+removing waits or claiming a GPU bottleneck. Added private MetalTrace.h and
+existing MetalDevice.mm trace implementation, wait instrumentation in native
+Buffer/Surface/WaitIdle/LockRect and Present phases, plus per-Present inclusive
+Context encoding counters. Default off; common steady-clock epoch ns; bounded
+262144 POD records; only final-device post-WaitIdle flush; no resource/sync/quality
+changes. All16 affected-TU probes across four configurations pass. Exact289 Speed
+lower archive preserved privately with SHA2ac5fe3e47978e7f49adbea46da0e4efb7b48400207b252f0ed06dace2204b3e.
+Muted CPU trace lifecycle checks4/4 PASS (Debug/Speed/UBSan/SpeedUBSan, halt-on-error),
+including writer/flush concurrency and restart. Production/fixture frozen, private
+archive/link/runtime leases released to root. Coherent actual moving-game trace
+integration remains pending; no repaired-audio/hitch claim from instrumentation.
+
+MAC292 read-only thread follow-up: actual Renderer producer and Engine writer use
+independent raw std::threads; native audio Thread stores but does not apply ctor
+priority and supports only normal SetPriority. Actual loader below-normal request
+is rejected/ignored; original PC producer highest/time-critical guards exclude
+native. Generic MT/TL worker QoS mapping is real but bypassed by these audio
+threads. System callback runs stream/object update under the System lock and flushes
+real shared audio scheduler jobs before ring publication. Existing native audio
+policy gives worker 4 priority 10 and worker 5 priority 6; most other queues exclude worker 4.
+No normal main/render-tick dependency found; producer is paced by device/ring
+backpressure, PS3 event and explicit movie capture distinct. Timed phase 6 cannot
+alone distinguish scheduling/lock/job/stream cause; original dropped counter is
+per unsuccessful poll. Source contracts documented in audio-timed-trace.md; all
+production remains frozen, no priority/sleep/policy change or extra runtime.
+
+
+## MAC298 — preserve dynamic CPU texture contents without repeated GPU download
+
+Owner `/root/metal_occlusion`. Actual296 qualified90-second unpaused/no-input
+window contains31851 download waits/5.39seconds; complete/drop-free traces, not a
+claim that downloads explain every frame hitch. Source shows the focused-vehicle
+six-face8×8 light cube is completely CPU generated. Implemented dynamic/non-depth/
+non-render texture-subresource mirrors with persistent staging. Every existing
+Surface wait, recording/locking/thread guard and upload pending/queue assignment
+is retained. GPU CopyTexture and CopySurfaceRegion invalidate destination mirrors;
+source-only samples/Present do not. Static assets and render/depth/MSAA stay uncached.
+
+All16 changed-source/fixture probes and all4 coherent21-source lower closures
+PASS. Muted GPU fixture4/4 PASS with Metal API Validation and halt-on-error UBSan:
+20downloads (18 initial face/mips +2 static), actual GPU byte rows and partial CPU
+preservation, cube/tail/region GPU-copy invalidation, volume copies/float formats,
+render-target/depth exclusion, invalid/duplicate/wrong-owner map rejection, and
+actual event-gated pending staging-upload/foreign-queue reader barriers. No wait
+was optimized away. Production/fixture frozen; runtime/archive leases released.
+Logs `_work/build/macos/occlusion-agent-cpu-mirror/<configuration>/gpu.log`.
+Actual moving-game before/after throughput/hitch/audio attribution is pending.
+
+MAC298 controlled Speed negative: same pinned298 headers and coherent21-source
+archive, exact pre298 Context/Surfaces/Textures bodies substituted. Independent
+GPU row checks PASS; clean expectedexit1 at56downloads versus20. No Metal/UBSan
+error. Positive4/4 remains20. Source/header SHA manifest under private
+occlusion-agent-cpu-mirror/control-source; all runtime/archive leases released.
+
+## 2026-10-27 — MAC301 native stereo signal layout
+
+MAC296 timed data contains no positive additional SDL demand or extended producer
+starvation. Its 33 gaps (21.3486–29.1401 ms, always 128 frames queued) fit ordinary
+1,024-frame device consumption/refill from 1,152 frames, not measured underruns.
+No priority, startup or queue repair follows. MAC300 priming work put on hold
+before any production change in favor of a stronger signal-layout fault.
+
+Actual original Output::MoveAudio writes separate 128-sample channel planes into
+renderer Input; producer ring preserves those planes. Inherited output adapter
+selected right from input[j+1], substituting shifted left samples and crossing
+into right-plane start at each last sample. This is documented recovered Windows
+behavior, so only the native branch now reads right input[j+uFrameLength]. Windows
+recovered branch and original left/downmix/other-channel semantics are preserved.
+The native difference is justified by actual renderer signal correctness, not a
+claim about different retail disassembly.
+
+New audio_stereo_planes_test uses actual Output/Input/Renderer producer ring
+with independent continuous 317/733 Hz channels and native 2/6/8-channel mapping.
+Four preserved-old controls exit clean expected1 with left error0, right error
+0.649989 and boundary jump0.621045. All four candidates exit0 with left/right
+error0/0 and boundary0.0381786. Additional actual Engine writer1.25s path verifies
+nonzero independent planes, zero routing error, distinguishable old mapping,
+bounded private signal statistics and joined teardown. Twelve final TU probes
+and private links pass across Debug/Speed plus UBSan variants. Runs serialized
+with per-stream mute1; system volume untouched. No shared archive/build writes.
+
+Engine.cpp opt-in BLUR_MAC_AUDIO_PCM_STATS_FILE allocates512 writer-only entries
+before Resume, samples no more than once per second, emits common steady_ns,
+all-bus energies, actual/hypothetical routing error and boundary deltas only after
+join/stream retirement. No PCM samples/assets written, callback unchanged,
+nonfinite observations retained without invalid JSON. Existing constant-channel
+audio_core assertion updated; meaningful differential is the real graph fixture.
+Source frozen; stereo-audio-layout.md records provenance, source route and sparse
+statistics limits. Parent actual303/304 game and subjective music acceptance still
+pending; nonzero stereo bus cannot isolate music from simultaneous effects.
+
+MAC302 source/fixture frozen by controls_options: replace only eligible tracked,
+retained, committed samequeue producer CPU waits with queue ordering and a
+shared callback-free producer/consumer retirement record. Device holds at most
+one outstanding present; the next valid Present retires it before another
+submission, including sourceA→sourceB. Surface aliases and WaitIdle preserve
+both command failures, even after eager alias retirement; terminal record
+releases command references and device error remains sticky. Crossqueue and
+unretained paths still wait; uncommitted path rejects; existing mirror298
+fields/body and Context acquisition waits remain unchanged. Consumer retained
+ownership is checked explicitly. No source/GPU build run by this subagent.
+New present_dependency_test.mm authors deterministic failure/release cases and
+real gated work with independent SurfaceB cap oracle, alias exact readback,
+retained lifetime, fallback and clean worker unblock/join. Parent owns target
+integration, coherent lower-backend rebuild, hardware execution, full suites
+and actual correlated race comparison. Source freeze SHA prefixes: Native
+47c4ff37, dependency87b00c3b, Present0341f325, Devicecd4d33c7,
+fixturebc7d15a9. See present-overlap-plan.md for limits; wait removal is not yet
+an actual-game performance claim.
+
+## MAC294/MAC303 — coherent integration and baseline
+
+Common-clock frame/audio/Metal diagnostics compiled and focused checks pass in Debug/Speed. Actual296 no-input90s qualified, observer typedboolean false-negative retained; supplemental original exits0/282.654s. Corrected observer297 completes both quiet windows, five finite WASDholds, normal exits0/309.302s, immutable285source unchanged. Baseline moving mean20.682ms/p9930.381/max95.575; no positive SDLdemand in either296/297. Stereo signal control then proves native PCM plane corruption, separate from buffer starvation. Mirror298 positive4/4GPU and oldbodynegative56vs20downloads; audio301 oldnegative4/4/candidatepositive4/4;302 independentreview+frozen boundedrecord. Coherent full builds succeed, Speed145/145PASS; Debug and sanitized302 runtime pending. Frozen23production+fixtureSHA proof at _work/publication/mac303-source-freeze.json. Signed0.1.3build303 stage ready; final303fulltrace and304minimal actual moving runs pending. All tests stream-muted beforeResume, no systemvolume changes.
+
+## 2026-10-27 — MAC305 streamed decoder observations frozen
+
+Added default-off `BLUR_MAC_AUDIO_DECODER_TRACE_FILE` diagnostics to the actual
+mono/stereo ADPCM FillBuffer source-hole branches. No zero-fill, source read,
+playhead, resampling, priority or output queue policy changed. Unsampled usage
+counters distinguish mono/stereo, resident/streamed attempts, completed decode
+and zero-fill; retained events include original global StreamHandle plus local
+index, source/playhead/end/available/required positions, pitch and primed/playing/
+finished/loop/reason state. Common `steady_ns` aligns with existing frame/audio/
+Metal traces. Fixed BSS ring retains first64 then every64th decision, capacity8192
+with explicit overflow. Decoder hot path has no allocation/logging/game lock;
+lock-free atomic requirement is compile-checked.
+
+Renderer successful Init acquires one diagnostic session before producer Start;
+invalid configuration stops its newly acquired writer and returns false.
+Different-owner retirement/duplicate acquisition are rejected. Quality writer
+restarts do not retire the session. Final drain is after the original renderer
+producer joins, whose System/ObjectManager callback flushes decoder tasks before
+returning. The ring has process lifetime, avoiding pointer-load/refcount/free
+races. Trace summaries require ordinary completed owner retirement; an empty
+file after a crash/kill is not a zero-hole result.
+
+New `audio_decoder_trace_test.cpp` uses original WaveStreamData readers and actual
+mono/stereo FillBuffer with authored VAG packets: priming, no data, insufficient
+bytes, unchanged zero/consumption behavior, nonzero successful recovery,540006
+real zero-fill calls across concurrent separate decoders, bounded retention/
+overflow and usage accounting, disabled/failed/duplicate owner, quality restart,
+repeated lifetime, and a real producer callback decoding after the SDL writer
+has joined. Final all4 configurations:16/16 source/fixture compilations,4/4 private
+links and4/4 stream-muted runtimes exit0. Logs/proofs are under
+`_work/build/macos/audio-decoder-trace-agent/` (probes.json/runtime.json). An initial
+invalid simultaneous-Renderer host case crashed because the recovered batch
+queue is static; replaced only that fixture prerequisite with direct trace-owner
+API checks. The crash evidence remains private. Sanitized private archives also
+needed current MAC170 Instance/core and SDLPlayback objects to match current
+headers; no production fix arose from those stale objects.
+
+Parent owns coherent full-suite/build308 integration and actual menu/race/current
+versus older-GPU evidence. The user's report is race audio through Mac speakers;
+recent zero SDL demand observations do not prove upstream source continuity.
+MAC303 captured nonzero SurroundLFE and no Stereo signal, so MAC301's independent
+stereo correction is not claimed as the cause or resolution of that race issue.
+No music-isolation or completed music-repair claim. See audio-decoder-trace.md.
+
+## 2026-10-27 — MAC305 completed MAC306/308/309 observations
+
+Read-only analysis after ordinary exit: MAC306 menu observed actual music/menu/
+effects/voice volumes 7, quality 0 and music_mode 2 (source means Surround, not
+music off). Stereo had 35,509 attempts, 31,739 streamed, 35,509 successful decodes
+and zero holes; mono had zero attempts. MAC308 actual early race/current renderer:
+mono had 1,158,664 attempts/successes, all resident; stereo had 550,161 attempts,
+105,380 streamed and 550,101 successes, with all 60 holes retained and overflow 0.
+All 60 had sample/index/source/consumed positions 0; 14 unprimed and 46 primed but
+empty. Twenty-four occurred inside the finite-W 60-second window. MAC309 previous
+renderer pressure baseline: mono had 1,151,806 resident attempts/successes; stereo
+had 540,453 attempts, 105,770 streamed and 540,384 successes, with 69 holes but only
+65 retained. All 65 retained positions were 0; 27 retained in the finite-W window.
+Four later holes were intentionally unsampled, so their positions are unknown.
+No blanket no-midstream-hole claim. Both bounded race experiments had ordinary
+exit 0 and no positive SDL input-demand observations; all remained stream-muted.
+
+Independent sparse original BANK/WAVE metadata correlation read only 29,932 bytes
+from 67 raw root_streaming BAF banks/261 ADPCM headers, with no sample extraction.
+Original WaveBankManager maps uPCMLoopPosEnd directly from ADPCM uNrSamples.
+Periodic paired race start lengths match env_battle front/rear waves, including
+04/05/06/07/08 and MAC309's 09/16/19, not ingamemusic within inspected headers.
+Equal front/rear lengths remain ambiguous. Sample count 960,960 has 21 eligible
+streaming environment intro candidates including Brighton (two resident entries
+excluded); track selection alone does not establish unique identity. Sample
+count 686,208 matches vista music; 4,423,680 matches the looping menu variation.
+Full metadata offsets/matches in
+ignored verification/mac308/decoder-bank-correlation.json; private sparse reader
+runtime/research/inspect_stream_bank_headers.py. Actual source Prime requests
+activation before async first read produces bytes; primed-empty start events
+are not EOF, nor automatically harmless without graph/audibility evidence.
+
+Updated audio-decoder-trace.md and own BOARD row. No production edits, builds,
+game runs or policy fixes for this analysis. Reported perceptual race music
+noise/choppiness remains unresolved; neither zero device demand nor environmental
+source-start identity constitutes a listening or complete music-health proof.
+
+## 2026-10-27 — MAC303/MAC308/MAC310 final integration and delivery
+
+Frozen 27 production/fixture paths pass both complete 146-test suites: Debug
+159.28 s, Speed 100.40 s. Earlier coherent 145-test suites and all four sanitized
+presentation/mirror GPU checks also passed. MAC303/304 longer actual 20-car
+windows show 65.09/66.03 driving submissions/s versus 48.35 baseline; source
+state is unchanged and original exits return 0. Stereo channel repair is proven
+by authored distinct-signal negatives/positives but actual races use SurroundLFE,
+so no race-music resolution follows from that repair.
+
+Final stage308: MAC306 actual menu options/control exits 0/100.470 s. MAC308
+full-trace early race exits 0/233.539 s, zero trace overflow, but p99 63.415 ms and
+maximum 288.956 ms explicitly prevent a universal jitter-improvement claim.
+MAC309 whole-older-GPU private control, same current audio, exits 0/234.563 s;
+46.75 driving Hz, p99 31.530 ms/max65.170 ms. Different contact/AI states limit
+causal comparison; private control is not delivery. Neither has SDL positive
+demand. Decoder/source findings and 309 sparse retention limits are in MAC305.
+
+MAC310 final stage308 with detailed traces off exits normally 0/234.581 s;
+source285 unchanged, actual human/WASD finite-W60s eligibility and movement
+proved. Eight conservative complete5s reports inside driving cover40.053 s:
+69.36 submissions/s, mean14.418 ms/max44.671 ms; p99 unavailable. No-input1s
+is excluded from rate analysis as too short. Frontend observer stopped after
+unavailable loading reply, did not retry input; fresh actual HUD and vehicle
+bookends still establish race eligibility. All tests stream-muted before Resume.
+No screenshot/readback/profiler inside windows. Trace scripts stay private.
+
+Independent bounded source audits found no definite native-only ADPCM or active
+SurroundLFE layout fault. The maintained configurable PSX reference has different
+integer-history semantics, so it is not a bit-exact validation oracle. Reported
+perceptual race music remains unresolved. Do not change decoder/playhead/queue/
+priority/quality/simulation policy without evidence. The verified development package
+contains these proven repairs; no new full-game or multiplayer claim.
+
+MAC310 local delivery completed: ad-hoc signed 0.1.3/build308 app and ZIP pass
+strict signature, complete dependency/notices manifests, ZIP extraction and
+relocated-copy symlink/content checks. Same verified executable is installed in
+ignored _work/run/BlurNativeGame.app; prior delivered app is preserved privately.
+No runtime is launched by packaging or delivery; automated tests remain muted.
+The public source update uses the personal account and isolated curated index;
+original data, profiles, binaries and private research evidence stay excluded.
