@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <cmath>
 #include <cstring>
+#include <cstdio>
+#include <cstdlib>
 #include <stdexcept>
 #include <unordered_map>
 namespace Display2 {
@@ -60,6 +62,9 @@ struct C_Context::Impl {
     std::array<TextureState,16> pixelTextures,vertexTextures;
     U32 maxAnisotropy=1; // D3D9 D3DSAMP_MAXANISOTROPY default.
     std::unordered_map<std::string,id<MTLSamplerState>> samplers;
+    std::string samplerKeyScratch;
+    bool samplerKeyStats=false;
+    U64 samplerRequests=0,samplerKeyGrowthCalls=0,samplerKeyMaxCapacity=0,samplerHits=0,samplerCreated=0;
     std::vector<F32> vertexConstants=std::vector<F32>(1024,0),pixelConstants=std::vector<F32>(1024,0);
     C_Viewport viewport;
     bool viewportExplicit=false,blendEnabled=false,stencilEnabled=false,alphaToCoverageEnabled=false;
@@ -81,7 +86,14 @@ struct C_Context::Impl {
     std::string pipelineKeyScratch;
     std::unordered_map<std::string,id<MTLRenderPipelineState>> clearPipelines;
     Metal::DepthStencilCache depthStencilStates;
-    explicit Impl(C_MetalDevice::State* state):device(state),depthStencilStates(state->device){}
+    // Disabled by default: lifetime integer evidence, never per-draw timing or I/O.
+    bool passStats=false,tilePassReuse=false;
+    U64 passCreations=0,colourSetters=0,depthSetters=0,identicalColour=0,identicalDepth=0,avoidedColourEnd=0,avoidedDepthEnd=0;
+    explicit Impl(C_MetalDevice::State* state):device(state),depthStencilStates(state->device){
+        const char* stats=std::getenv("BLUR_MAC_RENDER_PASS_STATS");passStats=stats&&std::strcmp(stats,"1")==0;
+        const char* tile=std::getenv("BLUR_MAC_TILE_PASS_REUSE");tilePassReuse=tile&&std::strcmp(tile,"1")==0;
+        const char* sampler=std::getenv("BLUR_MAC_SAMPLER_KEY_STATS");samplerKeyStats=sampler&&std::strcmp(sampler,"1")==0;
+    }
     void check(bool active=false)const {
         require(!active||bool(command),"Draw operation requires BeginScene");
         require(!command||owner==std::this_thread::get_id(),"Render context belongs to another thread during its scene");
@@ -112,7 +124,13 @@ struct C_Context::Impl {
         for(auto& surface:usedSurfaces){std::lock_guard<std::mutex> guard(surface->mutex);if(submitted)surface->pending=command;if(surface->recording==this)surface->recording=nullptr;}
         usedBuffers.clear();usedSurfaces.clear();
     }
-    ~Impl(){@autoreleasepool{endEncoder();if(activeQuery)activeQuery->active=false;releaseRecording(false);}}
+    ~Impl(){@autoreleasepool{endEncoder();if(activeQuery)activeQuery->active=false;releaseRecording(false);
+        if(samplerKeyStats)std::fprintf(stderr,"blur2pc.sampler_key_stats requests=%llu capacity_growth_calls=%llu max_capacity=%llu hits=%llu created=%llu entries=%zu\n",
+            static_cast<unsigned long long>(samplerRequests),static_cast<unsigned long long>(samplerKeyGrowthCalls),static_cast<unsigned long long>(samplerKeyMaxCapacity),
+            static_cast<unsigned long long>(samplerHits),static_cast<unsigned long long>(samplerCreated),samplers.size());
+        if(passStats)std::fprintf(stderr,"blur2pc.render_pass_stats passes=%llu colour_setters=%llu depth_setters=%llu identical_colour=%llu identical_depth=%llu avoided_colour_end=%llu avoided_depth_end=%llu\n",
+            static_cast<unsigned long long>(passCreations),static_cast<unsigned long long>(colourSetters),static_cast<unsigned long long>(depthSetters),
+            static_cast<unsigned long long>(identicalColour),static_cast<unsigned long long>(identicalDepth),static_cast<unsigned long long>(avoidedColourEnd),static_cast<unsigned long long>(avoidedDepthEnd));}}
     void useSurface(const std::shared_ptr<Metal::Surface>& surface) {
         if(!surface)return;
         std::lock_guard<std::mutex> guard(surface->mutex);
@@ -162,6 +180,7 @@ struct C_Context::Impl {
             activeQuery->segments.push_back({result,command});
         }
         encoder=[command renderCommandEncoderWithDescriptor:pass];require(bool(encoder),"Metal render encoder creation failed");
+        if(passStats)++passCreations;
         if(activeQuery&&visibility)[encoder setVisibilityResultMode:MTLVisibilityResultModeCounting offset:0];
     }
     void clearRectangle(U32 flags,U32 colour,F32 z,U8 stencil,const C_Viewport& viewport) {
@@ -320,10 +339,15 @@ struct C_Context::Impl {
         auto address=[](U32 v){switch(v){case E_TextureAddress_Wrap:return MTLSamplerAddressModeRepeat;case E_TextureAddress_Mirror:return MTLSamplerAddressModeMirrorRepeat;
             case E_TextureAddress_Clamp:return MTLSamplerAddressModeClampToEdge;case E_TextureAddress_Border:return MTLSamplerAddressModeClampToBorderColor;default:throw std::logic_error("Unsupported sampler address mode");}};
         auto filter=[](U32 v){require(v>=1&&v<=3,"Unsupported sampler min/mag filter");return v==E_TextureFilter_Point?MTLSamplerMinMagFilterNearest:MTLSamplerMinMagFilterLinear;};
-        std::string key;auto append=[&](U32 v){key.append(reinterpret_cast<const char*>(&v),sizeof(v));};
+        // The scene owner serializes this scratch lookup. Inserted map keys own
+        // independent copies; warm lookups retain capacity instead of allocating
+        // and freeing a fresh 32-byte string for every sampler on every draw.
+        auto& key=samplerKeyScratch;const auto beforeCapacity=samplerKeyStats?key.capacity():0;key.clear();
+        auto append=[&](U32 v){key.append(reinterpret_cast<const char*>(&v),sizeof(v));};
         append(s.m_TextureAddressU);append(s.m_TextureAddressV);append(s.m_TextureAddressW);append(s.m_TextureFilterMag);append(s.m_TextureFilterMin);append(s.m_TextureFilterMip);append(s.m_TextureBorderColour);
         append(anisotropy);
-        if(auto found=samplers.find(key);found!=samplers.end())return found->second;
+        if(samplerKeyStats){++samplerRequests;if(key.capacity()>beforeCapacity)++samplerKeyGrowthCalls;samplerKeyMaxCapacity=std::max<U64>(samplerKeyMaxCapacity,key.capacity());}
+        if(auto found=samplers.find(key);found!=samplers.end()){if(samplerKeyStats)++samplerHits;return found->second;}
         auto d=[MTLSamplerDescriptor new];d.sAddressMode=address(s.m_TextureAddressU);d.tAddressMode=address(s.m_TextureAddressV);d.rAddressMode=address(s.m_TextureAddressW);
         d.magFilter=filter(s.m_TextureFilterMag);d.minFilter=filter(s.m_TextureFilterMin);
         require(s.m_TextureFilterMip<=E_TextureFilter_Linear,"Unsupported mip filter");
@@ -333,7 +357,7 @@ struct C_Context::Impl {
             require(s.m_TextureBorderColour==0||s.m_TextureBorderColour==0xff000000||s.m_TextureBorderColour==0xffffffff,"Arbitrary sampler border colour requires shader integration");
             d.borderColor=s.m_TextureBorderColour==0?MTLSamplerBorderColorTransparentBlack:s.m_TextureBorderColour==0xff000000?MTLSamplerBorderColorOpaqueBlack:MTLSamplerBorderColorOpaqueWhite;
         }
-        auto result=[device->device newSamplerStateWithDescriptor:d];require(bool(result),"Native sampler creation failed");samplers.emplace(std::move(key),result);return result;
+        auto result=[device->device newSamplerStateWithDescriptor:d];require(bool(result),"Native sampler creation failed");samplers.emplace(key,result);if(samplerKeyStats)++samplerCreated;return result;
     }
     void textures(const std::shared_ptr<Metal::Shader>& shader,bool vertexStage){
         Metal::Trace::EncodingScope trace(Metal::Trace::Encoding::Textures);
@@ -555,9 +579,17 @@ void C_Context::CopySurfaceRegion(const C_Surface* destination,const C_Surface* 
     {std::lock_guard<std::mutex> guard(to->mutex);to->cpuMirrorValid=false;} // [Blur2PC] Partial GPU writes invalidate the entire canonical CPU mirror.
 }}
 void C_Context::SetViewport(const C_Viewport& viewport){m_Impl->check();require(std::isfinite(viewport.minZ)&&std::isfinite(viewport.maxZ)&&viewport.minZ>=0&&viewport.maxZ<=1&&viewport.minZ<=viewport.maxZ,"Invalid depth viewport");m_Impl->viewport=viewport;m_Impl->viewportExplicit=true;}
-void C_Context::SetColourSurface(U32 index,const C_Surface* surface){m_Impl->check();require(index<4,"Render target index exceeds engine limit");require(!surface||(surface->m_Surface&&surface->m_Surface->texture.device==m_Impl->device->device),"Colour attachment must be created on this GPU");m_Impl->endEncoder();m_Impl->colours[index]=surface?surface->m_Surface:nullptr;
+void C_Context::SetColourSurface(U32 index,const C_Surface* surface){m_Impl->check();require(index<4,"Render target index exceeds engine limit");require(!surface||(surface->m_Surface&&surface->m_Surface->texture.device==m_Impl->device->device),"Colour attachment must be created on this GPU");
+    const auto* next=surface?surface->m_Surface.get():nullptr;const bool same=m_Impl->colours[index].get()==next;
+    if(m_Impl->passStats){++m_Impl->colourSetters;if(same){++m_Impl->identicalColour;if(m_Impl->tilePassReuse&&m_Impl->encoder)++m_Impl->avoidedColourEnd;}}
+    // Identical engine Surface identity changes no pass attachment. Preserve the
+    // live tile contents; explicit resolve/copy/query/clear boundaries still end it.
+    if(!same||!m_Impl->tilePassReuse){m_Impl->endEncoder();m_Impl->colours[index]=surface?surface->m_Surface:nullptr;}
     if(!index){m_Impl->viewportExplicit=false;m_Impl->scissorState.m_ScissorRect={0,0,surface?S32(surface->GetWidth()):0,surface?S32(surface->GetHeight()):0};}}
-void C_Context::SetDepthStencilSurface(const C_Surface* surface){m_Impl->check();require(!surface||(surface->m_Surface&&surface->m_Surface->texture.device==m_Impl->device->device),"Depth attachment must be created on this GPU");m_Impl->endEncoder();m_Impl->depth=surface?surface->m_Surface:nullptr;}
+void C_Context::SetDepthStencilSurface(const C_Surface* surface){m_Impl->check();require(!surface||(surface->m_Surface&&surface->m_Surface->texture.device==m_Impl->device->device),"Depth attachment must be created on this GPU");
+    const auto* next=surface?surface->m_Surface.get():nullptr;const bool same=m_Impl->depth.get()==next;
+    if(m_Impl->passStats){++m_Impl->depthSetters;if(same){++m_Impl->identicalDepth;if(m_Impl->tilePassReuse&&m_Impl->encoder)++m_Impl->avoidedDepthEnd;}}
+    if(!same||!m_Impl->tilePassReuse){m_Impl->endEncoder();m_Impl->depth=surface?surface->m_Surface:nullptr;}}
 void C_Context::Clear(U32 flags,U32 colour,F32 depth,U8 stencil){@autoreleasepool{auto& s=*m_Impl;s.check(true);require(!(flags&~7U),"Invalid native clear flags");require(!(flags&E_Clear_Stencil)||s.hasStencil(),"Stencil clear has no stencil attachment");require(std::isfinite(depth)&&depth>=0&&depth<=1,"Invalid clear depth");
     if(!flags)return;require(bool(s.colours[0]),"Clear requires a render target");
     auto vp=s.viewportExplicit?s.viewport:C_Viewport(0,0,s.colours[0]->width,s.colours[0]->height);

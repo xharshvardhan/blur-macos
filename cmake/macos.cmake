@@ -104,6 +104,18 @@ target_compile_options(blur_mac_depth_state_cache_test PRIVATE -fobjc-arc)
 target_link_libraries(blur_mac_depth_state_cache_test PRIVATE blur_mac_display2_metal)
 add_test(NAME mac_depth_state_cache COMMAND blur_mac_depth_state_cache_test)
 set_tests_properties(mac_depth_state_cache PROPERTIES LABELS "hardware" TIMEOUT 90)
+# [Blur2PC] Exact identical-attachment pass preservation for Apple TBDR.
+add_executable(blur_mac_attachment_rebind_test ${BLUR_TOP}/tools/macos/attachment_rebind_test.mm)
+target_compile_options(blur_mac_attachment_rebind_test PRIVATE -fobjc-arc)
+target_link_libraries(blur_mac_attachment_rebind_test PRIVATE blur_mac_display2_metal)
+add_test(NAME mac_attachment_rebind COMMAND blur_mac_attachment_rebind_test)
+set_tests_properties(mac_attachment_rebind PROPERTIES LABELS "hardware" TIMEOUT 90)
+# [Blur2PC] Actual sampler pixels and warm lookup capacity across map growth.
+add_executable(blur_mac_sampler_key_reuse_test ${BLUR_TOP}/tools/macos/sampler_key_reuse_test.mm)
+target_compile_options(blur_mac_sampler_key_reuse_test PRIVATE -fobjc-arc)
+target_link_libraries(blur_mac_sampler_key_reuse_test PRIVATE blur_mac_display2_metal)
+add_test(NAME mac_sampler_key_reuse COMMAND blur_mac_sampler_key_reuse_test)
+set_tests_properties(mac_sampler_key_reuse PROPERTIES LABELS "hardware" TIMEOUT 90)
 # [Blur2PC] Actual critical filesystem, validator, mip upload and GPU bytes.
 add_executable(blur_mac_dds_single_read_test ${BLUR_TOP}/tools/macos/dds_single_read_test.cpp)
 target_link_libraries(blur_mac_dds_single_read_test PRIVATE blur_mac_display2_metal)

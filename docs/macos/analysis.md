@@ -1861,3 +1861,49 @@ also pass both UBSan builds and seven focused Metal-validation tests. Muted
 actual-game driving/normal exit passes. Sequential race timings are mixed,
 including worse no-input rates and remaining hitches; do not advertise a
 repeatable FPS increase. See [the full evidence and ablations](optimization-host-acceptance.md).
+
+
+## MAC337/338/339 — M4 Pro research and tile-pass preservation
+
+Runtime queries on the actual12CPU(8P4E)/16GPU/24GiB Mac confirm Apple9/Mac2,
+unified memory, BC compression, hardware ray tracing and stage-boundary
+timestamp sampling; Apple10 is false. The idle recommended working-set budget
+was19,069,665,280 bytes, not all installed24GiB. Root's baseline actual MAC337
+HUD profile completed original20-car driving/normal exit0/308.026s, source save
+unchanged and sound muted. Typical report-median GPU samples6.150/6.490ms
+(no-input/driving) accompany14.320/13.900ms presented intervals. Repeated HUD
+pairs preclude unique-frame FPS inference. See the full primary-source
+[hardware report](apple-silicon-optimization.md).
+
+SetColourSurface and SetDepthStencilSurface unconditionally ended render
+encoders for identical Surface bindings, including null MRT slots. On Apple's
+tile architecture this is avoidable pass/attachment work. Native Surface texture
+identity is assigned at creation; wrapper aliases share that same owner. The
+new identity check preserves validation and colour0 viewport/scissor resets.
+Clear/resolve/copy/snapshot/query/submission boundaries and load/store policies
+remain unchanged. Initial actualGPU fixture preserves pixels/query256 samples
+and1x/2x/4x resolves with72passes both with/without extra rebinds; it observes
+312colour+84depth avoided live endings. All693 non-notice app resource files
+match the prior version byte-for-byte. See [the precise GPU scope](apple-tile-rebind.md).
+
+The native scheduler's seven-worker cap is part of eight-slot policies/alerts/
+scratch ownership, not CPU affinity. The CAS/yield batch-pool lock and private
+texture transfer path are future attribution candidates; neither is changed
+without measurements. See [the CPU audit](apple-silicon-cpu-audit.md).
+
+
+### MAC337/MAC346 final Apple silicon facts (2026-10-28)
+
+Real20-car context348 made24,134,430 sampler lookups with one lookup-capacity
+growth,24,134,409 hits and21 native entries; counters cover startup through exit.
+The reused eight-word key is copied on insertion; lower GPU oracle/control
+prove exact sample output and warm capacity plateau. Both complete Debug/Speed
+suites153/153, four lower-fixture UBSan checks and12 Metal-validation checks pass.
+No workload/asset/shader/simulation/audio change is made. Pass coalescing stays
+default OFF. Candidate347 was markedly slower in HUD timings; old349 and
+metadata-only350 returned near previous ranges. Cause remains unresolved, no
+FPS/memory/power gain claimed. Game Mode packaging metadata now defaults OFF
+and preserves source policy. Final352 normalized unsigned executable matches
+actual347/350, and all693 non-notice resources match334. See
+[full data and limits](apple-silicon-optimization.md) for adverse samples, exact
+method, hardware capabilities, default choices and next measurement gates.

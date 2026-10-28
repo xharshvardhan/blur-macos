@@ -4683,3 +4683,169 @@ tested. Curated personal source publication preserves frozen code, redacted
 profile data and default index; no game assets, profiles or build outputs.
 Next separate performance work needs reproducible scene/GPU timing and hitch
 attribution; wider SDK scope needs a second actual engine adapter.
+
+
+### MAC338 — exact identical-attachment pass preservation (pending GPU acceptance)
+
+Apple-primary GPU/storage/feature audit identifies redundant same-Surface setter
+endings as a bounded TBDR opportunity. Setters retain all validation and colour0
+viewport/scissor-reset behavior; only actual identity changes end the encoder.
+Explicit resolve/clear/copy/snapshot/query boundaries and resource waits remain.
+Opt-in lifetime integer counters and a real lower-GPU pixel/query/MSAA/MRT fixture
+are implemented and source-frozen. Private four-config Context/fixture object
+probes pass8/8; no GPU or actual speed
+claim is made. Root owns coherent builds, serialized hardware and actual testing.
+See [source contract and limits](apple-tile-rebind.md).
+
+
+## 2026-10-28 — MAC339 Apple silicon CPU/unified-memory source audit
+
+Recorded [apple-silicon-cpu-audit.md](apple-silicon-cpu-audit.md) with current
+source contracts and primary Apple references. The bounded scheduler candidate
+is the native batch-pool CAS/yield lock, conditional on measured contention;
+any comparison must preserve the exact grouped completion/event notification,
+event retirement and pool-replacement lock span. Seven-worker/eight-slot policy
+and scratch ownership prevent a blind increase to the 12-core hardware count.
+Current MT logical recursion, coarse QoS mapping, packed alert lanes, repeated
+allocator classification and shared-buffer/private-texture staging were audited
+as source facts, not proven bottlenecks or permission to change quality/timing.
+
+Read-only discovery confirmed installed CLI sampling/memory tools and public
+Metal timing/counter APIs, while xctrace is unavailable under selected CLT.
+A bounded read of initial actual MAC337 HUD records demonstrated unsafe inferred
+frame IDs due to adjacent-equal/doubled samples; raw driver samples and report
+timestamps must remain qualified, without invented FPS or deduplication. Root
+owns actual capture/window selection and separate hardware/TBDR acceptance.
+
+Verification: exact scoped source reads, installed SDK header/tool discovery,
+Apple primary documentation and documentation diff/whitespace review. No code
+changes, builds, profiling execution, device workloads or game runs by this
+audit. No speedup, peak-memory reduction, priority repair or scheduling defect
+is claimed. Next: attributable job/lock/GPU measurement, then an isolated
+comparison only if the measured cost is material.
+
+## MAC342 claim — 2026-10-28
+
+Owner `/root/controls_options` claims only game staging metadata, its existing
+packaging checks and `game-mode-opt-in.md`. Add current Apple Game Mode support
+key/category to real game bundles, preserve overrides and unrelated metadata,
+and use temporary pure metadata/syntax checks only while root owns actual
+runtime. No changes to the independent NativeHost demo, process priorities,
+user settings, rendering quality or scheduling. Activation/performance unverified.
+
+## MAC342 frozen — 2026-10-28
+
+The real game staging metadata now declares `LSSupportsGameMode=true` and
+`LSApplicationCategoryType=public.app-category.games` before ordinary signing.
+The original overrides and unrelated plist fields remain preserved; NativeHost
+and its independently built clients are untouched. The actual staging test now
+asserts both game metadata values. A temporary pure fixture covers the false/other
+category input, existing overrides, preserved fields, rejected-write immutability
+and idempotence. Both Python syntax checks and pure packaging checks exit0.
+
+Apple primary key/category documentation and WWDC25 system-performance guidance
+were checked. No build, stage/sign, hardware/window, game or OS-setting operation
+was performed. Fullscreen Game Mode indicator/activation and performance remain
+unverified. Root owns coherent staging/signature/relocation and any manual
+fullscreen acceptance; no FPS, energy or latency gain is claimed.
+
+
+### MAC339 follow-up — qualified MAC341 owned CPU sample (2026-10-28)
+
+Appended the bounded MAC341 evidence to
+[apple-silicon-cpu-audit.md](apple-silicon-cpu-audit.md). Source proof identifies
+bcec243fcb889ed7aa7f56145a66545a0c9b0c21ef71d0af31dd796d1bcca4ba / build 340;
+three-second owned sample during 30.073s parked original 20-car HUD;
+measurementQualified=false, no input/readback/further measurement IPC, ordinary
+exit 0 / 180.588s. Explicit sample proof takes precedence over the old stale
+generic no-profiler flag; root preserves original and corrected proof.
+
+Main 1,592 observations include OnRender 943 / OnUpdate 620; RecordImpl 285 main and
+400–422 on six workers, often blocked; sampler 143 and malloc_size 277 inclusive
+main. Flush 282 includes 154 ordinary-yield observations, while actual batch-pool
+CAS lock appears only once and grouped completion twice. Counts are stack
+residency, not CPU time, lock durations or disjoint work. No CAS rewrite is
+justified/performed; interpolation lock and lifetime contract remain preserved.
+Root owns separate sampler-key allocation experiment and its acceptance.
+Docs-only follow-up; no source/build/runtime activity by this agent.
+
+
+### MAC346 — sampler key scratch; experimental tile path held default-off
+
+Source/sample-backed bounded change reuses the exact32-byte sampler lookup key
+inside its scene-owned Context, preserving eight-word order and independent map
+key copies. Separate opt-in capacity-growth-call evidence is not all heap/native
+allocation accounting. Tile pass coalescing now requires explicit context-time
+BLUR_MAC_TILE_PASS_REUSE=1; unset retains original endings with all setter reset
+and validation semantics. Updated attachment fixture tests both policies; new
+sampler GPU oracle covers2D/3D/both-stage/LOD/state alternation, map growth and
+invalid retry. Context + two fixture object probes pass12/12 in four configs.
+No new GPU/speed result claimed; root owns coherent serialized qualification.
+Exact340 source and hashes preserved privately. [Details](apple-tile-rebind.md).
+
+## MAC342 explicit-opt-in refinement claim — 2026-10-28
+
+Root assigned the two metadata Python files, dedicated doc and now only
+`tools/macos/stage_bundle.cmake` to make Game Mode packaging explicit/default OFF.
+Earlier source/test history is preserved at ignored
+`_work/publication/mac342-before-explicit-opt-in/` with hashes. Default metadata
+updates must preserve existing support/category values or their absence; only
+explicit ON adds true/Games. Root owns unresolved actual comparison/ablation.
+Only pure temporary metadata/syntax checks are authorized here.
+
+## MAC342 explicit-opt-in refinement frozen — 2026-10-28
+
+`BLUR_BUNDLE_GAME_MODE` defaults OFF. CMake forwards `--game-mode` only for
+explicit ON. The backward-compatible `metadata(..., game_mode=False)` preserves
+source support/category values and their absence; false does not remove an
+existing true/Games policy. Explicit true inserts/overrides the two values.
+The source-app staging fixture requests ON explicitly and still checks existing
+metadata overrides. NativeHost/demo paths remain untouched.
+
+Verification: both Python syntax checks exit0; temporary pure packaging fixture
+passes default false/category preservation, absent keys/no additions, existing
+true/Games preservation, idempotence, rejected-write immutability and original
+overrides. Actual helper CLI against an authored temporary plist passes default
+no-addition, explicit ON and subsequent default preservation. No CMake build,
+staging/signing, game, GPU/window, process/OS setting or current quiet-run
+operation was performed. Earlier implementation/test-history copies and hashes
+remain ignored at `_work/publication/mac342-before-explicit-opt-in/`. Root owns
+unresolved same-executable metadata comparisons and final packaging acceptance;
+no activation or performance gain/regression attribution is claimed.
+
+
+### MAC339 final documentation — MAC348 counters / MAC350 metadata control
+
+Updated only the owned CPU audit and this ledger entry. Recorded actual lifetime
+sampler counts (24,134,430 requests; 24,134,409 hits; 21 states; one lookup growth;
+47-byte retained lookup capacity), explicitly separate from total allocation/FPS
+evidence. Preserved adverse MAC347 timing beside old MAC349 and same-compiled-code
+MAC350 metadata-only control, including unsigned identity hash and re-signing
+distinction. Metadata and CPU causality remain unestablished; no repeatable speed,
+tail, power or peak-memory gain claimed. Root-selected defaults: absent Game Mode
+metadata, CPU key reuse enabled, tile reuse off; CAS/interpolation locks preserved.
+Parent reports both final 153-test suites plus four UBSan and twelve Metal checks
+passed. This agent performed documentation/link/whitespace checks only, with no
+source/build/runtime changes. Root retains combined report and delivery ownership.
+
+
+## 2026-10-28 — MAC337 final hardware phase / MAC346 acceptance (Codex /root)
+
+Continued after user stop/resume. Apple M4 Pro12CPU/16GPU/24GiB verified via
+local capabilities and Apple primary research. Frozen exact sampler scratch
+reuse retains filters/key bytes/ownership. Full Debug/Speed153/153, four lower
+UBSan checks,12 Metal-validation tests and old-local-key negative control pass.
+Actual348 lifetime24,134,430 requests/one key-capacity growth; actual350 muted
+20-car driving and original normal exit pass. All693 resource files unchanged.
+Adverse347 HUD run retained; old349 and metadata-only350 return near prior
+ranges without proving causality. Tile coalescing and Game Mode metadata remain
+explicit opt-ins, default OFF. No FPS/power/memory gain claimed.
+
+Metadata helpers alone refined after C++ qualification;43-path final freeze
+retains exact compiled code, explicit-ON source staging/signature/relocation
+reruns and default-OFF352 staging matches actual350 normalized executable.
+Final ZIP/standard delivery/publication proofs under ignored MAC352 records.
+No raw data, saves or diagnostic payloads published. Independent NativeHost
+package remains unchanged. Next: controlled GPU timeline/route measurement
+before any further GPU scheduling change; second Mac/remote racing/notarization
+remain separate acceptance limits.

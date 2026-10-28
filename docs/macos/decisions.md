@@ -90,3 +90,37 @@ User authorized subagents, unchanged quality, sound-off actual-game tests and
 completion without repeated small-step confirmations. Personal source-only
 publication authorization remains in force. See
 [qualification](optimization-host-acceptance.md).
+
+
+## MAC-D09 — Hardware-guided Apple silicon optimization (user request, 2026-10-28)
+
+Research and query the actual M4 Pro rather than select optimizations from a
+chip-name string or assume Metal4 implies the newest GPU family. Use Apple's
+primary architecture/resource/scheduling guidance and actual muted game
+profiling. Apply the MLX principle of fitting work and ownership to unified
+memory/execution; do not add a machine-learning dependency to a raster engine
+without a relevant workload.
+
+The first bounded change preserves a live encoder across identical native
+attachment bindings while retaining original viewport/scissor and all required
+resource/query/clear boundaries. Gate with exact GPU outputs/count controls,
+complete coherent suites and original frontend/race/exit. Keep resolution,
+shaders, effects, formats, synchronization, simulation and audio unchanged.
+
+Hardware capabilities and profiler sample semantics are evidence, not FPS
+claims. Keep contrary timings and the first timeout attempt. Do not infer
+unique frames from duplicated HUD pairs, combine unified-memory estimates as
+disjoint sums, pin hardware cores, expand the legacy worker slots or raise
+thread priorities without measured evidence and ownership-compatible design.
+
+
+MAC-D09 implementation refinement: preserve the pass-coalescing experiment
+behind an explicit default-off switch. Its counts/pixels qualify, but the
+measured race timings do not establish a gain and Apple documents a scheduling
+overlap trade-off. The new default optimization instead targets the sampled
+per-binding sampler key allocation, retaining exact key bytes and cold-key
+ownership. No scheduler/allocator/interpolation synchronization change follows
+from a three-second sample. Game Mode support is available through explicit default-OFF packaging
+metadata; delivery preserves prior policy. OS fullscreen activation and benefit
+are separate acceptance limits. The adverse347 and normal350 metadata-only
+control do not establish a causal scheduling diagnosis.

@@ -66,6 +66,17 @@ focused Metal-validation and lower-renderer UBSan checks also pass. The
 counts, mixed CPU and actual-race timings, remaining hitches and validation
 limits. A repeatable FPS increase has not been established.
 
+The 0.1.6 Apple silicon update reuses native sampler lookup-key storage instead
+of creating a temporary heap-backed key on every cached binding. Exact filter,
+address, LOD, validation and cache ownership behavior remain. Game Mode metadata is available through the explicit packaging option
+`BLUR_BUNDLE_GAME_MODE=ON`, default OFF; this delivery preserves the prior keys
+and absence. Fullscreen activation and benefits need separate observation. The tile-pass coalescing experiment is default-off after
+mixed measured results. Resolution, shaders, effects, formats, simulation and
+audio remain unchanged. See
+[M4 Pro research and actual-game profiling](docs/macos/apple-silicon-optimization.md),
+[the sampler/tile contracts](docs/macos/apple-tile-rebind.md), and
+[Game Mode scope](docs/macos/game-mode-opt-in.md).
+
 The independently installable
 [NativeHost package and demo](code/mercury/library/gamesys/framework/native_host/README.md)
 provide Cocoa windows, raw events and CAMetalLayer surfaces with a scoped MIT

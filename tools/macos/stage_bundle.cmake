@@ -30,6 +30,14 @@ endif()
 if(NOT DEFINED BLUR_BUNDLE_BUILD_VERSION)
     set(BLUR_BUNDLE_BUILD_VERSION "1")
 endif()
+# Preserve the source app's Game Mode policy unless explicitly requested.
+if(NOT DEFINED BLUR_BUNDLE_GAME_MODE)
+    set(BLUR_BUNDLE_GAME_MODE OFF)
+endif()
+set(_game_mode_args)
+if(BLUR_BUNDLE_GAME_MODE)
+    list(APPEND _game_mode_args --game-mode)
+endif()
 find_program(BLUR_BUNDLE_PYTHON NAMES python3 REQUIRED)
 set(_notice_helper "${CMAKE_CURRENT_LIST_DIR}/bundle_notices.py")
 execute_process(COMMAND "${BLUR_BUNDLE_PYTHON}" "${_notice_helper}" validate-source
@@ -61,7 +69,7 @@ execute_process(COMMAND "${BLUR_BUNDLE_PYTHON}" "${_notice_helper}" inspect --ap
 execute_process(COMMAND "${BLUR_BUNDLE_PYTHON}" "${_notice_helper}" metadata --app "${_app}"
     --identifier "${BLUR_BUNDLE_IDENTIFIER}" --name "${BLUR_BUNDLE_NAME}"
     --version "${BLUR_BUNDLE_VERSION}" --build-version "${BLUR_BUNDLE_BUILD_VERSION}"
-    --minimum-os "${_minimum_os}" COMMAND_ERROR_IS_FATAL ANY)
+    --minimum-os "${_minimum_os}" ${_game_mode_args} COMMAND_ERROR_IS_FATAL ANY)
 file(GLOB_RECURSE _bundled_dylibs "${_app}/Contents/Frameworks/*.dylib")
 foreach(_library IN LISTS _bundled_dylibs)
     if(NOT IS_SYMLINK "${_library}")

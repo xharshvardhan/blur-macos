@@ -187,3 +187,15 @@ is mixed and does not support a repeatable FPS-gain claim. See
 [the acceptance report](optimization-host-acceptance.md) for all results and
 [the authored SDK](../../code/mercury/library/gamesys/framework/native_host/README.md)
 for the scoped API, license and integration boundary.
+
+
+## Apple silicon follow-up
+
+The hardware-guided phase queries actual M4 Pro features, profiles the original
+race with Apple's Metal HUD and samples the owned CPU process separately. The
+result prioritizes exact sampler-key scratch reuse for a sampled render-thread
+allocation path; pass coalescing remains experimental/default-off after mixed
+actual timings. Native game staging offers documented Game Mode metadata as an explicit
+default-OFF packaging option; delivery preserves prior metadata.
+No priorities, worker-count expansion or blanket storage changes are made. See
+[the hardware research and qualification](apple-silicon-optimization.md).

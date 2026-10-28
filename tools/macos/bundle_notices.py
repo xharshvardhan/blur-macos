@@ -139,7 +139,7 @@ def verify_notices(app, manifest):
         require(path.is_file() and sha(path) == digest, 'Notice missing or modified: ' + str(path.relative_to(app)))
 
 
-def metadata(app, identifier, name, version, build, minimum):
+def metadata(app, identifier, name, version, build, minimum, game_mode=False):
     require(bool(re.fullmatch(r'[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+', identifier or '')), 'Invalid bundle identifier')
     require(bool(name) and len(name) <= 100 and all(ord(c) >= 32 for c in name), 'Invalid bundle name')
     for value in (version, build, minimum):
@@ -149,6 +149,10 @@ def metadata(app, identifier, name, version, build, minimum):
     info.update(CFBundleIdentifier=identifier, CFBundleName=name, CFBundleDisplayName=name,
                 CFBundleShortVersionString=version, CFBundleVersion=build,
                 CFBundleGetInfoString=name + ' ' + version + ' (development)', LSMinimumSystemVersion=minimum)
+    # Preserve source policy by default, including absent keys. Only an explicit
+    # game packaging opt-in changes support/category; never used by NativeHost.
+    if game_mode:
+        info.update(LSSupportsGameMode=True, LSApplicationCategoryType='public.app-category.games')
     path.write_bytes(plistlib.dumps(info, sort_keys=False))
 
 
@@ -164,6 +168,7 @@ def main():
     parser.add_argument('--version')
     parser.add_argument('--build-version')
     parser.add_argument('--minimum-os')
+    parser.add_argument('--game-mode', action='store_true', help='Explicit game metadata opt-in; default preserves source support/category')
     args = parser.parse_args()
     try:
         require(args.source_app and args.licenses if args.operation in ('validate-source', 'collect') else args.app, 'Required app/source/notice arguments are missing')
@@ -172,7 +177,7 @@ def main():
         elif args.operation == 'collect':
             collect(args.source_app.resolve(), args.app.resolve(), args.licenses.resolve(), args.dependencies)
         elif args.operation == 'metadata':
-            metadata(args.app, args.identifier, args.name, args.version, args.build_version, args.minimum_os)
+            metadata(args.app, args.identifier, args.name, args.version, args.build_version, args.minimum_os, game_mode=args.game_mode)
         else:
             manifest, minimum = inspect(args.app.resolve())
             if args.operation == 'seal':

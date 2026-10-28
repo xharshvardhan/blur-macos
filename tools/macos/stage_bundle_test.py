@@ -87,13 +87,54 @@ def pure_failures():
             raise RuntimeError('Retail-payload path accepted')
         app = root / 'sample.app'
         (app / 'Contents').mkdir(parents=True)
-        (app / 'Contents/Info.plist').write_bytes(plistlib.dumps({}))
+        original = {'CFBundleIdentifier': 'original.identifier',
+                    'LSSupportsGameMode': False,
+                    'LSApplicationCategoryType': 'public.app-category.developer-tools',
+                    'CFBundleExecutable': 'BlurNativeGame',
+                    'PreservedAuthoredMetadata': {'value': ['keep', 7]}}
+        (app / 'Contents/Info.plist').write_bytes(plistlib.dumps(original))
         try:
             helper.metadata(app, 'invalid id', 'Development', '0.1.0', '1', '26.0')
         except RuntimeError:
             pass
         else:
             raise RuntimeError('Invalid identifier accepted')
+        require(plistlib.loads((app / 'Contents/Info.plist').read_bytes()) == original,
+                'Rejected metadata update changed the source plist')
+        helper.metadata(app, 'io.github.authored.packaging-test', 'Authored Game', '0.1.42', '42', '26.0')
+        default_info = plistlib.loads((app / 'Contents/Info.plist').read_bytes())
+        require(default_info['LSSupportsGameMode'] is False and
+                default_info['LSApplicationCategoryType'] == original['LSApplicationCategoryType'],
+                'Default metadata update changed existing Game Mode/category policy')
+        helper.metadata(app, 'io.github.authored.packaging-test', 'Authored Game', '0.1.42', '42', '26.0')
+        require(plistlib.loads((app / 'Contents/Info.plist').read_bytes()) == default_info,
+                'Repeated default metadata update was not idempotent')
+        absent = root / 'absent-policy.app'
+        (absent / 'Contents').mkdir(parents=True)
+        (absent / 'Contents/Info.plist').write_bytes(plistlib.dumps({'CFBundleExecutable': 'BlurNativeGame'}))
+        helper.metadata(absent, 'io.github.authored.absent', 'Authored Game', '0.1.42', '42', '26.0')
+        absent_info = plistlib.loads((absent / 'Contents/Info.plist').read_bytes())
+        require('LSSupportsGameMode' not in absent_info and 'LSApplicationCategoryType' not in absent_info,
+                'Default metadata update inserted Game Mode/category keys')
+        helper.metadata(app, 'io.github.authored.packaging-test', 'Authored Game', '0.1.42', '42', '26.0', game_mode=True)
+        info = plistlib.loads((app / 'Contents/Info.plist').read_bytes())
+        require(info.get('LSSupportsGameMode') is True and
+                info.get('LSApplicationCategoryType') == 'public.app-category.games',
+                'Game Mode support/category metadata missing')
+        require(info['CFBundleIdentifier'] == 'io.github.authored.packaging-test' and
+                info['CFBundleDisplayName'] == 'Authored Game' and
+                info['CFBundleName'] == 'Authored Game' and
+                info['CFBundleVersion'] == '42' and info['CFBundleShortVersionString'] == '0.1.42' and
+                info['LSMinimumSystemVersion'] == '26.0', 'Game metadata overrides were not preserved')
+        require(info['CFBundleExecutable'] == original['CFBundleExecutable'] and
+                info['PreservedAuthoredMetadata'] == original['PreservedAuthoredMetadata'],
+                'Unrelated source metadata changed')
+        helper.metadata(app, 'io.github.authored.packaging-test', 'Authored Game', '0.1.42', '42', '26.0', game_mode=True)
+        require(plistlib.loads((app / 'Contents/Info.plist').read_bytes()) == info,
+                'Repeated explicit Game Mode metadata update was not idempotent')
+        helper.metadata(app, 'io.github.authored.packaging-test', 'Authored Game', '0.1.42', '42', '26.0', game_mode=False)
+        require(plistlib.loads((app / 'Contents/Info.plist').read_bytes()) == info,
+                'Default metadata update removed existing opt-in policy')
 
 
 def main():
@@ -120,7 +161,8 @@ def main():
     command = [args.cmake, '-DBLUR_SOURCE_APP=' + str(source), '-DBLUR_STAGE_DIR=' + str(stage),
                '-DBLUR_BUNDLE_IDENTIFIER=io.github.xharshvardhan.blur-macos.packaging-test',
                '-DBLUR_BUNDLE_NAME=Blur Native Packaging Test', '-DBLUR_BUNDLE_VERSION=0.1.247',
-               '-DBLUR_BUNDLE_BUILD_VERSION=247', '-P', str(HERE / 'stage_bundle.cmake')]
+               '-DBLUR_BUNDLE_BUILD_VERSION=247', '-DBLUR_BUNDLE_GAME_MODE=ON',
+               '-P', str(HERE / 'stage_bundle.cmake')]
     subprocess.run(command, check=True)
     app = stage / source.name
     manifest, minimum = helper.inspect(app)
@@ -129,6 +171,9 @@ def main():
     require(info['CFBundleIdentifier'].endswith('.packaging-test') and info['CFBundleDisplayName'] == 'Blur Native Packaging Test', 'Metadata override missing')
     require(info['CFBundleVersion'] == '247' and info['CFBundleShortVersionString'] == '0.1.247', 'Version override missing')
     require(info['LSMinimumSystemVersion'] == minimum, 'Minimum OS is not derived')
+    require(info.get('LSSupportsGameMode') is True and
+            info.get('LSApplicationCategoryType') == 'public.app-category.games',
+            'Staged game Game Mode support/category metadata missing')
     require({Path(n['path']).name for n in manifest['native_notices']} ==
             set(helper.NATIVE) | {'NativeHost.txt'} and manifest['packages'] and manifest['dependencies'],
             'Notice/provenance inventory missing')
