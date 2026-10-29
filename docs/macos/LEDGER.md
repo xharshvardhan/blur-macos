@@ -4853,3 +4853,8 @@ remain separate acceptance limits.
 ## 2026-10-29 — MAC353 neon remaster/reuse design baseline (Codex /root)
 
 User requested future multiplayer-world thinking, honest reusable-library scope and a best-in-class visual upgrade; chose bold neon redesign. Root researched primary Apple/SDL/Valve/Khronos/Filament sources; two agents performed read-only renderer and host/network audits. Recorded product hypotheses, reusable seams, specific current renderer limits, phased visual work, performance/quality goals and actual two-Mac networking acceptance in remaster-direction.md. Generated one preview concept with the built-in image tool, explicitly separate from game footage and assets. No runtime source/assets/defaults/builds/game runs changed;0.1.6 remains playable. Documentation/link checks only. Next implementation: isolated NEON world-look profile and one authored showcase, followed by selective emissive/material work; no completed-remaster or multiplayer claim.
+
+
+## 2026-10-30 — MAC354 faithful remaster alignment (Codex /root)
+
+User clarified original Blur style with improved overall graphics. Updated the current brief and recorded accepted MAC-D10, explicitly superseding bold-redesign concepts without erasing their history. Reordered work toward a matched original car/track baseline, image stability, materials/lighting and original effects. Preserved source audit and reuse/network scope. Documentation/link/whitespace checks only; runtime, build352, assets and saves unchanged. Next implementation: establish matched original-look baseline and qualify the first image-quality improvement in the real graph with muted testing.

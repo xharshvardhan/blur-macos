@@ -124,3 +124,8 @@ from a three-second sample. Game Mode support is available through explicit defa
 metadata; delivery preserves prior policy. OS fullscreen activation and benefit
 are separate acceptance limits. The adverse347 and normal350 metadata-only
 control do not establish a causal scheduling diagnosis.
+
+
+## MAC-D10 — Faithful original-Blur visual remaster (accepted,2026-10-30)
+
+User explicitly requested keeping the style similar to OG Blur while improving overall graphics. This supersedes the earlier bold-redesign art preference. Preserve original cars, tracks, palette, environmental mood, power-up visual meanings, camera and HUD identity. Prioritize image stability/clarity, surface/material detail, lighting, shadows, reflections and refined original effects, with matched before/after comparisons and a reversible original mode. Generated concept options are exploratory, not selected worlds or implemented visuals. No runtime changes or new performance claims follow from this documentation decision. See remaster-direction.md for the revised implementation order.

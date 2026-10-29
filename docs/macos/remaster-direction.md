@@ -1,6 +1,6 @@
-# Neon remaster: direction and implementation gates
+# Faithful Blur remaster: direction and implementation gates
 
-MAC353, 2026-10-29. User selected **bold redesign: push the neon arcade look into a new art direction**. This is a research and design baseline, not an implemented remaster. Native0.1.6/build352 remains the playable build; this audit changes no runtime code, assets, saved settings or quality defaults. No new build or game test was necessary for these documentation-only changes. Two agents independently inspected the renderer and reusable-host/network boundaries, read-only.
+MAC353 research, refined by MAC354 on 2026-10-30. Current user direction: **keep the style similar to original Blur and improve overall graphics**. This supersedes the29October bold-redesign preference. The generated concept options are exploratory references, not the selected art style. This is a research and design baseline, not an implemented remaster. Native0.1.6/build352 remains the playable build; this audit changes no runtime code, assets, saved settings or quality defaults. No new build or game test was necessary for these documentation-only changes. Two agents independently inspected the renderer and reusable-host/network boundaries, read-only.
 
 ## Product thesis
 
@@ -37,13 +37,15 @@ Existing projects to evaluate instead of duplicate:
 
 No new library has been integrated during this audit. Retain dependency provenance and required notices as part of the existing packaging workflow.
 
-## Art direction
+## Art direction — current user choice
 
-Aim for a recognizable neon arcade racer with expressive lighting and grounded material response. Preserve readable road edges, car silhouettes and original power-up colour meanings. Give car paint a distinct layered response; reserve strong emissive glow for identifiable sources. Keep the racing line and HUD legible amid attacks. Wet-road reflections, luminous architecture and blue-hour/night lighting are showcase goals requiring authored materials and lighting, not promises that a filter can relight baked content.
+A faithful remaster: preserve original Blur's car and track identity, proportions, environmental mood, authored time of day, palette, neon power-up colours, effect language, camera and HUD identity. Improve fidelity and readability while keeping the game immediately recognizable. The alternate illustrated, festival and monumental concepts were exploration only; no new architectural world or visual redesign is selected.
 
-A preview-only image was generated with the built-in image tool. It depicts an original unbranded coupe, rivals and a coastal circuit; it is concept art, not a captured frame, an engine render or an existing track reconstruction. It provides an artistic target, not measured feasibility. No generated bitmap was installed as a game asset.
+Priorities are stable edges and fine details in motion; clearer textures and surface detail; richer car paint, glass and road response; improved lighting, shadow and reflection quality; and refined original glow, smoke, sparks and trails with readable silhouettes. Preserve original effect colour meanings and avoid clipping bright neon sources. Higher texture resolution alone does not recover missing authored detail; replacement material inputs require deliberate authoring and validation.
 
-Concept prompt, condensed: “Bold neon arcade-racing concept; original unbranded coupe and rivals on a readable coastal circuit at blue hour after rain; distinct car/road reflections, selective emissive bloom, luminous power-up, clear racing line and silhouettes; no copied assets, logos, HUD or screenshot claim.”
+Use matched car/track/camera/time-of-day captures and original authored resources as references. Distinguish port-fidelity corrections from optional remaster enhancements. Current native screenshots establish the port baseline, not proof of exact retail appearance; compare verified original reference captures where available. A global saturation boost, darker exposure or forced wet road is not an acceptance criterion.
+
+No generated concept bitmap is installed as a game asset. Runtime implementation is still pending.
 
 ## Confirmed renderer seams
 
@@ -56,12 +58,12 @@ Concept prompt, condensed: “Bold neon arcade-racing concept; original unbrande
 
 ## Implementation order
 
-1. **Reversible NEON look profile.** Compose local grading/grain/vignette parameters after environment selection; do not repeatedly multiply mutable global values. Preserve the original profile. This is an art experiment, not yet a complete redesign. Bloom threshold/feedback must be composed at their actual owners, not assumed to follow final grading.
-2. **One authored showcase.** One car, one existing track, a representative race and a controlled comparison route. Introduce identifiable emissive sources and selective bloom, car/road material studies and lighting authored for the chosen conditions. Avoid recolouring every bright pixel or concealing weak material work under fog.
-3. **Stable image in motion.** Evaluate AA in the actual prepass/effect graph. Temporal MetalFX needs jitter, correctly encoded depth, object as well as camera motion, exposure conventions and history resets for cuts, respawns, loads, resizing and split views. Keep the HUD separate and evaluate transparency/neon trails. Adding the framework alone establishes none of these.
-4. **Material/lighting upgrades.** Qualify clear-coat/roughness inputs and image-based lighting for the car, then improve environment materials, reflections and shadows in separate measured steps. Reauthoring assets is a substantial part of best-in-class visual quality.
-5. **Optional HDR/EDR output.** Define linear working/output colour spaces, headroom/output conversion, tone mapping and HUD paper-white. Validate on supported displays while retaining correct SDR output.
-6. **Expand content and distribution.** Apply proven workflows to more cars/tracks only after visual and performance acceptance. Preserve compatibility with ordinary menu/save/exit paths.
+1. **Matched original-look baseline.** Select one original car and track, record camera/conditions and establish reference comparisons. Keep the existing authored colour grading and a reversible original-quality mode; fix demonstrated fidelity faults separately from enhancement work.
+2. **Image stability and clarity.** Evaluate anti-aliasing and texture filtering in the actual prepass/effect graph. Temporal MetalFX needs jitter, correctly encoded depth, object as well as camera motion, exposure conventions and history resets for cuts, respawns, loads, resizing and split views. Preserve HUD sharpness and evaluate original particles/trails. Adding the framework alone establishes none of these.
+3. **Material/lighting upgrades for the same scene.** Improve car paint/glass and environment surfaces while preserving their original identity. Qualify authored material inputs, reflections, shadowing and lighting in separate measured steps. Preserve track geometry, authored time of day and characteristic palette; photorealism or a new PBR label is not itself the target.
+4. **Refine original effects.** Improve original power-up glow, smoke, sparks and trails while preserving their colours, shapes, gameplay meanings and road/car visibility. Compose bloom changes at their actual owners rather than globally recolouring bright surfaces.
+5. **Optional HDR/EDR output.** Define linear working/output colour spaces, headroom/output conversion, tone mapping and HUD paper-white. Validate on supported displays while retaining correct SDR output and the original artistic intent.
+6. **Expand content and distribution.** Apply proven workflows to more original cars/tracks only after matched visual and performance acceptance. Preserve ordinary menu/save/exit paths.
 
 Initial performance goal, not a result: sustained60fps at a recorded2560×1440 configuration on the local M4 Pro with a representative20-car race (16.67ms nominal frame budget). Measure displayed frame pacing, CPU/GPU cost, long hitches and memory in a controlled route. Static beauty shots or generated concepts cannot establish this goal. A higher-refresh target is separate.
 
