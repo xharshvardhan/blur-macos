@@ -4849,3 +4849,7 @@ No raw data, saves or diagnostic payloads published. Independent NativeHost
 package remains unchanged. Next: controlled GPU timeline/route measurement
 before any further GPU scheduling change; second Mac/remote racing/notarization
 remain separate acceptance limits.
+
+## 2026-10-29 — MAC353 neon remaster/reuse design baseline (Codex /root)
+
+User requested future multiplayer-world thinking, honest reusable-library scope and a best-in-class visual upgrade; chose bold neon redesign. Root researched primary Apple/SDL/Valve/Khronos/Filament sources; two agents performed read-only renderer and host/network audits. Recorded product hypotheses, reusable seams, specific current renderer limits, phased visual work, performance/quality goals and actual two-Mac networking acceptance in remaster-direction.md. Generated one preview concept with the built-in image tool, explicitly separate from game footage and assets. No runtime source/assets/defaults/builds/game runs changed;0.1.6 remains playable. Documentation/link checks only. Next implementation: isolated NEON world-look profile and one authored showcase, followed by selective emissive/material work; no completed-remaster or multiplayer claim.

@@ -1907,3 +1907,7 @@ and preserves source policy. Final352 normalized unsigned executable matches
 actual347/350, and all693 non-notice resources match334. See
 [full data and limits](apple-silicon-optimization.md) for adverse samples, exact
 method, hardware capabilities, default choices and next measurement gates.
+
+### MAC353 — remaster/reuse architecture audit (2026-10-29)
+
+User selected bold neon redesign. NativeHost remains a window/raw-event/Metal-layer host, not a generic engine/converter. Read-only renderer audit confirms legacy exposure/LUT/bloom, SDR BGRA8Unorm presentation, camera-reconstructed blur without an established complete moving-object vector producer, authored legacy materials and integrated planar/cube/blob/drop paths. These prevent claiming native display HDR, temporal reconstruction or PBR merely from lower-level types/classes. Proposed profile/shading upgrades are new art features, not retail bug fixes. Current real LAN evidence remains host-only; a two-machine join/race is required. See [scope, primary sources and implementation gates](remaster-direction.md). No runtime implementation or new acceptance result is claimed.
