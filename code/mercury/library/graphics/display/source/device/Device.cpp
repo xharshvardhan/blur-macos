@@ -68,6 +68,18 @@ bool C_Device::CreateVolatile(C_DeviceParams& deviceParams)
 
 	BIZ_ASSERT(m_Created);
 
+#if defined(PLATFORM_MACOS)
+    // [Blur2PC] Early native validation can retain the old live windows. Keep
+    // their authoritative params on any rejected/throwing reconfiguration too.
+    // Later allocation cleanup still belongs to CreateDeviceVolatile; this
+    // metadata rollback does not reconstruct an already retired GPU graph.
+    struct NativeParamsRollback {
+        C_DeviceParams& current;
+        C_DeviceParams previous;
+        bool committed=false;
+        ~NativeParamsRollback(){if(!committed)current=previous;}
+    } rollback{m_DeviceParams,m_DeviceParams};
+#endif
 	m_DeviceParams = deviceParams;
 
 	if(!CreateDeviceVolatile())
@@ -77,6 +89,9 @@ bool C_Device::CreateVolatile(C_DeviceParams& deviceParams)
 
 	deviceParams = m_DeviceParams;
 
+#if defined(PLATFORM_MACOS)
+    rollback.committed=true;
+#endif
 	return true;
 }
 

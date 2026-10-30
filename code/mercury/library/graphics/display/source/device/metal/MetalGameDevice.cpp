@@ -3,6 +3,8 @@
 #include <display/device/metal/MetalGameDevice.h>
 #include <stdexcept>
 #include <cmath>
+#include <cstdlib>
+#include <display/device/metal/MetalWindowMSAAPolicy.h>
 #include <display/shaders/Constants.h>
 namespace Display::Metal {
 C_GameDevice::C_GameDevice():m_Binding(*this){
@@ -41,6 +43,13 @@ void C_GameDevice::SetupView(C_View* view,const C_ViewSetup& setup,U32 width,U32
     if(!view||!width||!height)throw std::invalid_argument("Native view setup requires a view and nonzero target dimensions");view->Setup(setup,width,height);
 }
 bool C_GameDevice::CreateDevice(){
+    // [Blur2PC] Shared C_Device::Create publishes these selected params back to
+    // the application. Read only at creation, never during static construction.
+    unsigned windowSamples=U32(m_DeviceParams.m_WindowBufferMultisample);
+    if(!SelectWindowMultisample(std::getenv("BLUR_MAC_WINDOW_MSAA"),windowSamples,windowSamples)){
+        m_LastError=WindowMSAAConfigurationError;return false;
+    }
+    m_DeviceParams.m_WindowBufferMultisample=static_cast<E_Multisample>(windowSamples);
     if(!m_DeviceParams.m_Width||!m_DeviceParams.m_Height||m_DeviceParams.m_Width>16384||m_DeviceParams.m_Height>16384){m_LastError="Invalid native framebuffer dimensions";return false;}
     if(!m_DeviceParams.m_Windowed||m_DeviceParams.m_RefreshRate){m_LastError="Native fullscreen/mode selection is not implemented";return false;}
     if(m_DeviceParams.m_PresentInterval!=E_PresentInterval_Default&&m_DeviceParams.m_PresentInterval!=E_PresentInterval_One&&m_DeviceParams.m_PresentInterval!=E_PresentInterval_Immediate){m_LastError="Native presentation interval is unsupported";return false;}
@@ -48,11 +57,25 @@ bool C_GameDevice::CreateDevice(){
     Display2::C_DeviceManagerParams mp;if(!Display2::CreateDeviceManager(&m_Manager,mp)){m_LastError="Native Metal adapter creation failed";return false;}
     Display2::C_DeviceParams params;Display2::SetupDefaultDeviceParams(&m_Manager,params);
     if(!Display2::CreateDevice(&m_Manager,&m_Display2,params)){Display2::DestroyDeviceManager(&m_Manager);m_LastError="Native Metal device creation failed";return false;}
+    if(!m_Display2.SupportsMultisample(static_cast<Display2::E_Multisample>(windowSamples))){
+        m_Display2.Destroy();Display2::DestroyDeviceManager(&m_Manager);
+        m_LastError="Native display-window MSAA is unsupported: "+std::to_string(windowSamples)+" (no quality fallback)";return false;
+    }
     Display2::Device(&m_Display2);m_ShaderProfile=E_ShaderProfile_3_0;m_VertexShaderProfile=E_VertexShaderProfile_3_0;m_PixelShaderProfile=E_PixelShaderProfile_3_0;
     SetAspectRatio(F32(m_DeviceParams.m_Width)/m_DeviceParams.m_Height);m_LastError.clear();return true;
 }
 bool C_GameDevice::CreateDeviceVolatile(){
     if(!m_Display2.IsCreated()||m_InScene){m_LastError="Native device is not ready for framebuffer creation";return false;}
+    // [Blur2PC] Reject malformed/unsupported requests before destroying an old
+    // window or allocating any new colour/depth/mask framebuffer resources.
+    unsigned windowSamples=U32(m_DeviceParams.m_WindowBufferMultisample);
+    if(!SelectWindowMultisample(std::getenv("BLUR_MAC_WINDOW_MSAA"),windowSamples,windowSamples)){
+        m_LastError=WindowMSAAConfigurationError;return false;
+    }
+    if(!m_Display2.SupportsMultisample(static_cast<Display2::E_Multisample>(windowSamples))){
+        m_LastError="Native display-window MSAA is unsupported: "+std::to_string(windowSamples)+" (no quality fallback)";return false;
+    }
+    m_DeviceParams.m_WindowBufferMultisample=static_cast<E_Multisample>(windowSamples);
     DestroyDeviceVolatile();
     if(m_DeviceParams.m_PresentationLayer&&m_DeviceParams.m_ColourFormat!=E_Format_A8R8G8B8){m_LastError="Native drawable presentation requires BGRA8";return false;}
     if(!m_DeviceParams.m_BeginVerticesSize||m_DeviceParams.m_FreeBeginVerticesSize>m_DeviceParams.m_BeginVerticesSize){m_LastError="Invalid original dynamic vertex budget";return false;}

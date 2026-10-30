@@ -17,6 +17,9 @@ public:
     void Destroy();
     U32 IsCreated() const;
     std::string GetDeviceName() const;
+    // [Blur2PC] Actual device sample/store+resolve capability; allocates no GPU
+    // resource. Caller serializes device lifecycle, as for other device methods.
+    bool SupportsMultisample(E_Multisample multisample) const;
     C_Context& GetContext();
     const C_Context& GetContext() const;
     C_ContextNoCheckNoTrack& GetContextNoCheckNoTrack();

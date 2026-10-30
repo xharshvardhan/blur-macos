@@ -1,6 +1,7 @@
 // [Blur2PC][macOS] Actual engine draw entry points, pipeline state and command ownership.
 #include "MetalNative.h"
 #include "MetalDepthStencilCache.h"
+#include "MetalTextureQuality.h"
 #include <limits>
 #include <algorithm>
 #include <cmath>
@@ -61,6 +62,7 @@ struct C_Context::Impl {
     struct TextureState { std::shared_ptr<Metal::Texture> texture;U32 flags=0;C_SamplerState sampler;U32 anisotropy=0; };
     std::array<TextureState,16> pixelTextures,vertexTextures;
     U32 maxAnisotropy=1; // D3D9 D3DSAMP_MAXANISOTROPY default.
+    Metal::TextureQualityPolicy textureQuality; // Explicit remaster option; authored mode by default.
     std::unordered_map<std::string,id<MTLSamplerState>> samplers;
     std::string samplerKeyScratch;
     bool samplerKeyStats=false;
@@ -336,6 +338,7 @@ struct C_Context::Impl {
         }
     }
     id<MTLSamplerState> sampler(const C_SamplerState& s,U32 anisotropy){
+        anisotropy=textureQuality.Select(s,anisotropy);
         auto address=[](U32 v){switch(v){case E_TextureAddress_Wrap:return MTLSamplerAddressModeRepeat;case E_TextureAddress_Mirror:return MTLSamplerAddressModeMirrorRepeat;
             case E_TextureAddress_Clamp:return MTLSamplerAddressModeClampToEdge;case E_TextureAddress_Border:return MTLSamplerAddressModeClampToBorderColor;default:throw std::logic_error("Unsupported sampler address mode");}};
         auto filter=[](U32 v){require(v>=1&&v<=3,"Unsupported sampler min/mag filter");return v==E_TextureFilter_Point?MTLSamplerMinMagFilterNearest:MTLSamplerMinMagFilterLinear;};

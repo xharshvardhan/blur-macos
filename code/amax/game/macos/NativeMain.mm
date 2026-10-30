@@ -14,6 +14,8 @@
 #include <iostream>
 #include <exception>
 #include <cstdio>
+#include <cstdlib>
+#include <utility>
 #include <cmath>
 int AmaxApplicationMain(Framework::C_CoreSystemsParams&,Framework::C_ApplicationParams&);
 namespace {
@@ -103,7 +105,9 @@ int main(int argc,char** argv) {
             if(argc==2&&std::strcmp(argv[1],"--help")==0){
                 std::cout<<"Blur native development game: --data-root <complete PC game-data directory>\n"
                     <<"Optional: --capture <PNG path> --capture-after <seconds> --quit-after <seconds>\n"
-                    <<"Launch without arguments to choose and remember an existing game-data folder.\n";
+                    <<"Launch without arguments to choose and remember an existing game-data folder.\n"
+                    <<"Remaster quality defaults: anisotropic16 on eligible authored samplers, original window sampling (optional MSAA2/4).\n"
+                    <<"Override per process: BLUR_MAC_TEXTURE_ANISOTROPY=authored|4|8|16, BLUR_MAC_WINDOW_MSAA=authored|2|4.\n";
                 return 0;
             }
             std::string dataRoot,capturePath;double captureAfter=-1,quitAfter=-1;
@@ -129,6 +133,14 @@ int main(int argc,char** argv) {
             NSString* resources=[[NSBundle mainBundle] resourcePath];
             if(!resources)throw std::runtime_error("Native app resource directory is missing");
             Display2::SetNativeShaderResourceRoot(resources.UTF8String);
+            // [Blur2PC] Faithful remaster defaults belong to the game launch,
+            // not the lower renderer API. Explicit process choices (including
+            // authored/original) remain authoritative and never alter saves.
+            for(const auto& setting : {std::pair<const char*,const char*>{"BLUR_MAC_TEXTURE_ANISOTROPY","16"},
+                                       {"BLUR_MAC_WINDOW_MSAA","authored"}}) {
+                if(!std::getenv(setting.first)&&::setenv(setting.first,setting.second,0)!=0)
+                    throw std::runtime_error("Could not configure native graphics quality");
+            }
             Framework::Mac::ConfigureRunDiagnostics(capturePath,captureAfter,quitAfter);
             Framework::C_CoreSystemsParams systems;
             systems.m_Name="Amax";systems.m_WorkingDir=Sys::C_FilePath(root.string().c_str());

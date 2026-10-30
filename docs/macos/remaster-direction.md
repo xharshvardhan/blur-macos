@@ -1,6 +1,6 @@
 # Faithful Blur remaster: direction and implementation gates
 
-MAC353 research, refined by MAC354 on 2026-10-30. Current user direction: **keep the style similar to original Blur and improve overall graphics**. This supersedes the29October bold-redesign preference. The generated concept options are exploratory references, not the selected art style. This is a research and design baseline, not an implemented remaster. Native0.1.6/build352 remains the playable build; this audit changes no runtime code, assets, saved settings or quality defaults. No new build or game test was necessary for these documentation-only changes. Two agents independently inspected the renderer and reusable-host/network boundaries, read-only.
+MAC353 research, refined by MAC354 on 2026-10-30. Current user direction: **keep the style similar to original Blur and improve overall graphics**. This supersedes the29October bold-redesign preference. The generated concept options are exploratory references, not the selected art style. This originated as a documentation-only research baseline. MAC380 now qualifies the first faithful rendering-quality batch: eligible texture filtering16 by default, optional window multisampling and an original-quality override. Original artistic resources remain unchanged; this is not a completed modern remaster. See [the acceptance report](faithful-remaster-acceptance.md) for final checks, actual images and adverse performance evidence. Two agents independently inspected the renderer and reusable-host/network boundaries, read-only.
 
 ## Product thesis
 

@@ -4858,3 +4858,70 @@ User requested future multiplayer-world thinking, honest reusable-library scope 
 ## 2026-10-30 — MAC354 faithful remaster alignment (Codex /root)
 
 User clarified original Blur style with improved overall graphics. Updated the current brief and recorded accepted MAC-D10, explicitly superseding bold-redesign concepts without erasing their history. Reordered work toward a matched original car/track baseline, image stability, materials/lighting and original effects. Preserved source audit and reuse/network scope. Documentation/link/whitespace checks only; runtime, build352, assets and saves unchanged. Next implementation: establish matched original-look baseline and qualify the first image-quality improvement in the real graph with muted testing.
+
+
+### MAC356 — faithful authored-anisotropic texture quality option
+
+User authorized faithful remaster implementation. Source adds a reversible
+context-time authored/4/8/16 anisotropy floor only for already-anisotropic,
+non-point-axis, mip-filtered samplers. Existing higher maxima, requested states,
+filters/mips/address/LOD/gamma/cache ownership and tile defaults remain unchanged.
+Optional lifetime selection counters distinguish eligibility/promotion from GPU
+or per-material evidence. Authored oblique-stripe GPU fixture and equivalent
+native-max/control checks are source-frozen; root owns builds/hardware/actual
+qualification. No compile or runtime result claimed yet. The old playable build
+is untouched. [Contract and limits](remaster-texture-quality.md).
+
+
+## 2026-10-30 — MAC359 reversible native display-window MSAA source freeze
+
+Implemented strict BLUR_MAC_WINDOW_MSAA authored/2/4 creation policy in native
+upper MetalGameDevice.cpp plus pure MetalWindowMSAAPolicy.h. No parameter layout
+or constructor changes: shared Create/CreateVolatile successful copyback publishes
+actual selection to application params, avoiding pre-main environment reads.
+Default remains authored/nativeNone; only window field is selected. Existing
+mirror/reflection inheritance is explicitly retained; backbuffer/deferred sample
+fields and effect graph remain unchanged.
+
+Narrow const lower SupportsMultisample query uses actual device sample support
+and existing combined store/resolve family contract. Unsupported/invalid window
+requests reject before volatile destruction/texture allocation, without quality
+fallback. Added pure policy grammar test and extended actual game_windows fixture
+for capability/copyback/matched colour-depth-mask samples/live-owner retention
+and recovery. Dormant EdgeAA was audited but not enabled: sampler overwrite and
+missing normal-variant define require separate work. See
+[remaster-window-aa.md](remaster-window-aa.md).
+
+Verification at freeze: scoped source review, local documentation links and
+whitespace checks only. Parent exclusively owns four-config coherent builds,
+muted GPU fixture runs and actual fullgraph/moving-image comparison. No compilation,
+GPU/game/runtime or performance/quality acceptance by this agent; no anisotropy,
+Context, NativeMain, CMake, assets or user-data changes.
+
+MAC359 review follow-up: shared native CreateVolatile now rolls previous internal
+params back on false/throw, committing only after success/caller copyback. This
+fixes metadata coherence for retained live windows on early rejection; it does
+not promise old GPU graph recovery after destructive allocation failure. The
+actual window fixture now also checks internal width/sample metadata, unchanged
+caller request and rendering after rejected settings. Root approved shared
+Device.cpp extension and will incrementally rebuild; no agent compilation/run.
+
+## 2026-10-30 — MAC355 overnight implementation checkpoint (Codex /root)
+
+User approved overnight faithful remaster. Active thread heartbeat blur-faithful-remaster-overnight ends08:00IST30Oct; local Mac/app must remain available. MAC356 eligible anisotropic detail and MAC359 original-window MSAA are implemented with native parameter failure rollback, strict policy/capability gates and exact image/failure oracles. Game-only candidate defaults16/2; lower APIs remain authored. Coherent Debug/Speed155/155 (177.12s/107.70s), six lower UBSan checks and14 focused Metal validations PASS;53-path freeze and693-resource byte identity recorded. Actual364 counters verify active use without FPS claim. Native original/enhanced captures362/363 qualify, with separately verified normal exit after correcting a private observer status-publication dependency; raw failed proofs preserved. Actual baseline358 and control365 qualify;366/367/368 continue serially with builds/captures stopped. No release/default-cost decision yet.
+
+Exact active work and next gates: ignored _work/remaster-night/checkpoint.json. Owned profile batch session64726/log mac360-profile-batch.log continues without another user message. Do not modify/rebuild source during its quiet windows. Review all4 results before creating mac360-quality-default-decision.json. Gated package_mac360.py and deliver_mac360.py are syntax-checked but NOT executed; only support compiled16/2 defaults. If choosing different defaults, rebuild/restage/requalify first. Preserve accepted immutable0.1.6/manual launcher; Debug compilation has overwritten standard _work/run with raw Debug candidate, so final delivery must install qualified Speed app there. Publish only exact12 source paths plus curated docs/README through the separate personal publication index, preserving profile redaction and excluding game data/builds/saves/unrelated edits. Live-reflection audit is read-only follow-up, not permission to bypass these first-batch gates or invent PBR inputs.
+
+## 2026-10-30 — MAC355 overnight stop and stable restoration (Codex /root)
+
+The overnight deadline has passed; stopped further implementation, interrupted the unfinished private-observer work, and deleted heartbeat blur-faithful-remaster-overnight. Candidate360 source remains53-path frozen and both155-test suites/six lower UBSan/14Metal checks remain valid. Complete real-CoreAudio cost profiles365(authored/authored) and366(16/authored) pass;367's moving window is unqualified after one passive telemetry miss during the3s composite warm-up budget, despite later application progress. Fresh369 and368 fail before racing at native audio initialization. Independent silence-only audio-output test371 reports AudioQueueStart -66681 (SDK kAudioQueueErr_CannotStart); accepted0.1.6 startup diagnostic370 fails the same audio-init path. Cause is unestablished; no service restart, OS audio-setting change, dummy-audio substitution or unrelated process termination was performed.
+
+Held0.1.7 rather than bypass incomplete moving/cost gates. Restored exact signed accepted0.1.6/build352 into standard _work/run; manual sound-on launcher remains its immutable distribution. Preserved candidateSpeed stage, rawDebug copy, original captures, source/test proofs and failed runs. No0.1.7 ZIP, standard delivery, public commit or release made. Private observer at deadline is snapshotted but unqualified; review it before use. Exact status/next step: _work/remaster-night/checkpoint.json. Resume with native-audio availability check, then complete the matched2x-only andcombined driving/cost runs, choose defaults and package/deliver/publish; retain all contrary evidence. This is unfinished work, not a completed remaster.
+
+## 2026-10-30 — MAC380 resumed diagnosis, qualified graphics defaults and delivery (Codex /root)
+
+User explicitly resumed after the night deadline and asked why audio failed. CoreAudio owned-client logs show15s AudioQueue start timeout during a background wake/device transition; exact OS cause remains unproved. Current real-output probe376 and muted original20-car driving377/378/381 pass without production audio changes or OS-service resets. Retain failed probes and the separate perceptual race-music limit. Private passive-observation handling now reports nil safely and budgets bounded bookends; no simulation/input workaround.
+
+Reviewed all four explicit quality profiles365/366/377/378. Optional2x raises measured GPU/frame/memory cost; final game default is eligible texture anisotropy16 with authored window samples, optional2/4 and reversible authored/authored mode. Final Debug/Speed155/155 (136.73s/64.86s); six unchanged lower UBSan and14 strict Metal checks retained under53-path freeze. Final actual381 has qualified no-input90s/driving45s and original menu/desktop exit0, source/save unchanged, muted native CoreAudio. Final381 interval/GPU medians16.43/7.17ms and20.38/8.17ms; hitches remain, no universal FPS win. Original visual362/363 and supplemental exit evidence retained.
+
+Packaged0.1.7/build380:693 unchanged non-notice resources, strict signature/notices/ZIP extraction/relocation PASS. Delivered verified Speed app to _work/run and manual launcher; preserve0.1.6. Curated12 source+10 documentation publication only, personal xharshvardhan, separate index/redacted profiles; no game data/artifacts/saves or unrelated edits. No active automation. Bounded first rendering-quality batch complete; material/asset remaster, perceptual music listening, clean second Mac and remote multiplayer remain separate work.

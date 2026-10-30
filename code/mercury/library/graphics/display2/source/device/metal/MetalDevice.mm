@@ -121,6 +121,17 @@ bool C_MetalDevice::CreateNative(void* selected) {
     }
 }
 void C_MetalDevice::Destroy() { const bool traced=m_State&&m_State->traceSession;if(m_State)m_State->context.reset(); WaitIdle(); m_State.reset();if(traced)Metal::Trace::EndSession(); }
+bool C_MetalDevice::SupportsMultisample(E_Multisample multisample) const {
+    @autoreleasepool {
+        if(!m_State||(multisample!=E_Multisample_None&&multisample!=E_Multisample_2&&multisample!=E_Multisample_4))return false;
+        // [Blur2PC] Retain the actual device during this synchronous query.
+        // Match CreateSurface's sample and combined store+resolve contract.
+        id<MTLDevice> device=m_State->device;
+        const U32 count=multisample==E_Multisample_None?1:U32(multisample);
+        return [device supportsTextureSampleCount:count]&&
+            (count==1||[device supportsFamily:MTLGPUFamilyApple3]||[device supportsFamily:MTLGPUFamilyMac2]);
+    }
+}
 C_Context& C_MetalDevice::GetContext() {
     if(!m_State)throw std::logic_error("Metal device is not created");
     if(!m_State->context)m_State->context=std::shared_ptr<C_Context>(new C_Context(*this));

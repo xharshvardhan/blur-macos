@@ -129,3 +129,7 @@ control do not establish a causal scheduling diagnosis.
 ## MAC-D10 — Faithful original-Blur visual remaster (accepted,2026-10-30)
 
 User explicitly requested keeping the style similar to OG Blur while improving overall graphics. This supersedes the earlier bold-redesign art preference. Preserve original cars, tracks, palette, environmental mood, power-up visual meanings, camera and HUD identity. Prioritize image stability/clarity, surface/material detail, lighting, shadows, reflections and refined original effects, with matched before/after comparisons and a reversible original mode. Generated concept options are exploratory, not selected worlds or implemented visuals. No runtime changes or new performance claims follow from this documentation decision. See remaster-direction.md for the revised implementation order.
+
+## MAC380 final qualification
+
+Refine the user-authorized faithful graphics batch using actual cost evidence: game-only eligible anisotropy16, original/authored window sampling, explicit optional2/4. Lower API defaults and explicit launch overrides remain authoritative. AA's measured higher GPU/frame/memory cost is retained, not hidden by a quality preset. Preserve original resources, colour/effect graph, simulation and a reversible authored/authored mode. This is not a new material model or an audio fix. No blanket audio-service reset/retry: the generic start failure plus wake timeout does not justify an OS workaround. [Acceptance and limits](faithful-remaster-acceptance.md).

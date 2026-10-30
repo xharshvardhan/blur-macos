@@ -116,6 +116,16 @@ target_compile_options(blur_mac_sampler_key_reuse_test PRIVATE -fobjc-arc)
 target_link_libraries(blur_mac_sampler_key_reuse_test PRIVATE blur_mac_display2_metal)
 add_test(NAME mac_sampler_key_reuse COMMAND blur_mac_sampler_key_reuse_test)
 set_tests_properties(mac_sampler_key_reuse PROPERTIES LABELS "hardware" TIMEOUT 90)
+# [Blur2PC] Strict window-only quality policy grammar without a GPU dependency.
+add_executable(blur_mac_window_msaa_policy_test ${BLUR_TOP}/tools/macos/window_msaa_policy_test.cpp)
+target_include_directories(blur_mac_window_msaa_policy_test PRIVATE ${BLUR_TOP}/code/mercury/library/graphics/display/include)
+add_test(NAME mac_window_msaa_policy COMMAND blur_mac_window_msaa_policy_test)
+# [Blur2PC] Faithful oblique texture-detail quality with exact authored controls.
+add_executable(blur_mac_texture_quality_test ${BLUR_TOP}/tools/macos/texture_quality_test.mm)
+target_compile_options(blur_mac_texture_quality_test PRIVATE -fobjc-arc)
+target_link_libraries(blur_mac_texture_quality_test PRIVATE blur_mac_display2_metal)
+add_test(NAME mac_texture_quality COMMAND blur_mac_texture_quality_test)
+set_tests_properties(mac_texture_quality PROPERTIES LABELS "hardware" TIMEOUT 90)
 # [Blur2PC] Actual critical filesystem, validator, mip upload and GPU bytes.
 add_executable(blur_mac_dds_single_read_test ${BLUR_TOP}/tools/macos/dds_single_read_test.cpp)
 target_link_libraries(blur_mac_dds_single_read_test PRIVATE blur_mac_display2_metal)

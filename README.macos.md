@@ -66,6 +66,18 @@ focused Metal-validation and lower-renderer UBSan checks also pass. The
 counts, mixed CPU and actual-race timings, remaining hitches and validation
 limits. A repeatable FPS increase has not been established.
 
+The0.1.7 faithful graphics update enables stronger anisotropic filtering on
+eligible original samplers. Window multisampling2x/4x is optional; original
+window sampling remains the default after actual cost comparisons. All693
+non-notice resources remain byte-identical, preserving original art and effects.
+Both complete final Debug/Speed suites pass155/155; actual muted20-car driving
+and normal menu/desktop exit pass. Hitches remain and no FPS gain is claimed.
+See [quality acceptance and reversible original settings](docs/macos/faithful-remaster-acceptance.md).
+The overnight audio-start refusal also affected0.1.6; logs show a15s CoreAudio
+start timeout during background wake. Current native output and races pass
+without an audio-code change. The exact OS trigger and earlier perceptual
+race-music symptom remain separate limits; see [audio investigation](docs/macos/audio-startup-wake-investigation.md).
+
 The 0.1.6 Apple silicon update reuses native sampler lookup-key storage instead
 of creating a temporary heap-backed key on every cached binding. Exact filter,
 address, LOD, validation and cache ownership behavior remain. Game Mode metadata is available through the explicit packaging option
