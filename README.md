@@ -12,9 +12,13 @@ an official release.
 
 **[Download the Apple Silicon Mac application — 0.1.7](https://github.com/xharshvardhan/blur-macos/releases/tag/v0.1.7)**
 
+**[Download the original PC game data — MyAbandonware (third-party)](https://www.myabandonware.com/game/blur-gls)**
+
+This is the source page used for local testing. Its **Full-Rip of English version** option provides a preinstalled data tree. Extract it, then choose the `BLUR` folder containing `cache`, `levels` and `UI` when the Mac app asks. This external site is separate from this project; its Windows-specific setup instructions are for the Windows game, not this native Mac app.
+
 Requires **Apple Silicon and macOS 26 or later**, plus your own complete Windows Blur game-data folder. Extract the release ZIP, open `BlurNativeGame.app`, and select that folder. Runtime libraries are bundled; players do not need Wine, Homebrew or Xcode. GitHub's “Source code” archives are for developers.
 
-Read the **[installation guide](docs/macos/installing-development-preview.md)** for data-folder requirements, controls, checksums and macOS app approval. The preview is ad-hoc signed and not notarized. Another clean Mac and two-machine multiplayer remain unverified. Original game data, profiles and saves are not included or downloaded.
+Read the **[installation guide](docs/macos/installing-development-preview.md)** for data-folder requirements, controls, checksums and macOS app approval. The preview is ad-hoc signed and not notarized. Another clean Mac and two-machine multiplayer remain unverified. Original game data, profiles and saves are not bundled or automatically downloaded by the Mac app.
 
 ## Current status
 

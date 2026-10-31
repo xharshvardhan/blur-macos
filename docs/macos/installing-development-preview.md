@@ -2,12 +2,20 @@
 
 **[Download 0.1.7 for Apple Silicon](https://github.com/xharshvardhan/blur-macos/releases/tag/v0.1.7)** · [Direct app ZIP](https://github.com/xharshvardhan/blur-macos/releases/download/v0.1.7/BlurNativeDevelopment-0.1.7-arm64.zip) · [SHA256SUMS](https://github.com/xharshvardhan/blur-macos/releases/download/v0.1.7/SHA256SUMS.txt)
 
+**[Download the original PC game data — MyAbandonware (third-party)](https://www.myabandonware.com/game/blur-gls)**
+
 This is an unofficial playable development preview. The application runs natively with Cocoa/Metal. It includes its native runtime libraries; players do not need to compile the source or install Wine, Homebrew or Xcode. The GitHub “Source code” archives are for developers and do not contain the ready-to-run app.
 
 ## Requirements
 
 - An Apple Silicon Mac and **macOS 26 or later**. This package is arm64 only; an older compilation target does not establish older macOS support. The development machine is an M4 Pro. A different clean Mac has not yet been validated.
-- Your own complete original **Windows Blur game-data folder**. The download does not contain or fetch the original cars, tracks, textures, movies or music. A Windows installer or executable by itself is insufficient: supply the installed folder tree.
+- Your own complete original **Windows Blur game-data folder**. The Mac app ZIP does not contain or fetch the original cars, tracks, textures, movies or music. A Windows installer or executable by itself is insufficient: supply the installed folder tree.
+
+## Get the game-data folder
+
+The [MyAbandonware Blur download page](https://www.myabandonware.com/game/blur-gls) is the third-party source used for local testing. In its Download section, the **Full-Rip of English version** option is a preinstalled data archive. Extract that archive and retain the complete `BLUR` directory containing `cache`, `levels` and `UI`. This is the directory to select in the Mac app. Link availability and other variants on the external site may change; they have not all been validated with this port.
+
+The site and its downloads are external to this project, and this reference does not establish redistribution permission. Its Windows-specific setup instructions apply to running the Windows game; the native Mac app reads the extracted data and does not run that Windows executable. You can also use the complete installed data folder from an existing PC copy you are entitled to use.
 
 ## Install and launch
 
@@ -17,7 +25,7 @@ This is an unofficial playable development preview. The application runs nativel
 4. At first launch, select the complete game folder containing `cache`, `levels` and `UI`, rather than one of those subfolders. The app remembers it and reads the original game data in place. Keep that data available on subsequent launches.
 5. Use **Options → Keyboard → Layout 2** for WASD controls. Existing saved layouts are preserved, so a previous profile may start with another layout.
 
-The original game data is separate from the Mac application and from your saves. Copy the complete installed folder from an existing PC copy you are entitled to use; this guide does not endorse a third-party full-game mirror or establish redistribution rights. The app does not run the Windows executable. Initial folder checks include nonempty `cache/root.pak`, `cache/gamedata.pak`, `UI/movies/atvi.bik`, `UI/movies/BizarreSplash.bik` and a complete level; passing those checks alone does not establish that every required archive/signature/level exists. Keep the complete tree, including signature files and original folder names. Case-sensitive data volumes remain unverified.
+The original game data is separate from the Mac application and from your saves. Use the extracted full data folder described above or the complete installed folder from your existing PC copy. The app does not run the Windows executable. Initial folder checks include nonempty `cache/root.pak`, `cache/gamedata.pak`, `UI/movies/atvi.bik`, `UI/movies/BizarreSplash.bik` and a complete level; passing those checks alone does not establish that every required archive/signature/level exists. Keep the complete tree, including signature files and original folder names. Case-sensitive data volumes remain unverified.
 
 ## Controls and LAN
 
