@@ -3577,10 +3577,11 @@ static S32 GetGarageCarByID( lua_State* pState )
 	if ( !pGameProfile )
 		return 0;
 
+	// [Blur2PC] Match GetGarage rawseti keys and vehicle IDs to the original PC32 Lua identity.
 	if ( lua_type( pState, 1 ) == LUA_TNUMBER )
-		lua_pushinteger( pState, pGameProfile->mMultiplayerProfile.GetLastCarUsed( (AmaxCarClass)(S32)lua_tonumber( pState, 1 ) ) );
+		Lua::PushInteger32( pState, pGameProfile->mMultiplayerProfile.GetLastCarUsed( (AmaxCarClass)(S32)lua_tonumber( pState, 1 ) ) );
 	else
-		lua_pushinteger( pState, pGameProfile->mMultiplayerProfile.GetLastCarUsed() );
+		Lua::PushInteger32( pState, pGameProfile->mMultiplayerProfile.GetLastCarUsed() );
 
 	return 1;
 }

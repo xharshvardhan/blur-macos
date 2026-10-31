@@ -1085,6 +1085,15 @@ if(BLUR_MAC_BUILD_GAME)
         target_link_options(blur_mac_lua_id_test PRIVATE "LINKER:-dead_strip")
         add_test(NAME mac_lua_id COMMAND blur_mac_lua_id_test)
         set_tests_properties(mac_lua_id PROPERTIES TIMEOUT 30)
+        # [Blur2PC] Invoke the actual Multiplayer getter against original PC32 garage keys.
+        add_executable(blur_mac_multiplayer_garage_id_test ${BLUR_TOP}/tools/macos/multiplayer_garage_id_test.cpp ${_mac_lua_blob})
+        target_include_directories(blur_mac_multiplayer_garage_id_test PRIVATE
+            $<TARGET_PROPERTY:blur_mac_amax_gamelogic,INCLUDE_DIRECTORIES>
+            $<TARGET_PROPERTY:blur_mac_amax,INCLUDE_DIRECTORIES>)
+        target_link_libraries(blur_mac_multiplayer_garage_id_test PRIVATE ${_mac_game_link_closure})
+        target_link_options(blur_mac_multiplayer_garage_id_test PRIVATE "LINKER:-dead_strip")
+        add_test(NAME mac_multiplayer_garage_id COMMAND blur_mac_multiplayer_garage_id_test)
+        set_tests_properties(mac_multiplayer_garage_id PROPERTIES TIMEOUT 30)
         add_test(NAME mac_global_resource_cleanup COMMAND blur_mac_global_resource_cleanup_test)
         set_tests_properties(mac_global_resource_cleanup PROPERTIES TIMEOUT 30)
         add_test(NAME mac_ui_gpu_ownership COMMAND blur_mac_ui_gpu_ownership_test)

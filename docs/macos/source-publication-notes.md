@@ -6,7 +6,7 @@ The published tree excludes retail game installations, console avatar/DLC and tr
 
 The snapshot has its own initial commit, so excluded upstream payloads and credential literals are not imported through Git history. The local development branch and original upstream history remain intact. Later public commits can build on this source snapshot.
 
-The native game builds its runtime dependencies from pinned source or the host packages described in [dependencies.md](dependencies.md). The0.1.7 development application is now provided separately as a GitHub prerelease asset, not committed into source history. It does not include game data or the upstream prebuilt Windows toolchain. Supply your own complete original PC data separately. See [installation and current limits](installing-development-preview.md).
+The native game builds its runtime dependencies from pinned source or the host packages described in [dependencies.md](dependencies.md). The0.1.8 development application is now provided separately as a GitHub prerelease asset, not committed into source history. It does not include game data or the upstream prebuilt Windows toolchain. Supply your own complete original PC data separately. See [installation and current limits](installing-development-preview.md).
 
 Validation distinguishes source checks from game proof. The Brighton/BMW
 keyboard slice completed its original checkpoint/lap/finish sequence and exited 0.

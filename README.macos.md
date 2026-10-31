@@ -1,6 +1,6 @@
 # Native macOS port — development status
 
-**[Download the 0.1.7 Apple Silicon development preview](https://github.com/xharshvardhan/blur-macos/releases/tag/v0.1.7)** — macOS 26+, separate original PC game data required. See [installation, controls and limits](docs/macos/installing-development-preview.md). Runtime libraries are bundled; the preview is ad-hoc signed, not notarized, and has not been verified on another clean Mac.
+**[Download the 0.1.8 Apple Silicon development preview](https://github.com/xharshvardhan/blur-macos/releases/tag/v0.1.8)** — macOS 26+, separate original PC game data required. See [installation, controls and limits](docs/macos/installing-development-preview.md). Runtime libraries are bundled; the preview is ad-hoc signed, not notarized, and has not been verified on another clean Mac.
 
 **[Original PC game-data download — MyAbandonware (third-party)](https://www.myabandonware.com/game/blur-gls)**. The English Full-Rip is the source used locally; extract it and select the `BLUR` folder containing `cache`, `levels` and `UI` in the native app. See the installation guide for details.
 
@@ -69,6 +69,12 @@ focused Metal-validation and lower-renderer UBSan checks also pass. The
 [acceptance report](docs/macos/optimization-host-acceptance.md) records resource
 counts, mixed CPU and actual-race timings, remaining hitches and validation
 limits. A repeatable FPS increase has not been established.
+
+The0.1.8 update fixes LAN garage selection when a saved car's high-bit ID
+was represented differently by the native Lua getter and the original garage
+list. Both complete final Debug/optimized suites pass156/156. No profile reset,
+unlock change, input remapping or original asset change is required. See
+[LAN car-selection repair](docs/macos/lan-garage-car-selection.md).
 
 The0.1.7 faithful graphics update enables stronger anisotropic filtering on
 eligible original samplers. Window multisampling2x/4x is optional; original
