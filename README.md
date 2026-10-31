@@ -6,8 +6,15 @@ The game was originally created by Bizarre Creations. This work builds on uKER's
 codebase, modern PC fixes and unlocked-frame-rate work; it is not
 an official release.
 
-**This is a development snapshot, not a finished game release.** Building from
-source requires developer tools and native dependencies.
+**A playable development preview is available below.** It requires separate original game data and is not a finished or official game release. Building from source requires developer tools and native dependencies.
+
+## Download and play
+
+**[Download the Apple Silicon Mac application — 0.1.7](https://github.com/xharshvardhan/blur-macos/releases/tag/v0.1.7)**
+
+Requires **Apple Silicon and macOS 26 or later**, plus your own complete Windows Blur game-data folder. Extract the release ZIP, open `BlurNativeGame.app`, and select that folder. Runtime libraries are bundled; players do not need Wine, Homebrew or Xcode. GitHub's “Source code” archives are for developers.
+
+Read the **[installation guide](docs/macos/installing-development-preview.md)** for data-folder requirements, controls, checksums and macOS app approval. The preview is ad-hoc signed and not notarized. Another clean Mac and two-machine multiplayer remain unverified. Original game data, profiles and saves are not included or downloaded.
 
 ## Current status
 

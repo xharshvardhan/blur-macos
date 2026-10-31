@@ -1,5 +1,7 @@
 # Native macOS port — development status
 
+**[Download the 0.1.7 Apple Silicon development preview](https://github.com/xharshvardhan/blur-macos/releases/tag/v0.1.7)** — macOS 26+, separate original PC game data required. See [installation, controls and limits](docs/macos/installing-development-preview.md). Runtime libraries are bundled; the preview is ad-hoc signed, not notarized, and has not been verified on another clean Mac.
+
 This local `macos` branch starts from `uKER/BlurRebuilt` commit
 `1965facd3d4860447a043b1e0fea4d55c086d1f5`. The original game builds and runs
 as an arm64 Cocoa/Metal application. Startup mounts the original PC archives,
